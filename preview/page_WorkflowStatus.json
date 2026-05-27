@@ -1,0 +1,298 @@
+{
+  "uiSchema": {
+    "name": "page_WorkflowStatus",
+    "type": "HorizontalLayout",
+    "heading": "Workflow Status Report",
+    "elements": [
+      {
+        "type": "WrapperLayout",
+        "scope": "#/properties/workflowStatusReport",
+        "config": {
+          "main": {"divider": false, "isAccordion": true, "defaultClosed": false},
+          "layout": 12,
+          "defaultStyle": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/workflow",
+            "config": {
+              "main": {"heading": "Work Flow Status Report", "onClick": "onClick", "iconName": ""},
+              "style": {},
+              "layout": {"lg": 3, "md": 4, "sm": 6, "xs": 6}
+            },
+            "options": {"widget": "Box"}
+          }
+        ]
+      },
+      {
+        "type": "WrapperLayout",
+        "scope": "#/properties/Search Container",
+        "config": {
+          "main": {"label": "Search Container", "divider": false, "isAccordion": true, "defaultClosed": false},
+          "layout": 12,
+          "defaultStyle": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/programId",
+            "config": {
+              "main": {"type": "text", "label": "Program Type", "freeSole": false},
+              "style": {},
+              "layout": {"lg": 3, "md": 4, "sm": 6, "xs": 6}
+            },
+            "options": {"widget": "SelectInputField"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/cycleFromDate",
+            "config": {
+              "main": {"type": "date", "label": "From Date"},
+              "layout": {"lg": 3, "md": 4, "sm": 6, "xs": 6}
+            },
+            "options": {"widget": "DateInputField"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/cycleEndDate",
+            "config": {
+              "main": {"type": "date", "label": "To Date"},
+              "layout": {"lg": 3, "md": 4, "sm": 6, "xs": 6}
+            },
+            "options": {"widget": "DateInputField"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/businessKey",
+            "config": {
+              "main": {"label": "Business Key", "errorMessage": "businessKey is empty or invalid"},
+              "style": {},
+              "layout": {"lg": 3, "md": 4, "sm": 6, "xs": 6}
+            },
+            "options": {"widget": "InputField"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/transId",
+            "config": {
+              "main": {"label": "Trans Id", "errorMessage": "transId is empty or invalid"},
+              "style": {},
+              "layout": {"lg": 3, "md": 4, "sm": 6, "xs": 6}
+            },
+            "options": {"widget": "InputField"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/payee",
+            "config": {
+              "main": {"label": "Payee", "errorMessage": "payee is empty or invalid"},
+              "style": {},
+              "layout": {"lg": 3, "md": 4, "sm": 6, "xs": 6}
+            },
+            "options": {"widget": "InputField"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/Search",
+            "config": {
+              "main": {
+                "icon": "", "name": "Search", "size": "small", "type": "text",
+                "onClick": "onClick", "variant": "contained", "startIcon": "SearchIcon", "styleDefault": false
+              },
+              "style": {},
+              "layout": {"lg": 1.5, "md": 2, "sm": 2.5, "xs": 4}
+            },
+            "options": {"widget": "Button"}
+          }
+        ]
+      },
+      {
+        "type": "WrapperLayout",
+        "scope": "#/properties/Report Container",
+        "config": {
+          "main": {
+            "label": "Report Container",
+            "divider": false,
+            "isAccordion": true,
+            "defaultClosed": false
+          },
+          "layout": 12,
+          "defaultStyle": true,
+          "style": {
+            "border": "1.5px solid #b0bec5",
+            "borderRadius": "8px",
+            "padding": "16px",
+            "marginTop": "8px"
+          }
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/reportEmptyTopSpacer",
+            "config": {
+              "main": {}, "style": {},
+              "layout": {"lg": 12, "md": 12, "sm": 12, "xs": 12}
+            },
+            "options": {"widget": "EmptyBox"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/reportEmptyIconLeft",
+            "config": {
+              "main": {}, "style": {},
+              "layout": {"lg": 5.25, "md": 5.25, "sm": 5, "xs": 4}
+            },
+            "options": {"widget": "EmptyBox"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/reportEmptyIcon",
+            "config": {
+              "main": {"heading": "", "iconName": "ReportIcon"},
+              "style": {"color": "#b0bec5", "fontSize": "64px"},
+              "layout": {"lg": 1.5, "md": 1.5, "sm": 2, "xs": 4}
+            },
+            "options": {"widget": "Box"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/reportEmptyIconRight",
+            "config": {
+              "main": {}, "style": {},
+              "layout": {"lg": 5.25, "md": 5.25, "sm": 5, "xs": 4}
+            },
+            "options": {"widget": "EmptyBox"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/reportEmptyTextLeft",
+            "config": {
+              "main": {}, "style": {},
+              "layout": {"lg": 4, "md": 3.5, "sm": 3, "xs": 1}
+            },
+            "options": {"widget": "EmptyBox"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/reportPlaceholder",
+            "config": {
+              "main": {"heading": "Run a search to view report results", "iconName": ""},
+              "style": {"color": "#7b8794", "fontSize": "13px", "textAlign": "center"},
+              "layout": {"lg": 4, "md": 5, "sm": 6, "xs": 10}
+            },
+            "options": {"widget": "Box"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/reportEmptyTextRight",
+            "config": {
+              "main": {}, "style": {},
+              "layout": {"lg": 4, "md": 3.5, "sm": 3, "xs": 1}
+            },
+            "options": {"widget": "EmptyBox"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/download",
+            "config": {
+              "main": {
+                "icon": "", "name": "Download", "size": "small", "type": "text",
+                "color": "primary", "onClick": "onClick", "variant": "contained",
+                "startIcon": "DownloadIcon", "styleDefault": false, "enableDefaultStyle": false
+              },
+              "style": {},
+              "layout": {"lg": 1.5, "md": 2, "sm": 2.5, "xs": 4}
+            },
+            "options": {"widget": "Button"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/reportFooterSpacer",
+            "config": {
+              "main": {}, "style": {},
+              "layout": {"lg": 6.5, "md": 5.1, "sm": 12, "xs": 12}
+            },
+            "options": {"widget": "EmptyBox"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/reportAddIcon",
+            "config": {
+              "main": {"heading": "", "iconName": "AddIcon"},
+              "style": {},
+              "layout": {"lg": 0.25, "md": 0.3, "sm": 0.5, "xs": 0.5}
+            },
+            "options": {"widget": "Box"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/reportAddText",
+            "config": {
+              "main": {"heading": "Add", "iconName": ""},
+              "style": {"fontSize": "11px"},
+              "layout": {"lg": 0.5, "md": 0.65, "sm": 1.5, "xs": 2}
+            },
+            "options": {"widget": "Box"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/reportMaxIcon",
+            "config": {
+              "main": {"heading": "", "iconName": "Maximize"},
+              "style": {},
+              "layout": {"lg": 0.25, "md": 0.3, "sm": 0.5, "xs": 0.5}
+            },
+            "options": {"widget": "Box"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/reportMaxText",
+            "config": {
+              "main": {"heading": "Maximise All", "iconName": ""},
+              "style": {"fontSize": "11px"},
+              "layout": {"lg": 1.4, "md": 1.65, "sm": 2.5, "xs": 3.5}
+            },
+            "options": {"widget": "Box"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/reportMinIcon",
+            "config": {
+              "main": {"heading": "", "iconName": "Minimize"},
+              "style": {},
+              "layout": {"lg": 0.25, "md": 0.3, "sm": 0.5, "xs": 0.5}
+            },
+            "options": {"widget": "Box"}
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/reportMinText",
+            "config": {
+              "main": {"heading": "Minimise All", "iconName": ""},
+              "style": {"fontSize": "11px"},
+              "layout": {"lg": 1.35, "md": 1.8, "sm": 2.5, "xs": 3.5}
+            },
+            "options": {"widget": "Box"}
+          }
+        ]
+      }
+    ],
+    "pageName": "page_WorkflowStatus",
+    "accessorKey": "page_WorkflowStatus"
+  },
+  "schema": {
+    "type": "object",
+    "required": ["programId"],
+    "properties": {
+      "payee": {}, "stage": {}, "Search": {}, "action": {}, "transId": {},
+      "download": {}, "workflow": {}, "createdOn": {}, "programId": {},
+      "payoutName": {}, "businessKey": {}, "cycleEndDate": {}, "cycleFromDate": {},
+      "reportAddIcon": {}, "reportAddText": {}, "reportMaxIcon": {}, "reportMaxText": {},
+      "reportMinIcon": {}, "reportMinText": {}, "reportEmptyIcon": {}, "reportPlaceholder": {},
+      "reportFooterSpacer": {}, "payoutComponentName": {}, "programCycleId_name": {},
+      "reportEmptyIconLeft": {}, "reportEmptyTextLeft": {}, "reportEmptyIconRight": {},
+      "reportEmptyTextRight": {}, "reportEmptyTopSpacer": {}
+    }
+  }
+}

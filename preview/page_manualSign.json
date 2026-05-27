@@ -1,0 +1,185 @@
+{
+  "schema": {
+    "type": "object",
+    "properties": {
+      "startDate": {},
+      "endDate": {},
+      "thought": {},
+      "metricsRow1": {},
+      "metricsRow2": {}
+    },
+    "required": []
+  },
+  "uiSchema": {
+    "type": "HorizontalLayout",
+    "pageName": "page_manualSign",
+    "name": "page_manualSign",
+    "accessorKey": "page_manualSign",
+    "heading": "Insurance Contest Dashboard",
+    "elements": [
+      {
+        "type": "WrapperLayout",
+        "config": {
+          "layout": {
+            "lg": 12
+          },
+          "main": {
+            "divider": true,
+            "label": "Filters",
+            "rowSpacing": 2,
+            "columnSpacing": null,
+            "spacing": null,
+            "isAccordion": true,
+            "defaultClosed": false
+          },
+          "defaultStyle": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/startDate",
+            "options": {
+              "widget": "DateInputField"
+            },
+            "config": {
+              "layout": {
+                "lg": 3,
+                "md": 3,
+                "sm": 6,
+                "xs": 12
+              },
+              "main": {
+                "label": "Start Date",
+                "type": "date"
+              }
+            }
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/endDate",
+            "options": {
+              "widget": "DateInputField"
+            },
+            "config": {
+              "layout": {
+                "lg": 3,
+                "md": 3,
+                "sm": 6,
+                "xs": 12
+              },
+              "main": {
+                "label": "End Date",
+                "type": "date"
+              }
+            }
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/contest",
+            "options": {
+              "widget": "SelectInputField"
+            },
+            "config": {
+              "layout": {
+                "lg": 3,
+                "md": 3,
+                "sm": 6,
+                "xs": 12
+              },
+              "main": {
+                "label": "Contest",
+                "type": "text",
+                "freeSole": false,
+                "lazyLoading": false
+              },
+              "style": {}
+            },
+            "elements": []
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/seasonality",
+            "options": {
+              "widget": "SelectInputField"
+            },
+            "config": {
+              "layout": {
+                "lg": 3,
+                "md": 3,
+                "sm": 6,
+                "xs": 12
+              },
+              "main": {
+                "label": "Seasonality",
+                "type": "text",
+                "freeSole": false,
+                "lazyLoading": false
+              },
+              "style": {}
+            },
+            "elements": []
+          }
+        ],
+        "scope": "#/properties/filterSection"
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/thought",
+        "options": {
+          "widget": "Thought"
+        },
+        "config": {
+          "layout": {
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12
+          },
+          "main": {
+            "thought": "Just one small positive thought in the morning can change your whole day."
+          }
+        }
+      },
+      {
+        "type": "WrapperLayout",
+        "config": {
+          "layout": {
+            "lg": 12
+          },
+          "main": {
+            "divider": false,
+            "label": " ",
+            "rowSpacing": 2,
+            "columnSpacing": null,
+            "spacing": null,
+            "isAccordion": true,
+            "defaultClosed": false
+          },
+          "defaultStyle": true
+        },
+        "elements": [],
+        "scope": "#/properties/metricsRow1"
+      },
+      {
+        "type": "WrapperLayout",
+        "config": {
+          "layout": {
+            "lg": 12
+          },
+          "main": {
+            "divider": false,
+            "label": " ",
+            "rowSpacing": 2,
+            "columnSpacing": null,
+            "spacing": null,
+            "isAccordion": true,
+            "defaultClosed": false
+          },
+          "defaultStyle": true
+        },
+        "elements": [],
+        "scope": "#/properties/metricsRow2"
+      }
+    ]
+  }
+}

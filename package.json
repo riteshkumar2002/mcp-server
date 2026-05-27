@@ -1,0 +1,30 @@
+{
+  "name": "hyperform-ui-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for reading and modifying Hyperform3 page UI JSON (uiSchema/schema)",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:frontend": "cd frontend && npm install --legacy-peer-deps && npm run build",
+    "build:all": "npm run build && npm run build:frontend",
+    "setup": "tsc && node dist/setup.js",
+    "start": "node dist/index.js",
+    "start:stdio": "node dist/stdio.js",
+    "gen-cert": "cd certs && mkcert localhost 127.0.0.1 ::1 && move localhost+2.pem localhost.pem && move localhost+2-key.pem localhost-key.pem"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "axios": "^1.16.1",
+    "express": "^4.22.2",
+    "impaktapps-ui-builder": "1.0.406",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/express": "^4.17.25",
+    "@types/node": "^25.8.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  }
+}

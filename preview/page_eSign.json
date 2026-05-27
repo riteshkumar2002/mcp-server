@@ -1,0 +1,218 @@
+{
+  "uiSchema": {
+    "name": "page_eSign",
+    "type": "HorizontalLayout",
+    "heading": "Office Head Dashboard",
+    "pageName": "page_eSign",
+    "accessorKey": "page_eSign",
+    "elements": [
+      {
+        "type": "WrapperLayout",
+        "scope": "#/properties/ohIdentityCard",
+        "config": {
+          "main": {},
+          "style": {
+            "wrapperStyle": { "top": "50%", "position": "relative", "transform": "translateY(-50%)", "fontFamily": "poppins", "borderRadius": "12px", "marginBottom": 0 },
+            "componentsBoxStyle": { "width": "100% !important", "height": "100%", "&:hover": { "color": "#ffffff", "background": "#1BA1A6" }, "padding": "20px 20px 20px 14px", "flexWrap": "nowrap", "overflow": "hidden", "position": "relative", "boxShadow": "0 0 6px 1px rgba(149,147,147,0.25)", "minHeight": "100px", "background": "transparent", "borderRadius": "12px", "flexDirection": "column" }
+          },
+          "layout": { "lg": 4, "md": 6, "sm": 12, "xs": 12 }
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/ohIdentityCard/properties/url", "config": { "main": { "url": "https://www.svgrepo.com/show/509999/users.svg" }, "style": { "imageStyle": { "color": "inherit", "width": "36px", "height": "36px", "margin": "0px", "padding": "0px" }, "containerStyle": { "top": "4px", "right": "4px", "display": "flex", "position": "absolute", "alignItems": "flex-start", "justifyContent": "flex-end" } } }, "options": { "widget": "Image" } },
+          { "type": "Control", "scope": "#/properties/ohIdentityCard/properties/label", "config": { "main": { "heading": "Suresh Mehta — Office Head" }, "style": { "top": "8px", "left": "12px", "color": "inherit", "display": "flex", "fontSize": "14px", "position": "absolute", "fontFamily": "Poppins", "fontWeight": 600, "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/ohIdentityCard/properties/value", "config": { "main": { "heading": "Kothrud Branch" }, "style": { "color": "inherit", "width": "100%", "display": "flex", "fontSize": { "md": "20px", "xs": "16px" }, "marginTop": "8px", "fontWeight": 500, "lineHeight": "1.2", "whiteSpace": "nowrap", "marginBottom": "4px" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/ohIdentityCard/properties/description", "config": { "main": { "heading": "EMP-2023-0412  |  EBH  |  Vintage M18  |  EBH Mentorship  |  HC: 5 SMs" }, "style": { "color": "inherit", "margin": "0px", "fontSize": "11px", "fontWeight": "400", "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } }
+        ]
+      },
+      {
+        "type": "WrapperLayout",
+        "scope": "#/properties/branchTargetCard",
+        "config": {
+          "main": {},
+          "style": {
+            "wrapperStyle": { "top": "50%", "position": "relative", "transform": "translateY(-50%)", "fontFamily": "poppins", "borderRadius": "12px", "marginBottom": 0 },
+            "componentsBoxStyle": { "width": "100% !important", "height": "100%", "&:hover": { "color": "#ffffff", "background": "#1BA1A6" }, "padding": "20px 20px 20px 14px", "flexWrap": "nowrap", "overflow": "hidden", "position": "relative", "boxShadow": "0 0 6px 1px rgba(149,147,147,0.25)", "minHeight": "100px", "background": "transparent", "borderRadius": "12px", "flexDirection": "column" }
+          },
+          "layout": { "lg": 2, "md": 3, "sm": 6, "xs": 12 }
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/branchTargetCard/properties/url", "config": { "main": { "url": "https://www.svgrepo.com/show/510077/chart-growth.svg" }, "style": { "imageStyle": { "color": "inherit", "width": "32px", "height": "32px", "margin": "0px", "padding": "0px" }, "containerStyle": { "top": "4px", "right": "4px", "display": "flex", "position": "absolute", "alignItems": "flex-start", "justifyContent": "flex-end" } } }, "options": { "widget": "Image" } },
+          { "type": "Control", "scope": "#/properties/branchTargetCard/properties/label", "config": { "main": { "heading": "BRANCH TARGET ACH." }, "style": { "top": "8px", "left": "12px", "color": "inherit", "display": "flex", "fontSize": "10px", "position": "absolute", "fontFamily": "Poppins", "fontWeight": 300, "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/branchTargetCard/properties/value", "config": { "main": { "heading": "83%" }, "style": { "color": "inherit", "width": "100%", "display": "flex", "fontSize": { "md": "28px", "xs": "22px" }, "marginTop": "8px", "fontWeight": 600, "lineHeight": "1", "whiteSpace": "nowrap", "marginBottom": "4px" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/branchTargetCard/properties/description", "config": { "main": { "heading": "Oct-25  Gate >=75%  Gate Passed" }, "style": { "color": "inherit", "margin": "0px", "fontSize": "10px", "fontWeight": "400", "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } }
+        ]
+      },
+      {
+        "type": "WrapperLayout",
+        "scope": "#/properties/smsEarningCard",
+        "config": {
+          "main": {},
+          "style": {
+            "wrapperStyle": { "top": "50%", "position": "relative", "transform": "translateY(-50%)", "fontFamily": "poppins", "borderRadius": "12px", "marginBottom": 0 },
+            "componentsBoxStyle": { "width": "100% !important", "height": "100%", "&:hover": { "color": "#ffffff", "background": "#1BA1A6" }, "padding": "20px 20px 20px 14px", "flexWrap": "nowrap", "overflow": "hidden", "position": "relative", "boxShadow": "0 0 6px 1px rgba(149,147,147,0.25)", "minHeight": "100px", "background": "transparent", "borderRadius": "12px", "flexDirection": "column" }
+          },
+          "layout": { "lg": 2, "md": 3, "sm": 6, "xs": 12 }
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/smsEarningCard/properties/url", "config": { "main": { "url": "https://www.svgrepo.com/show/509999/users.svg" }, "style": { "imageStyle": { "color": "inherit", "width": "32px", "height": "32px", "margin": "0px", "padding": "0px" }, "containerStyle": { "top": "4px", "right": "4px", "display": "flex", "position": "absolute", "alignItems": "flex-start", "justifyContent": "flex-end" } } }, "options": { "widget": "Image" } },
+          { "type": "Control", "scope": "#/properties/smsEarningCard/properties/label", "config": { "main": { "heading": "SMS EARNING" }, "style": { "top": "8px", "left": "12px", "color": "inherit", "display": "flex", "fontSize": "10px", "position": "absolute", "fontFamily": "Poppins", "fontWeight": 300, "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/smsEarningCard/properties/value", "config": { "main": { "heading": "4" }, "style": { "color": "inherit", "width": "100%", "display": "flex", "fontSize": { "md": "28px", "xs": "22px" }, "marginTop": "8px", "fontWeight": 600, "lineHeight": "1", "whiteSpace": "nowrap", "marginBottom": "4px" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/smsEarningCard/properties/description", "config": { "main": { "heading": "of 5 Sanctioned HC  Slab 3  75%" }, "style": { "color": "inherit", "margin": "0px", "fontSize": "10px", "fontWeight": "400", "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } }
+        ]
+      },
+      {
+        "type": "WrapperLayout",
+        "scope": "#/properties/teamPoolCard",
+        "config": {
+          "main": {},
+          "style": {
+            "wrapperStyle": { "top": "50%", "position": "relative", "transform": "translateY(-50%)", "fontFamily": "poppins", "borderRadius": "12px", "marginBottom": 0 },
+            "componentsBoxStyle": { "width": "100% !important", "height": "100%", "&:hover": { "color": "#ffffff", "background": "#1BA1A6" }, "padding": "20px 20px 20px 14px", "flexWrap": "nowrap", "overflow": "hidden", "position": "relative", "boxShadow": "0 0 6px 1px rgba(149,147,147,0.25)", "minHeight": "100px", "background": "transparent", "borderRadius": "12px", "flexDirection": "column" }
+          },
+          "layout": { "lg": 2, "md": 3, "sm": 6, "xs": 12 }
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/teamPoolCard/properties/url", "config": { "main": { "url": "https://www.svgrepo.com/show/508166/rupee-circle.svg" }, "style": { "imageStyle": { "color": "inherit", "width": "32px", "height": "32px", "margin": "0px", "padding": "0px" }, "containerStyle": { "top": "4px", "right": "4px", "display": "flex", "position": "absolute", "alignItems": "flex-start", "justifyContent": "flex-end" } } }, "options": { "widget": "Image" } },
+          { "type": "Control", "scope": "#/properties/teamPoolCard/properties/label", "config": { "main": { "heading": "TEAM INCENTIVE POOL" }, "style": { "top": "8px", "left": "12px", "color": "inherit", "display": "flex", "fontSize": "10px", "position": "absolute", "fontFamily": "Poppins", "fontWeight": 300, "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/teamPoolCard/properties/value", "config": { "main": { "heading": "Rs.1.10L" }, "style": { "color": "inherit", "width": "100%", "display": "flex", "fontSize": { "md": "28px", "xs": "22px" }, "marginTop": "8px", "fontWeight": 600, "lineHeight": "1", "whiteSpace": "nowrap", "marginBottom": "4px" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/teamPoolCard/properties/description", "config": { "main": { "heading": "WFYP + Rock combined" }, "style": { "color": "inherit", "margin": "0px", "fontSize": "10px", "fontWeight": "400", "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } }
+        ]
+      },
+      {
+        "type": "WrapperLayout",
+        "scope": "#/properties/estPayoutCard",
+        "config": {
+          "main": {},
+          "style": {
+            "wrapperStyle": { "top": "50%", "position": "relative", "transform": "translateY(-50%)", "fontFamily": "poppins", "borderRadius": "12px", "marginBottom": 0 },
+            "componentsBoxStyle": { "width": "100% !important", "height": "100%", "&:hover": { "color": "#ffffff", "background": "#1BA1A6" }, "padding": "20px 20px 20px 14px", "flexWrap": "nowrap", "overflow": "hidden", "position": "relative", "boxShadow": "0 0 6px 1px rgba(149,147,147,0.25)", "minHeight": "100px", "background": "transparent", "borderRadius": "12px", "flexDirection": "column" }
+          },
+          "layout": { "lg": 2, "md": 3, "sm": 6, "xs": 12 }
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/estPayoutCard/properties/url", "config": { "main": { "url": "https://www.svgrepo.com/show/508166/rupee-circle.svg" }, "style": { "imageStyle": { "color": "inherit", "width": "32px", "height": "32px", "margin": "0px", "padding": "0px" }, "containerStyle": { "top": "4px", "right": "4px", "display": "flex", "position": "absolute", "alignItems": "flex-start", "justifyContent": "flex-end" } } }, "options": { "widget": "Image" } },
+          { "type": "Control", "scope": "#/properties/estPayoutCard/properties/label", "config": { "main": { "heading": "EST. QTR PAYOUT" }, "style": { "top": "8px", "left": "12px", "color": "inherit", "display": "flex", "fontSize": "10px", "position": "absolute", "fontFamily": "Poppins", "fontWeight": 300, "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/estPayoutCard/properties/value", "config": { "main": { "heading": "Rs.1.86L" }, "style": { "color": "inherit", "width": "100%", "display": "flex", "fontSize": { "md": "28px", "xs": "22px" }, "marginTop": "8px", "fontWeight": 600, "lineHeight": "1", "whiteSpace": "nowrap", "marginBottom": "4px" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/estPayoutCard/properties/description", "config": { "main": { "heading": "OH + EBH + Persist  Paid at Qtr close" }, "style": { "color": "inherit", "margin": "0px", "fontSize": "10px", "fontWeight": "400", "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } }
+        ]
+      },
+      {
+        "type": "TabLayout",
+        "scope": "#/properties/ohDashboardTabs",
+        "config": {
+          "main": {
+            "id": "ohDashboardTabs",
+            "layout": 12,
+            "lazyLoad": false,
+            "tabLabels": [
+              "Quarterly Goal Sheet",
+              "SM Team — Oct-25 Breakdown",
+              "Team Earning Slab",
+              "Incentive Calculation — Q3",
+              "EBH Mentorship Incentive",
+              "13th Month Persistency"
+            ]
+          }
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/goalSheetTable",
+            "config": { "main": { "Selection": false, "columns": { "dataColumns": [], "actionColumns": [] }, "disableSorting": false, "downloadAllData": true, "disableColumnFilter": true, "disableDownloadFile": false, "disableGlobalSearch": false } },
+            "options": { "widget": "Table" },
+            "elements": [
+              { "size": 120, "header": "Month",         "accessorKey": "month" },
+              { "size": 140, "header": "Achievement %", "accessorKey": "achPct" },
+              { "size": 200, "header": "Status",        "accessorKey": "status" },
+              { "size": 130, "header": "SMs Earning",   "accessorKey": "smsEarning" },
+              { "size": 150, "header": "Pool",          "accessorKey": "pool", "type": "amount" },
+              { "size": 120, "header": "Gate",          "accessorKey": "gate" }
+            ]
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/smTeamTable",
+            "config": { "main": { "Selection": false, "columns": { "dataColumns": [], "actionColumns": [] }, "disableSorting": false, "downloadAllData": true, "disableColumnFilter": true, "disableDownloadFile": false, "disableGlobalSearch": false } },
+            "options": { "widget": "Table" },
+            "elements": [
+              { "size": 160, "header": "SM Name",       "accessorKey": "smName" },
+              { "size": 90,  "header": "Desig.",         "accessorKey": "designation" },
+              { "size": 100, "header": "% Ach",          "accessorKey": "achPct" },
+              { "size": 70,  "header": "Rock",           "accessorKey": "rock" },
+              { "size": 160, "header": "WFYP Incentive", "accessorKey": "wfypIncentive", "type": "amount" },
+              { "size": 150, "header": "Rock Incentive", "accessorKey": "rockIncentive", "type": "amount" },
+              { "size": 140, "header": "Total",          "accessorKey": "total",          "type": "amount" },
+              { "size": 90,  "header": "Earner?",        "accessorKey": "earner" }
+            ]
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/slabTable",
+            "config": { "main": { "Selection": false, "columns": { "dataColumns": [], "actionColumns": [] }, "disableSorting": false, "downloadAllData": true, "disableColumnFilter": true, "disableDownloadFile": false, "disableGlobalSearch": false } },
+            "options": { "widget": "Table" },
+            "elements": [
+              { "size": 80,  "header": "Slab",      "accessorKey": "slab" },
+              { "size": 120, "header": "# Earning", "accessorKey": "numEarning" },
+              { "size": 200, "header": "Gate",      "accessorKey": "gate" },
+              { "size": 120, "header": "% of Pool", "accessorKey": "poolPct" },
+              { "size": 100, "header": "Status",    "accessorKey": "status" }
+            ]
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/incentiveCalcTable",
+            "config": { "main": { "Selection": false, "columns": { "dataColumns": [], "actionColumns": [] }, "disableSorting": false, "downloadAllData": true, "disableColumnFilter": true, "disableDownloadFile": false, "disableGlobalSearch": false } },
+            "options": { "widget": "Table" },
+            "elements": [
+              { "size": 260, "header": "Component", "accessorKey": "component" },
+              { "size": 200, "header": "Amount",    "accessorKey": "amount",    "type": "amount" },
+              { "size": 220, "header": "Note",      "accessorKey": "note" }
+            ]
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/ebhTable",
+            "config": { "main": { "Selection": false, "columns": { "dataColumns": [], "actionColumns": [] }, "disableSorting": false, "downloadAllData": true, "disableColumnFilter": true, "disableDownloadFile": false, "disableGlobalSearch": false } },
+            "options": { "widget": "Table" },
+            "elements": [
+              { "size": 180, "header": "Unit",            "accessorKey": "unit" },
+              { "size": 140, "header": "Ach vs Plan",     "accessorKey": "achVsPlan" },
+              { "size": 180, "header": "Slab",            "accessorKey": "slabLabel" },
+              { "size": 160, "header": "% of OH Earning", "accessorKey": "incentivePct" },
+              { "size": 160, "header": "Incentive",       "accessorKey": "incentiveAmt", "type": "amount" }
+            ]
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/persistencyTable",
+            "config": { "main": { "Selection": false, "columns": { "dataColumns": [], "actionColumns": [] }, "disableSorting": false, "downloadAllData": true, "disableColumnFilter": true, "disableDownloadFile": false, "disableGlobalSearch": false } },
+            "options": { "widget": "Table" },
+            "elements": [
+              { "size": 220, "header": "Metric", "accessorKey": "metric" },
+              { "size": 160, "header": "Value",  "accessorKey": "value" },
+              { "size": 280, "header": "Note",   "accessorKey": "note" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "schema": {
+    "type": "object",
+    "required": [],
+    "properties": {
+      "ohIdentityCard":    { "type": "object", "properties": { "url": {}, "label": {}, "value": {}, "description": {} } },
+      "branchTargetCard":  { "type": "object", "properties": { "url": {}, "label": {}, "value": {}, "description": {} } },
+      "smsEarningCard":    { "type": "object", "properties": { "url": {}, "label": {}, "value": {}, "description": {} } },
+      "teamPoolCard":      { "type": "object", "properties": { "url": {}, "label": {}, "value": {}, "description": {} } },
+      "estPayoutCard":     { "type": "object", "properties": { "url": {}, "label": {}, "value": {}, "description": {} } },
+      "ohDashboardTabs":   {},
+      "goalSheetTable":    { "type": "array", "items": { "type": "object", "required": [], "properties": {} } },
+      "smTeamTable":       { "type": "array", "items": { "type": "object", "required": [], "properties": {} } },
+      "slabTable":         { "type": "array", "items": { "type": "object", "required": [], "properties": {} } },
+      "incentiveCalcTable":{ "type": "array", "items": { "type": "object", "required": [], "properties": {} } },
+      "ebhTable":          { "type": "array", "items": { "type": "object", "required": [], "properties": {} } },
+      "persistencyTable":  { "type": "array", "items": { "type": "object", "required": [], "properties": {} } }
+    }
+  }
+}

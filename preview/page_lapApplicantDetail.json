@@ -1,0 +1,229 @@
+{
+  "uiSchema": {
+    "name": "page_lapApplicantDetail",
+    "type": "HorizontalLayout",
+    "heading": "LAP Applicant Detail",
+    "pageName": "page_lapApplicantDetail",
+    "accessorKey": "page_lapApplicantDetail",
+    "elements": [
+      {
+        "type": "WrapperLayout",
+        "config": {
+          "main": {},
+          "style": {
+            "wrapperStyle": { "top": "50%", "position": "relative", "transform": "translateY(-50%)", "fontFamily": "poppins", "borderRadius": "12px", "marginBottom": 0 },
+            "componentsBoxStyle": { "width": "100% !important", "height": "100%", "padding": "20px 20px 20px 14px", "&: hover": { "color": "#ffffff", "background": "#1BA1A6" }, "flexWrap": "nowrap", "overflow": "hidden", "position": "relative", "boxShadow": "0 0 6px 1px rgba(149, 147, 147, 0.25)", "minHeight": "100px", "background": "transparent", "marginLeft": "0px", "borderRadius": "12px", "flexDirection": "column" }
+          },
+          "layout": { "lg": 2, "md": 4, "sm": 6, "xs": 12 }
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/loanAmountCard/properties/url", "config": { "main": { "url": "https://www.svgrepo.com/show/508166/rupee-circle.svg" }, "style": { "imageStyle": { "color": "inherit", "width": "32px", "height": "32px", "margin": "0px", "padding": "0px" }, "containerStyle": { "top": "4px", "color": "inherit", "right": "4px", "display": "flex", "position": "absolute", "alignItems": "flex-start", "justifyContent": "flex-end" } } }, "options": { "widget": "Image" } },
+          { "type": "Control", "scope": "#/properties/loanAmountCard/properties/label", "config": { "main": { "heading": "Loan Amount" }, "style": { "top": "8px", "left": "12px", "color": "inherit", "display": "flex", "fontSize": "16px", "maxWidth": "200px", "position": "absolute", "fontFamily": "Poppins", "fontWeight": 300, "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/loanAmountCard/properties/value", "config": { "main": { "heading": "₹37.3L" }, "style": { "color": "inherit", "width": "100%", "margin": "0px", "display": "flex", "fontSize": { "md": "32px", "xs": "18px" }, "marginTop": "8px", "fontWeight": 600, "lineHeight": "1", "whiteSpace": "nowrap", "marginBottom": "4px" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/loanAmountCard/properties/description", "config": { "main": { "heading": "Sanctioned amount" }, "style": { "color": "inherit", "margin": "0px", "fontSize": "12px", "fontWeight": "400", "whiteSpace": "nowrap", "paddingLeft": "2px", "marginBottom": "8px" } }, "options": { "widget": "Box" } }
+        ]
+      },
+      {
+        "type": "WrapperLayout",
+        "config": {
+          "main": {},
+          "style": {
+            "wrapperStyle": { "top": "50%", "position": "relative", "transform": "translateY(-50%)", "fontFamily": "poppins", "borderRadius": "12px", "marginBottom": 0 },
+            "componentsBoxStyle": { "width": "100% !important", "height": "100%", "padding": "20px 20px 20px 14px", "&: hover": { "color": "#ffffff", "background": "#1BA1A6" }, "flexWrap": "nowrap", "overflow": "hidden", "position": "relative", "boxShadow": "0 0 6px 1px rgba(149, 147, 147, 0.25)", "minHeight": "100px", "background": "transparent", "marginLeft": "0px", "borderRadius": "12px", "flexDirection": "column" }
+          },
+          "layout": { "lg": 2, "md": 4, "sm": 6, "xs": 12 }
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/productCard/properties/url", "config": { "main": { "url": "https://www.svgrepo.com/show/509344/documents.svg" }, "style": { "imageStyle": { "color": "inherit", "width": "32px", "height": "32px", "margin": "0px", "padding": "0px" }, "containerStyle": { "top": "4px", "color": "inherit", "right": "4px", "display": "flex", "position": "absolute", "alignItems": "flex-start", "justifyContent": "flex-end" } } }, "options": { "widget": "Image" } },
+          { "type": "Control", "scope": "#/properties/productCard/properties/label", "config": { "main": { "heading": "Product" }, "style": { "top": "8px", "left": "12px", "color": "inherit", "fontFamily": "Poppins", "fontWeight": 300, "position": "absolute", "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/productCard/properties/value", "config": { "main": { "heading": "LAP – Residential" }, "style": { "color": "inherit", "fontSize": { "md": "16px", "xs": "13px" }, "fontWeight": 600, "lineHeight": "1", "marginTop": "8px", "marginBottom": "4px", "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/productCard/properties/description", "config": { "main": { "heading": "Loan product type" }, "style": { "color": "inherit", "fontSize": "12px", "fontWeight": "400" } }, "options": { "widget": "Box" } }
+        ]
+      },
+      {
+        "type": "WrapperLayout",
+        "config": {
+          "main": {},
+          "style": {
+            "wrapperStyle": { "top": "50%", "position": "relative", "transform": "translateY(-50%)", "fontFamily": "poppins", "borderRadius": "12px", "marginBottom": 0 },
+            "componentsBoxStyle": { "width": "100% !important", "height": "100%", "padding": "20px 20px 20px 14px", "&: hover": { "color": "#ffffff", "background": "#1BA1A6" }, "flexWrap": "nowrap", "overflow": "hidden", "position": "relative", "boxShadow": "0 0 6px 1px rgba(149, 147, 147, 0.25)", "minHeight": "100px", "background": "transparent", "marginLeft": "0px", "borderRadius": "12px", "flexDirection": "column" }
+          },
+          "layout": { "lg": 2, "md": 4, "sm": 6, "xs": 12 }
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/tenorCard/properties/url", "config": { "main": { "url": "https://www.svgrepo.com/show/510077/chart-growth.svg" }, "style": { "imageStyle": { "color": "inherit", "width": "32px", "height": "32px", "margin": "0px", "padding": "0px" }, "containerStyle": { "top": "4px", "color": "inherit", "right": "4px", "display": "flex", "position": "absolute", "alignItems": "flex-start", "justifyContent": "flex-end" } } }, "options": { "widget": "Image" } },
+          { "type": "Control", "scope": "#/properties/tenorCard/properties/label", "config": { "main": { "heading": "Tenor" }, "style": { "top": "8px", "left": "12px", "color": "inherit", "fontFamily": "Poppins", "fontWeight": 300, "position": "absolute" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/tenorCard/properties/value", "config": { "main": { "heading": "240 months" }, "style": { "color": "inherit", "fontSize": { "md": "22px", "xs": "14px" }, "fontWeight": 600, "lineHeight": "1", "marginTop": "8px", "marginBottom": "4px", "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/tenorCard/properties/description", "config": { "main": { "heading": "Tenure in months" }, "style": { "color": "inherit", "fontSize": "12px", "fontWeight": "400" } }, "options": { "widget": "Box" } }
+        ]
+      },
+      {
+        "type": "WrapperLayout",
+        "config": {
+          "main": {},
+          "style": {
+            "wrapperStyle": { "top": "50%", "position": "relative", "transform": "translateY(-50%)", "fontFamily": "poppins", "borderRadius": "12px", "marginBottom": 0 },
+            "componentsBoxStyle": { "width": "100% !important", "height": "100%", "padding": "20px 20px 20px 14px", "&: hover": { "color": "#ffffff", "background": "#1BA1A6" }, "flexWrap": "nowrap", "overflow": "hidden", "position": "relative", "boxShadow": "0 0 6px 1px rgba(149, 147, 147, 0.25)", "minHeight": "100px", "background": "transparent", "marginLeft": "0px", "borderRadius": "12px", "flexDirection": "column" }
+          },
+          "layout": { "lg": 2, "md": 4, "sm": 6, "xs": 12 }
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/emiCard/properties/url", "config": { "main": { "url": "https://www.svgrepo.com/show/508166/rupee-circle.svg" }, "style": { "imageStyle": { "color": "inherit", "width": "32px", "height": "32px", "margin": "0px", "padding": "0px" }, "containerStyle": { "top": "4px", "color": "inherit", "right": "4px", "display": "flex", "position": "absolute", "alignItems": "flex-start", "justifyContent": "flex-end" } } }, "options": { "widget": "Image" } },
+          { "type": "Control", "scope": "#/properties/emiCard/properties/label", "config": { "main": { "heading": "EMI" }, "style": { "top": "8px", "left": "12px", "color": "inherit", "fontFamily": "Poppins", "fontWeight": 300, "position": "absolute" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/emiCard/properties/value", "config": { "main": { "heading": "₹39,800" }, "style": { "color": "inherit", "fontSize": { "md": "28px", "xs": "16px" }, "fontWeight": 600, "lineHeight": "1", "marginTop": "8px", "marginBottom": "4px", "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/emiCard/properties/description", "config": { "main": { "heading": "Monthly installment" }, "style": { "color": "inherit", "fontSize": "12px", "fontWeight": "400" } }, "options": { "widget": "Box" } }
+        ]
+      },
+      {
+        "type": "WrapperLayout",
+        "config": {
+          "main": {},
+          "style": {
+            "wrapperStyle": { "top": "50%", "position": "relative", "transform": "translateY(-50%)", "fontFamily": "poppins", "borderRadius": "12px", "marginBottom": 0 },
+            "componentsBoxStyle": { "width": "100% !important", "height": "100%", "padding": "20px 20px 20px 14px", "&: hover": { "color": "#ffffff", "background": "#1BA1A6" }, "flexWrap": "nowrap", "overflow": "hidden", "position": "relative", "boxShadow": "0 0 6px 1px rgba(149, 147, 147, 0.25)", "minHeight": "100px", "background": "transparent", "marginLeft": "0px", "borderRadius": "12px", "flexDirection": "column" }
+          },
+          "layout": { "lg": 2, "md": 4, "sm": 6, "xs": 12 }
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/interestRateCard/properties/url", "config": { "main": { "url": "https://www.svgrepo.com/show/510118/percent-symbol.svg" }, "style": { "imageStyle": { "color": "inherit", "width": "32px", "height": "32px", "margin": "0px", "padding": "0px" }, "containerStyle": { "top": "4px", "color": "inherit", "right": "4px", "display": "flex", "position": "absolute", "alignItems": "flex-start", "justifyContent": "flex-end" } } }, "options": { "widget": "Image" } },
+          { "type": "Control", "scope": "#/properties/interestRateCard/properties/label", "config": { "main": { "heading": "Interest Rate" }, "style": { "top": "8px", "left": "12px", "color": "inherit", "fontFamily": "Poppins", "fontWeight": 300, "position": "absolute", "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/interestRateCard/properties/value", "config": { "main": { "heading": "11.58% p.a." }, "style": { "color": "inherit", "fontSize": { "md": "22px", "xs": "14px" }, "fontWeight": 600, "lineHeight": "1", "marginTop": "8px", "marginBottom": "4px", "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/interestRateCard/properties/description", "config": { "main": { "heading": "Annual rate p.a." }, "style": { "color": "inherit", "fontSize": "12px", "fontWeight": "400" } }, "options": { "widget": "Box" } }
+        ]
+      },
+      {
+        "type": "WrapperLayout",
+        "config": {
+          "main": {},
+          "style": {
+            "wrapperStyle": { "top": "50%", "position": "relative", "transform": "translateY(-50%)", "fontFamily": "poppins", "borderRadius": "12px", "marginBottom": 0 },
+            "componentsBoxStyle": { "width": "100% !important", "height": "100%", "padding": "20px 20px 20px 14px", "&: hover": { "color": "#ffffff", "background": "#1BA1A6" }, "flexWrap": "nowrap", "overflow": "hidden", "position": "relative", "boxShadow": "0 0 6px 1px rgba(149, 147, 147, 0.25)", "minHeight": "100px", "background": "transparent", "marginLeft": "0px", "borderRadius": "12px", "flexDirection": "column" }
+          },
+          "layout": { "lg": 2, "md": 4, "sm": 6, "xs": 12 }
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/cibilScoreCard/properties/url", "config": { "main": { "url": "https://www.svgrepo.com/show/509999/users.svg" }, "style": { "imageStyle": { "color": "inherit", "width": "32px", "height": "32px", "margin": "0px", "padding": "0px" }, "containerStyle": { "top": "4px", "color": "inherit", "right": "4px", "display": "flex", "position": "absolute", "alignItems": "flex-start", "justifyContent": "flex-end" } } }, "options": { "widget": "Image" } },
+          { "type": "Control", "scope": "#/properties/cibilScoreCard/properties/label", "config": { "main": { "heading": "CIBIL Score" }, "style": { "top": "8px", "left": "12px", "color": "inherit", "fontFamily": "Poppins", "fontWeight": 300, "position": "absolute", "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/cibilScoreCard/properties/value", "config": { "main": { "heading": "684" }, "style": { "color": "inherit", "fontSize": { "md": "40px", "xs": "22px" }, "fontWeight": 600, "lineHeight": "1", "marginTop": "8px", "marginBottom": "4px", "whiteSpace": "nowrap" } }, "options": { "widget": "Box" } },
+          { "type": "Control", "scope": "#/properties/cibilScoreCard/properties/description", "config": { "main": { "heading": "Bureau credit score" }, "style": { "color": "inherit", "fontSize": "12px", "fontWeight": "400" } }, "options": { "widget": "Box" } }
+        ]
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/compositeScoreGraph",
+        "config": {
+          "main": { "type": "BarGraph", "header": "Composite Approval Score (75/100)", "leftLabel": "Score", "bottomLabel": "Category" },
+          "style": { "colorMap": {}, "labelStyle": { "margin": {} }, "containerStyle": {} },
+          "layout": { "lg": 6, "md": 12, "sm": 12, "xs": 12 }
+        },
+        "options": { "widget": "Graph" }
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/categoryScoreGraph",
+        "config": {
+          "main": { "type": "HorizontalBarGraph", "header": "Category Score vs Max", "leftLabel": "Category", "bottomLabel": "Score" },
+          "style": { "colorMap": { "Achieved": "#1BA1A6", "Max": "#e0e0e0" }, "labelStyle": { "margin": {} }, "containerStyle": {} },
+          "layout": { "lg": 6, "md": 12, "sm": 12, "xs": 12 }
+        },
+        "options": { "widget": "Graph" }
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/nstpAuthority",
+        "config": { "main": { "label": "NSTP Authority", "type": "text", "disabled": true }, "layout": { "lg": 4, "md": 6, "sm": 12, "xs": 12 } },
+        "options": { "widget": "InputField" }
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/emtActionSpace",
+        "config": { "layout": { "lg": 4, "md": 12, "sm": 12, "xs": 12 } },
+        "options": { "widget": "EmptyBox" }
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/approveBtn",
+        "config": { "main": { "color": "primary", "name": "✓  Approve", "onClick": "onClick", "size": "small", "variant": "contained" }, "layout": { "lg": 2, "md": 6, "sm": 12, "xs": 12 } },
+        "options": { "widget": "Button" }
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/declineBtn",
+        "config": { "main": { "color": "error", "name": "✗  Decline", "onClick": "onClick", "size": "small", "variant": "outlined" }, "layout": { "lg": 2, "md": 6, "sm": 12, "xs": 12 } },
+        "options": { "widget": "Button" }
+      },
+      {
+        "type": "TabLayout",
+        "scope": "#/properties/detailTabs",
+        "config": {
+          "main": {
+            "id": "detailTabs",
+            "layout": 12,
+            "lazyLoad": true,
+            "tabLabels": ["Eligibility", "Bureau & Credit", "Income & Financials", "Property Details", "Collateral & Legal", "Documents", "Employment"]
+          }
+        },
+        "elements": [
+          {
+            "type": "Control", "scope": "#/properties/eligibilityTabTable",
+            "config": { "main": { "Selection": false, "columns": { "dataColumns": [], "actionColumns": [] }, "disableColumnFilter": true, "disableDownloadFile": true, "disableGlobalSearch": true, "disableSorting": true, "downloadAllData": false, "lazyLoading": false }, "layout": { "lg": 12, "xs": 12 } },
+            "options": { "widget": "Table" },
+            "elements": [
+              { "accessorKey": "checkName", "header": "Check Name", "size": 220 },
+              { "accessorKey": "result", "header": "Result", "size": 160 },
+              { "accessorKey": "value", "header": "Value", "size": 160 }
+            ]
+          },
+          { "type": "Control", "scope": "#/properties/cibilScoreBureau", "config": { "main": { "label": "CIBIL Score", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/dpdCount", "config": { "main": { "label": "Max DPD Last 12M", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/overdueAmount", "config": { "main": { "label": "Overdue Amount", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/activeLoans", "config": { "main": { "label": "Active Loans", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/grossIncome", "config": { "main": { "label": "Gross Monthly Income", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/netIncome", "config": { "main": { "label": "Net Monthly Income", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/dbrRatio", "config": { "main": { "label": "DBR / DTI Ratio (%)", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/repaymentCapacity", "config": { "main": { "label": "Repayment Capacity", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/propertyType", "config": { "main": { "label": "Property Type", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/marketValue", "config": { "main": { "label": "Market Value", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/distressValue", "config": { "main": { "label": "Distress Value", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/ltvPercent", "config": { "main": { "label": "LTV %", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/collateralType", "config": { "main": { "label": "Collateral Type", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/legalClearStatus", "config": { "main": { "label": "Legal Clear Status", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/legalClearDate", "config": { "main": { "label": "Legal Clear Date", "type": "date", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "DateInputField" } },
+          { "type": "Control", "scope": "#/properties/mortgageType", "config": { "main": { "label": "Mortgage Type", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          {
+            "type": "Control", "scope": "#/properties/documentsTable",
+            "config": { "main": { "Selection": false, "columns": { "dataColumns": [], "actionColumns": [] }, "disableColumnFilter": true, "disableDownloadFile": true, "disableGlobalSearch": true, "disableSorting": true, "downloadAllData": false, "lazyLoading": false }, "layout": { "lg": 12, "xs": 12 } },
+            "options": { "widget": "Table" },
+            "elements": [
+              { "accessorKey": "docName", "header": "Document Name", "size": 240 },
+              { "accessorKey": "required", "header": "Required", "size": 120 },
+              { "accessorKey": "received", "header": "Received", "size": 120 },
+              { "accessorKey": "status", "header": "Status", "size": 140 }
+            ]
+          },
+          { "type": "Control", "scope": "#/properties/uploadDocument", "config": { "main": { "label": "Upload Document", "accept": ".pdf,.jpg,.png", "onClick": "onClick" }, "layout": { "lg": 4, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "UploadFile" } },
+          { "type": "Control", "scope": "#/properties/employerName", "config": { "main": { "label": "Employer Name", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/employmentType", "config": { "main": { "label": "Employment Type", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/designation", "config": { "main": { "label": "Designation", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } },
+          { "type": "Control", "scope": "#/properties/monthlySalary", "config": { "main": { "label": "Monthly Salary", "type": "text", "disabled": true }, "layout": { "lg": 3, "md": 6, "sm": 12, "xs": 12 } }, "options": { "widget": "InputField" } }
+        ]
+      }
+    ]
+  },
+  "schema": {
+    "type": "object",
+    "required": [],
+    "properties": {
+      "loanAmountCard": {}, "productCard": {}, "tenorCard": {}, "emiCard": {}, "interestRateCard": {}, "cibilScoreCard": {},
+      "compositeScoreGraph": {}, "categoryScoreGraph": {},
+      "nstpAuthority": {}, "emtActionSpace": {}, "approveBtn": {}, "declineBtn": {},
+      "detailTabs": {},
+      "eligibilityTabTable": {}, "cibilScoreBureau": {}, "dpdCount": {}, "overdueAmount": {}, "activeLoans": {},
+      "grossIncome": {}, "netIncome": {}, "dbrRatio": {}, "repaymentCapacity": {},
+      "propertyType": {}, "marketValue": {}, "distressValue": {}, "ltvPercent": {},
+      "collateralType": {}, "legalClearStatus": {}, "legalClearDate": {}, "mortgageType": {},
+      "documentsTable": {}, "uploadDocument": {},
+      "employerName": {}, "employmentType": {}, "designation": {}, "monthlySalary": {}
+    }
+  }
+}

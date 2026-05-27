@@ -1,0 +1,31 @@
+{
+  "schema": {
+    "type": "object",
+    "required": [],
+    "properties": {
+      "quarter": {
+        "oneOf": [
+          {
+            "const": "Q2 - Jul-Sep 25",
+            "title": "Q2 - Jul-Sep 25"
+          },
+          {
+            "const": "Q3 - Oct-Dec 25",
+            "title": "Q3 - Oct-Dec 25"
+          },
+          {
+            "const": "Q4 - Jan-Mar 26",
+            "title": "Q4 - Jan-Mar 26"
+          }
+        ]
+      },
+      "headerMainTitle": {}
+    }
+  },
+  "uiSchema": {
+    "name": "page_ohDashboard",
+    "type": "HorizontalLayout",
+    "heading": "Office Head Dashboard",
+    "elements": []
+  }
+}

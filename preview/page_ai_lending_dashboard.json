@@ -1,0 +1,834 @@
+{
+  "uiSchema": {
+    "name": "page_ai_lending_dashboard",
+    "type": "HorizontalLayout",
+    "heading": "AI Lending Dashboard",
+    "pageName": "page_ai_lending_dashboard",
+    "accessorKey": "page_ai_lending_dashboard",
+    "elements": [
+
+      {
+        "type": "WrapperLayout",
+        "scope": "#/properties/loanHeaderSection",
+        "config": {
+          "main": { "divider": false, "rowSpacing": 0, "isAccordion": false, "defaultClosed": false },
+          "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 },
+          "defaultStyle": false,
+          "style": {
+            "wrapperStyle": {
+              "background": "linear-gradient(135deg, #1a237e 0%, #0d47a1 55%, #01579b 100%)",
+              "borderRadius": "12px",
+              "boxShadow": "0 4px 24px rgba(0,0,0,0.35)",
+              "marginBottom": "12px",
+              "overflow": "hidden",
+              "padding": "0"
+            },
+            "componentsBoxStyle": { "padding": "0", "margin": "0" }
+          }
+        },
+        "elements": [
+          {
+            "type": "Control", "scope": "#/properties/applicantInfo",
+            "config": {
+              "main": { "heading": "👤  Arjun Mehta   |   TCL-LAP-2026-00847   |   NCM REVIEW   |   14 yrs (SEP)  ·  Age 57  ·  Submitted 29-Apr-2026", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "13px", "fontWeight": "600", "letterSpacing": "0.3px", "padding": "16px 12px 8px 20px" },
+              "layout": { "lg": 4, "md": 4, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/nstpAuthority",
+            "config": {
+              "main": { "heading": "🏦  L4 — National Credit Manager   |   APPLICANT_CIBIL_002 triggered", "iconName": "" },
+              "style": { "color": "#90caf9", "fontSize": "13px", "fontWeight": "500", "padding": "16px 12px 8px 12px", "borderLeft": "1px solid rgba(255,255,255,0.15)", "borderRight": "1px solid rgba(255,255,255,0.15)" },
+              "layout": { "lg": 4, "md": 4, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/loanApprovalAmt",
+            "config": {
+              "main": { "heading": "LOAN APPROVAL AMT\n₹37.3L", "iconName": "" },
+              "style": { "color": "#ffffff", "fontSize": "12px", "fontWeight": "700", "padding": "12px 8px 8px 8px", "textAlign": "center", "lineHeight": "1.8" },
+              "layout": { "lg": 2, "md": 2, "sm": 6, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/declineBtn",
+            "config": {
+              "main": { "icon": "CloseIcon", "name": "Decline", "size": "small", "type": "text", "color": "error", "onClick": "onClick", "variant": "contained", "startIcon": "CloseIcon", "styleDefault": false },
+              "style": { "padding": "14px 4px 8px 4px" },
+              "layout": { "lg": 1, "md": 1, "sm": 3, "xs": 6 }
+            },
+            "options": { "widget": "Button" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/approveBtn",
+            "config": {
+              "main": { "icon": "CheckIcon", "name": "Approve", "size": "small", "type": "text", "color": "success", "onClick": "onClick", "variant": "contained", "startIcon": "CheckIcon", "styleDefault": false },
+              "style": { "padding": "14px 4px 8px 4px" },
+              "layout": { "lg": 1, "md": 1, "sm": 3, "xs": 6 }
+            },
+            "options": { "widget": "Button" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/metricsDivider",
+            "config": {
+              "main": { "heading": "", "iconName": "" },
+              "style": { "borderTop": "1px solid rgba(255,255,255,0.15)", "marginTop": "4px", "marginBottom": "0", "padding": "0" },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/loanAmtLabel",
+            "config": {
+              "main": { "heading": "LOAN AMOUNT\n₹37.3L", "iconName": "" },
+              "style": { "color": "#e3f2fd", "fontSize": "11px", "fontWeight": "500", "padding": "10px 16px", "borderRight": "1px solid rgba(255,255,255,0.1)", "lineHeight": "1.8" },
+              "layout": { "lg": 2, "md": 2, "sm": 4, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/productLabel",
+            "config": {
+              "main": { "heading": "PRODUCT\nLAP – Residential", "iconName": "" },
+              "style": { "color": "#e3f2fd", "fontSize": "11px", "fontWeight": "500", "padding": "10px 16px", "borderRight": "1px solid rgba(255,255,255,0.1)", "lineHeight": "1.8" },
+              "layout": { "lg": 2, "md": 2, "sm": 4, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/tenorLabel",
+            "config": {
+              "main": { "heading": "TENOR\n240 months (20 yr)", "iconName": "" },
+              "style": { "color": "#e3f2fd", "fontSize": "11px", "fontWeight": "500", "padding": "10px 16px", "borderRight": "1px solid rgba(255,255,255,0.1)", "lineHeight": "1.8" },
+              "layout": { "lg": 2, "md": 2, "sm": 4, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/emiLabel",
+            "config": {
+              "main": { "heading": "EMI\n₹39,800", "iconName": "" },
+              "style": { "color": "#e3f2fd", "fontSize": "11px", "fontWeight": "500", "padding": "10px 16px", "borderRight": "1px solid rgba(255,255,255,0.1)", "lineHeight": "1.8" },
+              "layout": { "lg": 2, "md": 2, "sm": 4, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/interestRateLabel",
+            "config": {
+              "main": { "heading": "INTEREST RATE\n11.50% p.a.", "iconName": "" },
+              "style": { "color": "#e3f2fd", "fontSize": "11px", "fontWeight": "500", "padding": "10px 16px", "borderRight": "1px solid rgba(255,255,255,0.1)", "lineHeight": "1.8" },
+              "layout": { "lg": 2, "md": 2, "sm": 4, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/cibilScoreLabel",
+            "config": {
+              "main": { "heading": "CIBIL SCORE\n684", "iconName": "" },
+              "style": { "color": "#ffcc02", "fontSize": "11px", "fontWeight": "700", "padding": "10px 16px", "lineHeight": "1.8" },
+              "layout": { "lg": 2, "md": 2, "sm": 4, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          }
+        ]
+      },
+
+      {
+        "type": "WrapperLayout",
+        "scope": "#/properties/card1",
+        "config": {
+          "main": { "divider": false, "rowSpacing": 2, "isAccordion": false, "defaultClosed": false },
+          "layout": { "lg": 4, "md": 4, "sm": 12, "xs": 12 },
+          "defaultStyle": false,
+          "style": {
+            "wrapperStyle": {
+              "background": "#1a1f2e",
+              "border": "1px solid rgba(255,255,255,0.08)",
+              "borderRadius": "12px",
+              "boxShadow": "0 2px 16px rgba(0,0,0,0.3)",
+              "padding": "0",
+              "overflow": "hidden",
+              "minHeight": "520px"
+            }
+          }
+        },
+        "elements": [
+          {
+            "type": "Control", "scope": "#/properties/card1Header",
+            "config": {
+              "main": { "heading": "👤  Applicant Identity   ·   SECTION 01\nKYC · Demographics · Residence", "iconName": "" },
+              "style": {
+                "background": "rgba(255,255,255,0.04)",
+                "borderBottom": "1px solid rgba(255,255,255,0.08)",
+                "color": "#e8eaf6",
+                "fontSize": "13px",
+                "fontWeight": "600",
+                "padding": "14px 16px",
+                "lineHeight": "1.7"
+              },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/card1Applicant",
+            "config": {
+              "main": { "heading": "AM   Arjun Mehta   ·   Self-Employed Prof.\n✅ PAN Verified   ✅ Aadhaar Linked   ✅ Indian", "iconName": "" },
+              "style": {
+                "background": "rgba(33,150,243,0.08)",
+                "borderBottom": "1px solid rgba(255,255,255,0.06)",
+                "color": "#90caf9",
+                "fontSize": "12px",
+                "fontWeight": "500",
+                "padding": "12px 16px",
+                "lineHeight": "1.8"
+              },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/demoLabel",
+            "config": {
+              "main": { "heading": "DEMOGRAPHICS", "iconName": "" },
+              "style": { "color": "#546e7a", "fontSize": "10px", "fontWeight": "700", "letterSpacing": "1.2px", "padding": "10px 16px 4px 16px" },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/demoAge",
+            "config": {
+              "main": { "heading": "Age", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/demoAgeVal",
+            "config": {
+              "main": { "heading": "57 years", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "12px", "fontWeight": "500", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/demoDob",
+            "config": {
+              "main": { "heading": "Date of Birth", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/demoDobVal",
+            "config": {
+              "main": { "heading": "15-Mar-1969", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "12px", "fontWeight": "500", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/demoApplicantType",
+            "config": {
+              "main": { "heading": "Applicant Type", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/demoApplicantTypeVal",
+            "config": {
+              "main": { "heading": "PRIMARY", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "12px", "fontWeight": "500", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/demoCustSeg",
+            "config": {
+              "main": { "heading": "Customer Segment", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/demoCustSegVal",
+            "config": {
+              "main": { "heading": "SELF_EMPLOYED_PROFESSIONAL", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "11px", "fontWeight": "500", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/kycLabel",
+            "config": {
+              "main": { "heading": "KYC", "iconName": "" },
+              "style": { "color": "#546e7a", "fontSize": "10px", "fontWeight": "700", "letterSpacing": "1.2px", "padding": "10px 16px 4px 16px", "borderTop": "1px solid rgba(255,255,255,0.06)", "marginTop": "4px" },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/kycPan",
+            "config": {
+              "main": { "heading": "PAN Number", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/kycPanVal",
+            "config": {
+              "main": { "heading": "ARZAM7251K", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "12px", "fontWeight": "500", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/kycPanStatus",
+            "config": {
+              "main": { "heading": "PAN Status", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/kycPanStatusVal",
+            "config": {
+              "main": { "heading": "TRUE (Verified)", "iconName": "" },
+              "style": { "color": "#4caf50", "fontSize": "12px", "fontWeight": "600", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/kycAadhaar",
+            "config": {
+              "main": { "heading": "Aadhaar", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/kycAadhaarVal",
+            "config": {
+              "main": { "heading": "XXXX XXXX 7842 (masked)", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "12px", "fontWeight": "500", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/residenceLabel",
+            "config": {
+              "main": { "heading": "RESIDENCE", "iconName": "" },
+              "style": { "color": "#546e7a", "fontSize": "10px", "fontWeight": "700", "letterSpacing": "1.2px", "padding": "10px 16px 4px 16px", "borderTop": "1px solid rgba(255,255,255,0.06)", "marginTop": "4px" },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/residentType",
+            "config": {
+              "main": { "heading": "Resident Type", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/residentTypeVal",
+            "config": {
+              "main": { "heading": "Indian Resident", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "12px", "fontWeight": "500", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/address",
+            "config": {
+              "main": { "heading": "Address", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px 12px 16px" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/addressVal",
+            "config": {
+              "main": { "heading": "Bandra West, Mumbai – 400050", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "12px", "fontWeight": "500", "padding": "3px 16px 12px 16px", "textAlign": "right" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          }
+        ]
+      },
+
+      {
+        "type": "WrapperLayout",
+        "scope": "#/properties/card2",
+        "config": {
+          "main": { "divider": false, "rowSpacing": 2, "isAccordion": false, "defaultClosed": false },
+          "layout": { "lg": 4, "md": 4, "sm": 12, "xs": 12 },
+          "defaultStyle": false,
+          "style": {
+            "wrapperStyle": {
+              "background": "#1a1f2e",
+              "border": "1px solid rgba(255,255,255,0.08)",
+              "borderRadius": "12px",
+              "boxShadow": "0 2px 16px rgba(0,0,0,0.3)",
+              "padding": "0",
+              "overflow": "hidden",
+              "minHeight": "520px"
+            }
+          }
+        },
+        "elements": [
+          {
+            "type": "Control", "scope": "#/properties/card2Header",
+            "config": {
+              "main": { "heading": "💼  Employment & Business   ·   SECTION 02\nSelf-Employed · Vintage · Turnover", "iconName": "" },
+              "style": {
+                "background": "rgba(255,255,255,0.04)",
+                "borderBottom": "1px solid rgba(255,255,255,0.08)",
+                "color": "#e8eaf6", "fontSize": "13px", "fontWeight": "600", "padding": "14px 16px", "lineHeight": "1.7"
+              },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/card2Tags",
+            "config": {
+              "main": { "heading": "SEP   ✅ TGE (Top Gross Entity)   ✅ Financials Audited   HINDU_UNDIVIDED_FAMILY", "iconName": "" },
+              "style": {
+                "background": "rgba(33,150,243,0.06)",
+                "borderBottom": "1px solid rgba(255,255,255,0.06)",
+                "color": "#80cbc4", "fontSize": "11px", "fontWeight": "500", "padding": "10px 16px", "lineHeight": "1.6"
+              },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/vintageLabel",
+            "config": {
+              "main": { "heading": "BUSINESS VINTAGE", "iconName": "" },
+              "style": { "color": "#546e7a", "fontSize": "10px", "fontWeight": "700", "letterSpacing": "1.2px", "padding": "12px 16px 4px 16px" },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/vintageValue",
+            "config": {
+              "main": { "heading": "13.98 years   (0 yrs → 20 yrs benchmark)", "iconName": "" },
+              "style": { "color": "#4caf50", "fontSize": "20px", "fontWeight": "700", "padding": "4px 16px 12px 16px" },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/turnoverLabel",
+            "config": {
+              "main": { "heading": "TURNOVER TREND (YEAR-ON-YEAR)", "iconName": "" },
+              "style": { "color": "#546e7a", "fontSize": "10px", "fontWeight": "700", "letterSpacing": "1.2px", "padding": "8px 16px 4px 16px", "borderTop": "1px solid rgba(255,255,255,0.06)" },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/turnoverChart",
+            "config": {
+              "main": {
+                "type": "BarGraph",
+                "header": "Turnover Trend",
+                "leftLabel": "Amount (₹ Cr)",
+                "bottomLabel": ""
+              },
+              "style": {
+                "barStyle": {},
+                "labelStyle": { "margin": { "left": "60" } },
+                "containerStyle": { "height": "160px" }
+              },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Graph" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/yoyChange",
+            "config": {
+              "main": { "heading": "YoY Change:  ▼ -28%   (₹2.65Cr → ₹1.90Cr)", "iconName": "" },
+              "style": { "color": "#ef5350", "fontSize": "13px", "fontWeight": "600", "padding": "4px 16px 12px 16px" },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/detailsLabel",
+            "config": {
+              "main": { "heading": "DETAILS", "iconName": "" },
+              "style": { "color": "#546e7a", "fontSize": "10px", "fontWeight": "700", "letterSpacing": "1.2px", "padding": "8px 16px 4px 16px", "borderTop": "1px solid rgba(255,255,255,0.06)" },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/gstTurnover",
+            "config": {
+              "main": { "heading": "GST Turnover (Reported)", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/gstTurnoverVal",
+            "config": {
+              "main": { "heading": "₹2.33 Crore", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "12px", "fontWeight": "500", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/workExp",
+            "config": {
+              "main": { "heading": "Total Work Experience", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/workExpVal",
+            "config": {
+              "main": { "heading": "30 months (on record)", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "12px", "fontWeight": "500", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/constitution",
+            "config": {
+              "main": { "heading": "Constitution", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/constitutionVal",
+            "config": {
+              "main": { "heading": "HINDU_UNDIVIDED_FAMILY (HUF)", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "11px", "fontWeight": "500", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/companyCategory",
+            "config": {
+              "main": { "heading": "Company Category", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px 12px 16px" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/companyCategoryVal",
+            "config": {
+              "main": { "heading": "TGE (Top Gross Entity)", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "12px", "fontWeight": "500", "padding": "3px 16px 12px 16px", "textAlign": "right" },
+              "layout": { "lg": 6, "md": 6, "sm": 6, "xs": 6 }
+            },
+            "options": { "widget": "Box" }
+          }
+        ]
+      },
+
+      {
+        "type": "WrapperLayout",
+        "scope": "#/properties/card3",
+        "config": {
+          "main": { "divider": false, "rowSpacing": 2, "isAccordion": false, "defaultClosed": false },
+          "layout": { "lg": 4, "md": 4, "sm": 12, "xs": 12 },
+          "defaultStyle": false,
+          "style": {
+            "wrapperStyle": {
+              "background": "#1a1f2e",
+              "border": "1px solid rgba(255,255,255,0.08)",
+              "borderRadius": "12px",
+              "boxShadow": "0 2px 16px rgba(0,0,0,0.3)",
+              "padding": "0",
+              "overflow": "hidden",
+              "minHeight": "520px"
+            }
+          }
+        },
+        "elements": [
+          {
+            "type": "Control", "scope": "#/properties/card3Header",
+            "config": {
+              "main": { "heading": "💰  Income & Financials   ·   SECTION 03\nRepayment Capacity · DBR · Banking Behaviour", "iconName": "" },
+              "style": {
+                "background": "rgba(255,255,255,0.04)",
+                "borderBottom": "1px solid rgba(255,255,255,0.08)",
+                "color": "#e8eaf6", "fontSize": "13px", "fontWeight": "600", "padding": "14px 16px", "lineHeight": "1.7"
+              },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/netIncomeLabel",
+            "config": {
+              "main": { "heading": "NET MONTHLY INCOME", "iconName": "" },
+              "style": { "color": "#546e7a", "fontSize": "10px", "fontWeight": "700", "letterSpacing": "1.2px", "padding": "12px 16px 2px 16px" },
+              "layout": { "lg": 8, "md": 8, "sm": 8, "xs": 8 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/dbrBadge",
+            "config": {
+              "main": { "heading": "DBR/DTI  42%", "iconName": "" },
+              "style": { "background": "#e65100", "color": "#fff", "fontSize": "11px", "fontWeight": "700", "padding": "6px 10px", "borderRadius": "8px", "textAlign": "center", "margin": "10px 16px 0 0" },
+              "layout": { "lg": 4, "md": 4, "sm": 4, "xs": 4 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/netIncomeValue",
+            "config": {
+              "main": { "heading": "₹81,449", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "26px", "fontWeight": "700", "padding": "2px 16px 0px 16px" },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/annualIncome",
+            "config": {
+              "main": { "heading": "₹9,77,389 annual", "iconName": "" },
+              "style": { "color": "#546e7a", "fontSize": "11px", "padding": "2px 16px 8px 16px" },
+              "layout": { "lg": 8, "md": 8, "sm": 8, "xs": 8 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/elevatedBadge",
+            "config": {
+              "main": { "heading": "⚠ Elevated", "iconName": "" },
+              "style": { "background": "rgba(255,152,0,0.15)", "color": "#ffb74d", "fontSize": "11px", "fontWeight": "600", "padding": "4px 10px", "borderRadius": "6px", "textAlign": "center", "margin": "4px 16px 0 0" },
+              "layout": { "lg": 4, "md": 4, "sm": 4, "xs": 4 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/amcLabel",
+            "config": {
+              "main": { "heading": "AMC VS PROPOSED EMI   ✅ 3.0x coverage", "iconName": "" },
+              "style": { "color": "#546e7a", "fontSize": "10px", "fontWeight": "700", "letterSpacing": "1px", "padding": "10px 16px 6px 16px", "borderTop": "1px solid rgba(255,255,255,0.06)" },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/avgCredits",
+            "config": {
+              "main": { "heading": "AVG MONTHLY CREDITS\n₹1,02,451", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "12px", "fontWeight": "600", "padding": "6px 16px", "lineHeight": "1.8", "borderRight": "2px solid #42a5f5" },
+              "layout": { "lg": 5, "md": 5, "sm": 5, "xs": 5 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/arrowLabel",
+            "config": {
+              "main": { "heading": "→", "iconName": "" },
+              "style": { "color": "#42a5f5", "fontSize": "20px", "fontWeight": "700", "padding": "6px 8px", "textAlign": "center" },
+              "layout": { "lg": 2, "md": 2, "sm": 2, "xs": 2 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/proposedEmi",
+            "config": {
+              "main": { "heading": "PROPOSED EMI\n₹34,234", "iconName": "" },
+              "style": { "background": "rgba(33,150,243,0.12)", "borderRadius": "8px", "color": "#90caf9", "fontSize": "12px", "fontWeight": "600", "padding": "6px 12px", "lineHeight": "1.8" },
+              "layout": { "lg": 5, "md": 5, "sm": 5, "xs": 5 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/bankingLabel",
+            "config": {
+              "main": { "heading": "BANKING", "iconName": "" },
+              "style": { "color": "#546e7a", "fontSize": "10px", "fontWeight": "700", "letterSpacing": "1.2px", "padding": "12px 16px 6px 16px", "borderTop": "1px solid rgba(255,255,255,0.06)" },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/bankAccounts",
+            "config": {
+              "main": { "heading": "BANK ACCOUNTS\n3", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "11px", "fontWeight": "500", "padding": "4px 16px", "textAlign": "center", "lineHeight": "2" },
+              "layout": { "lg": 4, "md": 4, "sm": 4, "xs": 4 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/bouncesL6m",
+            "config": {
+              "main": { "heading": "BOUNCES L6M\n2", "iconName": "" },
+              "style": { "color": "#ffb74d", "fontSize": "11px", "fontWeight": "500", "padding": "4px 16px", "textAlign": "center", "lineHeight": "2" },
+              "layout": { "lg": 4, "md": 4, "sm": 4, "xs": 4 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/chequeReturns",
+            "config": {
+              "main": { "heading": "CHEQUE RETURNS\n5", "iconName": "" },
+              "style": { "color": "#ef5350", "fontSize": "11px", "fontWeight": "500", "padding": "4px 16px", "textAlign": "center", "lineHeight": "2" },
+              "layout": { "lg": 4, "md": 4, "sm": 4, "xs": 4 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/obligationsLabel",
+            "config": {
+              "main": { "heading": "OBLIGATIONS", "iconName": "" },
+              "style": { "color": "#546e7a", "fontSize": "10px", "fontWeight": "700", "letterSpacing": "1.2px", "padding": "10px 16px 6px 16px", "borderTop": "1px solid rgba(255,255,255,0.06)" },
+              "layout": { "lg": 12, "md": 12, "sm": 12, "xs": 12 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/totalObligation",
+            "config": {
+              "main": { "heading": "Total Monthly Obligation", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 7, "md": 7, "sm": 7, "xs": 7 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/totalObligationVal",
+            "config": {
+              "main": { "heading": "₹1,02,600", "iconName": "" },
+              "style": { "color": "#ef5350", "fontSize": "12px", "fontWeight": "700", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 5, "md": 5, "sm": 5, "xs": 5 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/incomeMultiplier",
+            "config": {
+              "main": { "heading": "Income Multiplier Applied", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 7, "md": 7, "sm": 7, "xs": 7 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/incomeMultiplierVal",
+            "config": {
+              "main": { "heading": "25x (SEP category)", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "12px", "fontWeight": "500", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 5, "md": 5, "sm": 5, "xs": 5 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/dbrRatio",
+            "config": {
+              "main": { "heading": "DBR / DTI Ratio", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px" },
+              "layout": { "lg": 7, "md": 7, "sm": 7, "xs": 7 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/dbrRatioVal",
+            "config": {
+              "main": { "heading": "42.0%", "iconName": "" },
+              "style": { "color": "#ef5350", "fontSize": "12px", "fontWeight": "700", "padding": "3px 16px", "textAlign": "right" },
+              "layout": { "lg": 5, "md": 5, "sm": 5, "xs": 5 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/finalEmi",
+            "config": {
+              "main": { "heading": "Final EMI (Proposed)", "iconName": "" },
+              "style": { "color": "#90a4ae", "fontSize": "12px", "padding": "3px 16px 12px 16px" },
+              "layout": { "lg": 7, "md": 7, "sm": 7, "xs": 7 }
+            },
+            "options": { "widget": "Box" }
+          },
+          {
+            "type": "Control", "scope": "#/properties/finalEmiVal",
+            "config": {
+              "main": { "heading": "₹34,234", "iconName": "" },
+              "style": { "color": "#e8eaf6", "fontSize": "12px", "fontWeight": "700", "padding": "3px 16px 12px 16px", "textAlign": "right" },
+              "layout": { "lg": 5, "md": 5, "sm": 5, "xs": 5 }
+            },
+            "options": { "widget": "Box" }
+          }
+        ]
+      }
+
+    ]
+  },
+  "schema": {
+    "type": "object",
+    "properties": {
+      "loanHeaderSection": {}, "applicantInfo": {}, "nstpAuthority": {}, "loanApprovalAmt": {},
+      "declineBtn": {}, "approveBtn": {}, "metricsDivider": {},
+      "loanAmtLabel": {}, "productLabel": {}, "tenorLabel": {}, "emiLabel": {}, "interestRateLabel": {}, "cibilScoreLabel": {},
+      "card1": {}, "card1Header": {}, "card1Applicant": {},
+      "demoLabel": {}, "demoAge": {}, "demoAgeVal": {}, "demoDob": {}, "demoDobVal": {},
+      "demoApplicantType": {}, "demoApplicantTypeVal": {}, "demoCustSeg": {}, "demoCustSegVal": {},
+      "kycLabel": {}, "kycPan": {}, "kycPanVal": {}, "kycPanStatus": {}, "kycPanStatusVal": {},
+      "kycAadhaar": {}, "kycAadhaarVal": {},
+      "residenceLabel": {}, "residentType": {}, "residentTypeVal": {}, "address": {}, "addressVal": {},
+      "card2": {}, "card2Header": {}, "card2Tags": {},
+      "vintageLabel": {}, "vintageValue": {},
+      "turnoverLabel": {}, "turnoverChart": {}, "yoyChange": {},
+      "detailsLabel": {}, "gstTurnover": {}, "gstTurnoverVal": {},
+      "workExp": {}, "workExpVal": {}, "constitution": {}, "constitutionVal": {},
+      "companyCategory": {}, "companyCategoryVal": {},
+      "card3": {}, "card3Header": {},
+      "netIncomeLabel": {}, "dbrBadge": {}, "netIncomeValue": {}, "annualIncome": {}, "elevatedBadge": {},
+      "amcLabel": {}, "avgCredits": {}, "arrowLabel": {}, "proposedEmi": {},
+      "bankingLabel": {}, "bankAccounts": {}, "bouncesL6m": {}, "chequeReturns": {},
+      "obligationsLabel": {}, "totalObligation": {}, "totalObligationVal": {},
+      "incomeMultiplier": {}, "incomeMultiplierVal": {},
+      "dbrRatio": {}, "dbrRatioVal": {}, "finalEmi": {}, "finalEmiVal": {}
+    }
+  }
+}
