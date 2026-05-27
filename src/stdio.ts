@@ -15,6 +15,7 @@ if (savedConfig) {
 const server = createMcpServer();
 const transport = new StdioServerTransport();
 
+process.stderr.write("MCP stdio server starting...\n");
 server.connect(transport).catch((err) => {
   process.stderr.write(`Fatal: ${err}\n`);
   process.exit(1);

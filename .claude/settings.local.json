@@ -54,5 +54,9 @@
       "Bash(mv D:/Act21files/mcp-server/.claude/commands/add-checkbox.md D:/Act21files/mcp-server/.claude/commands/hyperform-ui-skill/components/inputs/)",
       "PowerShell(Get-ChildItem \"D:\\\\Act21files\\\\mcp-server\\\\dist\" -Recurse -File | ForEach-Object { $_.FullName })"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "hyperform-ui-mcp-server"
+  ],
+  "enableAllProjectMcpServers": true
 }
