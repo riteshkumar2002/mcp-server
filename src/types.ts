@@ -30,14 +30,14 @@ export interface PageStaging extends Page {
   isDeleted?: string;
 }
 
-export interface EntityReportRequest {
-  entityName: string;
-  type?: string;
-  userId?: number;
-  pageIndex?: number;
-  size?: number;
-  filters?: Record<string, unknown>;
-}
+// export interface EntityReportRequest {
+//   entityName: string;
+//   type?: string;
+//   userId?: number;
+//   pageIndex?: number;
+//   size?: number;
+//   filters?: Record<string, unknown>;
+// }
 
 export interface HyperformApiResponse {
   success?: boolean;

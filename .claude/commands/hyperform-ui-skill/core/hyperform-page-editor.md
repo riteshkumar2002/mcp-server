@@ -1,7 +1,7 @@
 ---
 name: hyperform-page-editor
 description: Master orchestration skill for creating and maintaining Hyperform page JSON end-to-end. Handles text instructions AND image-based requirements ("update page_X as shown in this image"). Correct flow: fetch page (MCP) → apply edits to CONFIG only in memory → render preview using preview_session_from_config (MCP, auto-derives uiSchema+schema) → screenshot (MCP) → compare against requirement → fix in memory and re-render if needed (repeat up to 3 times, NO intermediate saves) → save ONCE to staging via update_page(config only) (MCP) → close session → respond. Use for any "edit this page", "make it look like this image", "add X to page_Y", or "create a new page" request.
-compatibility: hyperform-ui MCP server (server name: hyperform-ui-mcp) — required tools: get_page_record, update_page, approve_or_reject_record, preview_session_from_config, preview_screenshot, preview_close_session
+compatibility: hyperform-ui MCP server (server name: hyperform-ui-mcp) — required tools: get_page_record, update_page, preview_session_from_config, preview_screenshot, preview_close_session
 ---
 
 # HyPerform Skill: Page Editor (Full Workflow)
@@ -45,7 +45,7 @@ All three core operations go through the **`hyperform-ui-mcp`** MCP server. Neve
 | **Screenshot** | `preview_screenshot` | Phase 5 — after each render |
 | **Close renderer** | `preview_close_session` | Phase 6 — once, after validation passes |
 | **Save page** | `update_page` | Phase 6 — once, only after screenshots pass; pass config only |
-| **Unblock staging** | `approve_or_reject_record` | Phase 6 — only if `update_page` hits a staging blocker |
+| **Unblock staging** | Admin action | Phase 6 — Manual approval required; never auto-approve. If a blocking staging record exists (A/P/D), an administrator must resolve it in the Hyperform workflow dashboard. |
 
 > **KEY PRINCIPLE:** You only ever build and edit the **`config`** object. `uiSchema` and `schema` are derived automatically inside `preview_session_from_config` and `update_page` via `buildUiSchema` / `buildSchema`. Never construct uiSchema or schema manually.
 
@@ -381,13 +381,13 @@ update_page(
 )
 ```
 
-`update_page` auto-handles everything: calls `buildUiSchema(config, {})`, `buildConfig(config)`, `buildSchema(config)` internally, rejects any blocking staging record, and saves the new staging record to the backend.
+`update_page` builds `uiSchema` and `schema` from your `config` (via `buildUiSchema` / `buildSchema`) and attempts to save the result as a new staging record in the backend. It does NOT auto-approve staging records. If a blocking staging record exists, `update_page` may return an error and an administrator must approve or reject the existing staging record using the Hyperform workflow dashboard before the changes can go live.
 
 **If `update_page` returns an error:**
 
 | Error | Root cause | Fix |
 |---|---|---|
-| "First Approve the previously edited entity" | Staging A/P/D is blocking | Tool handles it; if not, call `approve_or_reject_record(action:"R")` manually then retry |
+| "First Approve the previously edited entity" | Staging A/P/D is blocking | This indicates a blocking staging record. Do NOT auto-approve — ask an administrator to approve or reject the blocking staging record in the Hyperform workflow dashboard, then retry `update_page`. |
 | "Name already present" | `id: null` when staging record exists | Tool should use the existing staging ID from Phase 1 |
 | HTTP 400 no message | Missing required field | Verify all three of config, uiSchema, schema are present |
 | HTTP 401 | Token expired | Re-run `npm run setup` |

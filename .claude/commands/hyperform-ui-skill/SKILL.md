@@ -160,7 +160,7 @@ This skill orchestrates the full loop: retrieve page → apply changes → save 
 
 1. **Never write page JSON from memory** — always invoke the matching skill first
 2. **Never invent widget types** — only use types defined in the skills
-3. **Always save through staging** — use `update_page` tool (handles reject-staging → build → save)
+3. **Always save through staging** — use `update_page` tool (builds uiSchema/schema from `config` and saves to staging). Manual administrator approval is required for saved staging records; do not auto-approve.
 4. **Never auto-approve** — leave saves in staging for admin approval
 5. **Always validate visually** — take screenshots via `preview_launch_session` + `preview_screenshot`
 6. **masterName** for all page operations = `com.act21.hyperform3.entity.page.PageStaging`
@@ -174,7 +174,6 @@ This skill orchestrates the full loop: retrieve page → apply changes → save 
 |---|---|
 | `get_page_record` | Fetch current page JSON + IDs (mainId, stagingId, actionId) |
 | `update_page` | Save changes through staging workflow |
-| `approve_or_reject_record` | Manually reject a blocking staging record |
 | `preview_launch_session` | Start renderer + open Playwright browser (keeps session open) |
 | `preview_screenshot` | Take full-page or element-scoped screenshot |
 | `preview_close_session` | Shut down browser and renderer |

@@ -3,29 +3,29 @@ import {
   getPageByName,
   getDetailById,
   getStagingByMainId,
-  getDetailsByStatus,
-  getDetailsById,
-  getApprovedDetails,
-  getApprovedDetailsPaginated,
-  getDraftDetails,
-  getDraftDetailsPaginated,
-  getPendingDetails,
-  getPendingDetailsPaginated,
-  getRejectedDetails,
-  getRejectedDetailsPaginated,
-  getPendingActionDetails,
-  getPendingActionDetailsPaginated,
+  // getDetailsByStatus,
+  // getDetailsById,
+  // getApprovedDetails,
+  // getApprovedDetailsPaginated,
+  // getDraftDetails,
+  // getDraftDetailsPaginated,
+  // getPendingDetails,
+  // getPendingDetailsPaginated,
+  // getRejectedDetails,
+  // getRejectedDetailsPaginated,
+  // getPendingActionDetails,
+  // getPendingActionDetailsPaginated,
 } from "../apiClient.js";
-import type { EntityReportRequest } from "../types.js";
+// import type { EntityReportRequest } from "../types.js";
 
 // ── Shared param schemas ──────────────────────────────────────────────────────
 
-const entityReportSchema = z.object({
-  entityName: z.string().describe("Master name, e.g. 'com.act21.hyperform3.entity.page.PageStaging'"),
-  pageIndex: z.number().int().nonnegative().optional().describe("0-based page index (required for paginated variants)"),
-  size: z.number().int().positive().optional().describe("Page size (required for paginated variants)"),
-  filters: z.record(z.unknown()).optional().describe("Optional filter map"),
-});
+// const entityReportSchema = z.object({
+//   entityName: z.string().describe("Master name, e.g. 'com.act21.hyperform3.entity.page.PageStaging'"),
+//   pageIndex: z.number().int().nonnegative().optional().describe("0-based page index (required for paginated variants)"),
+//   size: z.number().int().positive().optional().describe("Page size (required for paginated variants)"),
+//   filters: z.record(z.unknown()).optional().describe("Optional filter map"),
+// });
 
 // ── get_page_record ───────────────────────────────────────────────────────────
 // Resolves page name → id via /page/getByName, then fetches the master record.
@@ -90,121 +90,121 @@ export const getStagingByMainIdSchema = z.object({
   masterName: z.string().describe("Master name, e.g. 'com.act21.hyperform3.entity.page.PageStaging'"),
 });
 
-export async function toolGetStagingByMainId(args: z.infer<typeof getStagingByMainIdSchema>) {
-  const data = await getStagingByMainId(args.id, args.masterName);
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
-}
+// export async function toolGetStagingByMainId(args: z.infer<typeof getStagingByMainIdSchema>) {
+//   const data = await getStagingByMainId(args.id, args.masterName);
+//   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+// }
 
 // ── get_records_by_status ─────────────────────────────────────────────────────
 
-export const getRecordsByStatusSchema = z.object({
-  status: z.string().describe("Status filter: 'A'=Approved, 'P'=Pending, 'R'=Rejected, 'D'=Draft"),
-  masterName: z.string().describe("Master name, e.g. 'com.act21.hyperform3.entity.page.PageStaging'"),
-});
+// export const getRecordsByStatusSchema = z.object({
+//   status: z.string().describe("Status filter: 'A'=Approved, 'P'=Pending, 'R'=Rejected, 'D'=Draft"),
+//   masterName: z.string().describe("Master name, e.g. 'com.act21.hyperform3.entity.page.PageStaging'"),
+// });
 
-export async function toolGetRecordsByStatus(args: z.infer<typeof getRecordsByStatusSchema>) {
-  const data = await getDetailsByStatus(args.status, args.masterName);
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
-}
+// export async function toolGetRecordsByStatus(args: z.infer<typeof getRecordsByStatusSchema>) {
+//   const data = await getDetailsByStatus(args.status, args.masterName);
+//   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+// }
 
 // ── get_records_by_ids ────────────────────────────────────────────────────────
 
-export const getRecordsByIdsSchema = z.object({
-  entityName: z.string().describe("Fully-qualified entity class name"),
-  ids: z.array(z.number().int().positive()).describe("List of record IDs to fetch"),
-});
+// export const getRecordsByIdsSchema = z.object({
+//   entityName: z.string().describe("Fully-qualified entity class name"),
+//   ids: z.array(z.number().int().positive()).describe("List of record IDs to fetch"),
+// });
 
-export async function toolGetRecordsByIds(args: z.infer<typeof getRecordsByIdsSchema>) {
-  const data = await getDetailsById(args.entityName, args.ids);
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
-}
+// export async function toolGetRecordsByIds(args: z.infer<typeof getRecordsByIdsSchema>) {
+//   const data = await getDetailsById(args.entityName, args.ids);
+//   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+// }
 
 // ── get_approved_details ──────────────────────────────────────────────────────
 
-export const getApprovedDetailsSchema = entityReportSchema;
+// export const getApprovedDetailsSchema = entityReportSchema;
 
-export async function toolGetApprovedDetails(args: z.infer<typeof getApprovedDetailsSchema>) {
-  const data = await getApprovedDetails(args as EntityReportRequest);
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
-}
+// export async function toolGetApprovedDetails(args: z.infer<typeof getApprovedDetailsSchema>) {
+//   const data = await getApprovedDetails(args as EntityReportRequest);
+//   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+// }
 
 // ── get_approved_details_paginated ────────────────────────────────────────────
 
-export const getApprovedDetailsPaginatedSchema = entityReportSchema;
+// export const getApprovedDetailsPaginatedSchema = entityReportSchema;
 
-export async function toolGetApprovedDetailsPaginated(args: z.infer<typeof getApprovedDetailsPaginatedSchema>) {
-  const data = await getApprovedDetailsPaginated(args as EntityReportRequest);
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
-}
+// export async function toolGetApprovedDetailsPaginated(args: z.infer<typeof getApprovedDetailsPaginatedSchema>) {
+//   const data = await getApprovedDetailsPaginated(args as EntityReportRequest);
+//   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+// }
 
 // ── get_pending_details ───────────────────────────────────────────────────────
 
-export const getPendingDetailsSchema = entityReportSchema;
+// export const getPendingDetailsSchema = entityReportSchema;
 
-export async function toolGetPendingDetails(args: z.infer<typeof getPendingDetailsSchema>) {
-  const data = await getPendingDetails(args as EntityReportRequest);
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
-}
+// export async function toolGetPendingDetails(args: z.infer<typeof getPendingDetailsSchema>) {
+//   const data = await getPendingDetails(args as EntityReportRequest);
+//   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+// }
 
 // ── get_pending_details_paginated ─────────────────────────────────────────────
 
-export const getPendingDetailsPaginatedSchema = entityReportSchema;
+// export const getPendingDetailsPaginatedSchema = entityReportSchema;
 
-export async function toolGetPendingDetailsPaginated(args: z.infer<typeof getPendingDetailsPaginatedSchema>) {
-  const data = await getPendingDetailsPaginated(args as EntityReportRequest);
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
-}
+// export async function toolGetPendingDetailsPaginated(args: z.infer<typeof getPendingDetailsPaginatedSchema>) {
+//   const data = await getPendingDetailsPaginated(args as EntityReportRequest);
+//   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+// }
 
 // ── get_rejected_details ──────────────────────────────────────────────────────
 
-export const getRejectedDetailsSchema = entityReportSchema;
+// export const getRejectedDetailsSchema = entityReportSchema;
 
-export async function toolGetRejectedDetails(args: z.infer<typeof getRejectedDetailsSchema>) {
-  const data = await getRejectedDetails(args as EntityReportRequest);
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
-}
+// export async function toolGetRejectedDetails(args: z.infer<typeof getRejectedDetailsSchema>) {
+//   const data = await getRejectedDetails(args as EntityReportRequest);
+//   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+// }
 
 // ── get_rejected_details_paginated ────────────────────────────────────────────
 
-export const getRejectedDetailsPaginatedSchema = entityReportSchema;
+// export const getRejectedDetailsPaginatedSchema = entityReportSchema;
 
-export async function toolGetRejectedDetailsPaginated(args: z.infer<typeof getRejectedDetailsPaginatedSchema>) {
-  const data = await getRejectedDetailsPaginated(args as EntityReportRequest);
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
-}
+// export async function toolGetRejectedDetailsPaginated(args: z.infer<typeof getRejectedDetailsPaginatedSchema>) {
+//   const data = await getRejectedDetailsPaginated(args as EntityReportRequest);
+//   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+// }
 
 // ── get_draft_details ─────────────────────────────────────────────────────────
 
-export const getDraftDetailsSchema = entityReportSchema;
+// export const getDraftDetailsSchema = entityReportSchema;
 
-export async function toolGetDraftDetails(args: z.infer<typeof getDraftDetailsSchema>) {
-  const data = await getDraftDetails(args as EntityReportRequest);
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
-}
+// export async function toolGetDraftDetails(args: z.infer<typeof getDraftDetailsSchema>) {
+//   const data = await getDraftDetails(args as EntityReportRequest);
+//   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+// }
 
 // ── get_draft_details_paginated ───────────────────────────────────────────────
 
-export const getDraftDetailsPaginatedSchema = entityReportSchema;
+// export const getDraftDetailsPaginatedSchema = entityReportSchema;
 
-export async function toolGetDraftDetailsPaginated(args: z.infer<typeof getDraftDetailsPaginatedSchema>) {
-  const data = await getDraftDetailsPaginated(args as EntityReportRequest);
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
-}
+// export async function toolGetDraftDetailsPaginated(args: z.infer<typeof getDraftDetailsPaginatedSchema>) {
+//   const data = await getDraftDetailsPaginated(args as EntityReportRequest);
+//   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+// }
 
 // ── get_pending_action_details ────────────────────────────────────────────────
 
-export const getPendingActionDetailsSchema = entityReportSchema;
+// export const getPendingActionDetailsSchema = entityReportSchema;
 
-export async function toolGetPendingActionDetails(args: z.infer<typeof getPendingActionDetailsSchema>) {
-  const data = await getPendingActionDetails(args as EntityReportRequest);
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
-}
+// export async function toolGetPendingActionDetails(args: z.infer<typeof getPendingActionDetailsSchema>) {
+//   const data = await getPendingActionDetails(args as EntityReportRequest);
+//   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+// }
 
 // ── get_pending_action_details_paginated ──────────────────────────────────────
 
-export const getPendingActionDetailsPaginatedSchema = entityReportSchema;
+// export const getPendingActionDetailsPaginatedSchema = entityReportSchema;
 
-export async function toolGetPendingActionDetailsPaginated(args: z.infer<typeof getPendingActionDetailsPaginatedSchema>) {
-  const data = await getPendingActionDetailsPaginated(args as EntityReportRequest);
-  return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
-}
+// export async function toolGetPendingActionDetailsPaginated(args: z.infer<typeof getPendingActionDetailsPaginatedSchema>) {
+//   const data = await getPendingActionDetailsPaginated(args as EntityReportRequest);
+//   return { content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] };
+// }

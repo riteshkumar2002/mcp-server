@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance, type AxiosError } from "axios";
-import type { EntityReportRequest, HyperformApiResponse } from "./types.js";
+import type { HyperformApiResponse } from "./types.js";
 import { loadConfig } from "./config.js";
 import { login } from "./auth.js";
 
@@ -126,107 +126,107 @@ export async function getStagingByMainId(
 }
 
 // ── /master/getDetailsByStatus ────────────────────────────────────────────────
-export async function getDetailsByStatus(
-  status: string,
-  masterName: string
-): Promise<unknown[]> {
-  const res = await getClient().get<unknown[]>("/master/getDetailsByStatus", {
-    params: { status, masterName },
-  });
-  return res.data;
-}
+// export async function getDetailsByStatus(
+//   status: string,
+//   masterName: string
+// ): Promise<unknown[]> {
+//   const res = await getClient().get<unknown[]>("/master/getDetailsByStatus", {
+//     params: { status, masterName },
+//   });
+//   return res.data;
+// }
 
 // ── /master/getDetailsById ────────────────────────────────────────────────────
-export async function getDetailsById(
-  entityName: string,
-  ids: number[]
-): Promise<unknown[]> {
-  const res = await getClient().post<unknown[]>("/master/getDetailsById", {
-    entityName,
-    entityValue: ids,
-  });
-  return res.data;
-}
+// export async function getDetailsById(
+//   entityName: string,
+//   ids: number[]
+// ): Promise<unknown[]> {
+//   const res = await getClient().post<unknown[]>("/master/getDetailsById", {
+//     entityName,
+//     entityValue: ids,
+//   });
+//   return res.data;
+// }
 
 // ── /master/getApprovedDetails ────────────────────────────────────────────────
-export async function getApprovedDetails(
-  req: EntityReportRequest
-): Promise<Record<string, unknown>[]> {
-  const res = await getClient().post<Record<string, unknown>[]>("/master/getApprovedDetails", req);
-  return res.data;
-}
+// export async function getApprovedDetails(
+//   req: EntityReportRequest
+// ): Promise<Record<string, unknown>[]> {
+//   const res = await getClient().post<Record<string, unknown>[]>("/master/getApprovedDetails", req);
+//   return res.data;
+// }
 
 // ── /master/getApprovedDetailsPaginated ──────────────────────────────────────
-export async function getApprovedDetailsPaginated(
-  req: EntityReportRequest
-): Promise<Record<string, unknown>> {
-  const res = await getClient().post<Record<string, unknown>>("/master/getApprovedDetailsPaginated", req);
-  return res.data;
-}
+// export async function getApprovedDetailsPaginated(
+//   req: EntityReportRequest
+// ): Promise<Record<string, unknown>> {
+//   const res = await getClient().post<Record<string, unknown>>("/master/getApprovedDetailsPaginated", req);
+//   return res.data;
+// }
 
 // ── /master/getPendingDetails ─────────────────────────────────────────────────
-export async function getPendingDetails(
-  req: EntityReportRequest
-): Promise<Record<string, unknown>[]> {
-  const res = await getClient().post<Record<string, unknown>[]>("/master/getPendingDetails", req);
-  return res.data;
-}
+// export async function getPendingDetails(
+//   req: EntityReportRequest
+// ): Promise<Record<string, unknown>[]> {
+//   const res = await getClient().post<Record<string, unknown>[]>("/master/getPendingDetails", req);
+//   return res.data;
+// }
 
 // ── /master/getPendingDetailsPaginated ───────────────────────────────────────
-export async function getPendingDetailsPaginated(
-  req: EntityReportRequest
-): Promise<Record<string, unknown>> {
-  const res = await getClient().post<Record<string, unknown>>("/master/getPendingDetailsPaginated", req);
-  return res.data;
-}
+// export async function getPendingDetailsPaginated(
+//   req: EntityReportRequest
+// ): Promise<Record<string, unknown>> {
+//   const res = await getClient().post<Record<string, unknown>>("/master/getPendingDetailsPaginated", req);
+//   return res.data;
+// }
 
 // ── /master/getRejectedDetails ────────────────────────────────────────────────
-export async function getRejectedDetails(
-  req: EntityReportRequest
-): Promise<Record<string, unknown>[]> {
-  const res = await getClient().post<Record<string, unknown>[]>("/master/getRejectedDetails", req);
-  return res.data;
-}
+// export async function getRejectedDetails(
+//   req: EntityReportRequest
+// ): Promise<Record<string, unknown>[]> {
+//   const res = await getClient().post<Record<string, unknown>[]>("/master/getRejectedDetails", req);
+//   return res.data;
+// }
 
 // ── /master/getRejectedDetailsPaginated ──────────────────────────────────────
-export async function getRejectedDetailsPaginated(
-  req: EntityReportRequest
-): Promise<Record<string, unknown>> {
-  const res = await getClient().post<Record<string, unknown>>("/master/getRejectedDetailsPaginated", req);
-  return res.data;
-}
+// export async function getRejectedDetailsPaginated(
+//   req: EntityReportRequest
+// ): Promise<Record<string, unknown>> {
+//   const res = await getClient().post<Record<string, unknown>>("/master/getRejectedDetailsPaginated", req);
+//   return res.data;
+// }
 
 // ── /master/getPendingActionDetails ──────────────────────────────────────────
-export async function getPendingActionDetails(
-  req: EntityReportRequest
-): Promise<Record<string, unknown>[]> {
-  const res = await getClient().post<Record<string, unknown>[]>("/master/getPendingActionDetails", req);
-  return res.data;
-}
+// export async function getPendingActionDetails(
+//   req: EntityReportRequest
+// ): Promise<Record<string, unknown>[]> {
+//   const res = await getClient().post<Record<string, unknown>[]>("/master/getPendingActionDetails", req);
+//   return res.data;
+// }
 
 // ── /master/getPendingActionDetailsPaginated ──────────────────────────────────
-export async function getPendingActionDetailsPaginated(
-  req: EntityReportRequest
-): Promise<Record<string, unknown>> {
-  const res = await getClient().post<Record<string, unknown>>("/master/getPendingActionDetailsPaginated", req);
-  return res.data;
-}
+// export async function getPendingActionDetailsPaginated(
+//   req: EntityReportRequest
+// ): Promise<Record<string, unknown>> {
+//   const res = await getClient().post<Record<string, unknown>>("/master/getPendingActionDetailsPaginated", req);
+//   return res.data;
+// }
 
 // ── /master/getDraftDetails ───────────────────────────────────────────────────
-export async function getDraftDetails(
-  req: EntityReportRequest
-): Promise<Record<string, unknown>[]> {
-  const res = await getClient().post<Record<string, unknown>[]>("/master/getDraftDetails", req);
-  return res.data;
-}
+// export async function getDraftDetails(
+//   req: EntityReportRequest
+// ): Promise<Record<string, unknown>[]> {
+//   const res = await getClient().post<Record<string, unknown>[]>("/master/getDraftDetails", req);
+//   return res.data;
+// }
 
 // ── /master/getDraftDetailsPaginated ─────────────────────────────────────────
-export async function getDraftDetailsPaginated(
-  req: EntityReportRequest
-): Promise<Record<string, unknown>> {
-  const res = await getClient().post<Record<string, unknown>>("/master/getDraftDetailsPaginated", req);
-  return res.data;
-}
+// export async function getDraftDetailsPaginated(
+//   req: EntityReportRequest
+// ): Promise<Record<string, unknown>> {
+//   const res = await getClient().post<Record<string, unknown>>("/master/getDraftDetailsPaginated", req);
+//   return res.data;
+// }
 
 // ── /master/delete ────────────────────────────────────────────────────────────
 export async function masterDelete(entityName: string, id: number): Promise<void> {

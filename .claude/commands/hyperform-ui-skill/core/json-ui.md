@@ -400,19 +400,10 @@ Before saving, check the staging record status:
 | Staging status | Action required before save |
 |---|---|
 | None (no staging exists) | Save directly |
-| A / P / D (Approved, Pending, Draft) | **Reject it first** via `approve_or_reject_record(action:"R")` |
+| A / P / D (Approved, Pending, Draft) | **Manual approval required** — do NOT auto-approve. If a blocking staging record exists, ask an administrator to approve or reject it in the Hyperform workflow dashboard. |
 | R (already Rejected) | Save directly |
 
-**Why:** Hyperform only allows one staging record per page. If an approved or pending staging record exists, the save will return: *"First Approve the previously edited entity or check draft entries"*.
-
-Reject the blocking staging record:
-```
-approve_or_reject_record(
-  entityName: "com.act21.hyperform3.entity.page.PageStaging",
-  action: "R",
-  entityValue: <full staging record object from step 1>
-)
-```
+**Why:** Hyperform only allows one staging record per page. If an approved or pending staging record exists, `update_page` will fail to complete the save; the change remains in staging and requires manual administrator approval to go live.
 
 ---
 

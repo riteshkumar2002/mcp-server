@@ -93,58 +93,58 @@ export async function toolSaveRecord(args: z.infer<typeof saveRecordSchema>) {
 
 // ── approve_or_reject_record ──────────────────────────────────────────────────
 
-export const masterActionSchema = z.object({
-  entityName: z.string().describe(
-    "Fully-qualified Java entity class name, e.g. 'com.act21.hyperform3.entity.page.PageStaging'"
-  ),
-  action: z.enum(["A", "R"]).describe("'A' = Approve,  'R' = Reject"),
-  entityValue: z.record(z.unknown()).describe(
-    "The full entity object to approve or reject (as returned by get_page_record or get_staging_by_main_id)."
-  ),
-});
+// export const masterActionSchema = z.object({
+//   entityName: z.string().describe(
+//     "Fully-qualified Java entity class name, e.g. 'com.act21.hyperform3.entity.page.PageStaging'"
+//   ),
+//   action: z.enum(["A", "R"]).describe("'A' = Approve,  'R' = Reject"),
+//   entityValue: z.record(z.unknown()).describe(
+//     "The full entity object to approve or reject (as returned by get_page_record or get_staging_by_main_id)."
+//   ),
+// });
 
-export async function toolMasterAction(args: z.infer<typeof masterActionSchema>) {
-  try {
-    await masterAction(args.entityName, args.action, args.entityValue);
-    const label = args.action === "A" ? "approved" : "rejected";
-    return {
-      content: [{
-        type: "text" as const,
-        text: JSON.stringify({ success: true, message: `Record ${label} successfully` }, null, 2),
-      }],
-    };
-  } catch (err) {
-    return {
-      content: [{
-        type: "text" as const,
-        text: `Action failed.\n\n${extractApiError(err)}`,
-      }],
-    };
-  }
-}
+// export async function toolMasterAction(args: z.infer<typeof masterActionSchema>) {
+//   try {
+//     await masterAction(args.entityName, args.action, args.entityValue);
+//     const label = args.action === "A" ? "approved" : "rejected";
+//     return {
+//       content: [{
+//         type: "text" as const,
+//         text: JSON.stringify({ success: true, message: `Record ${label} successfully` }, null, 2),
+//       }],
+//     };
+//   } catch (err) {
+//     return {
+//       content: [{
+//         type: "text" as const,
+//         text: `Action failed.\n\n${extractApiError(err)}`,
+//       }],
+//     };
+//   }
+// }
 
 // ── delete_record ─────────────────────────────────────────────────────────────
 
-export const deleteRecordSchema = z.object({
-  entityName: z.string().describe("Fully-qualified Java entity class name"),
-  id: z.number().int().positive().describe("ID of the record to delete"),
-});
+// export const deleteRecordSchema = z.object({
+//   entityName: z.string().describe("Fully-qualified Java entity class name"),
+//   id: z.number().int().positive().describe("ID of the record to delete"),
+// });
 
-export async function toolDeleteRecord(args: z.infer<typeof deleteRecordSchema>) {
-  try {
-    await masterDelete(args.entityName, args.id);
-    return {
-      content: [{
-        type: "text" as const,
-        text: JSON.stringify({ success: true, message: `Record ${args.id} deleted` }, null, 2),
-      }],
-    };
-  } catch (err) {
-    return {
-      content: [{
-        type: "text" as const,
-        text: `Delete failed.\n\n${extractApiError(err)}`,
-      }],
-    };
-  }
-}
+// export async function toolDeleteRecord(args: z.infer<typeof deleteRecordSchema>) {
+//   try {
+//     await masterDelete(args.entityName, args.id);
+//     return {
+//       content: [{
+//         type: "text" as const,
+//         text: JSON.stringify({ success: true, message: `Record ${args.id} deleted` }, null, 2),
+//       }],
+//     };
+//   } catch (err) {
+//     return {
+//       content: [{
+//         type: "text" as const,
+//         text: `Delete failed.\n\n${extractApiError(err)}`,
+//       }],
+//     };
+//   }
+// }

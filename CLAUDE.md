@@ -47,7 +47,7 @@ All skills live under `.claude/commands/hyperform-ui-skill/`. Use the full names
 1. **Before writing any page JSON** — invoke the matching skill first, then follow its patterns exactly.
 2. **Never invent widget types** — only use types defined in the skills.
 3. **Build `config` only — never build uiSchema or schema manually.** Both `update_page` and `preview_session_from_config` call `buildUiSchema` / `buildSchema` internally. You only ever construct and pass the `config` object.
-4. **Never skip the staging save flow** — always use `update_page(pageName, config, userId)` which auto-derives uiSchema/schema and handles reject-staging → save.
+4. **Never skip the staging save flow** — always use `update_page(pageName, config, userId)` which auto-derives uiSchema/schema and saves the result to staging. Manual administrator approval is required for staging records; do not auto-approve.
 5. **Never auto-approve** — leave all saved pages for manual approval in the workflow dashboard.
 6. **userId** defaults to `1` unless explicitly provided.
 7. **masterName for page operations is always** `com.act21.hyperform3.entity.page.PageStaging` — never `PageMaster` or any other value when working with pages.
