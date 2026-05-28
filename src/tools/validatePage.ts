@@ -106,16 +106,16 @@ async function startRenderer(schemaPath: string): Promise<ChildProcess> {
 
 // ── Port readiness polling ────────────────────────────────────────────────────
 
-async function waitForUrl(url: string, timeoutMs = 40_000): Promise<boolean> {
+async function waitForUrl(url: string, timeoutMs = 20_000): Promise<boolean> {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(2_000) });
+      const res = await fetch(url, { signal: AbortSignal.timeout(1_000) });
       if (res.status < 500) return true;
     } catch {
       // not ready yet
     }
-    await new Promise<void>((r) => setTimeout(r, 800));
+    await new Promise<void>((r) => setTimeout(r, 200));
   }
   return false;
 }
