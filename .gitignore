@@ -26,6 +26,7 @@ Thumbs.db
 # Testing
 playwright-results/
 .playwright/
+preview/
 
 # Project specific
 mcp-server.zip
