@@ -29,14 +29,18 @@ function parseSkillFile(filePath: string): SkillMeta | null {
   }
 }
 
+let skillsCache: SkillMeta[] | null = null;
+
 function getAllSkills(): SkillMeta[] {
+  if (skillsCache) return skillsCache;
   if (!fs.existsSync(COMMANDS_DIR)) return [];
-  return fs
+  skillsCache = fs
     .readdirSync(COMMANDS_DIR)
     .filter((f) => f.endsWith(".md"))
     .map((f) => parseSkillFile(path.join(COMMANDS_DIR, f)))
     .filter((s): s is SkillMeta => s !== null)
     .sort((a, b) => a.name.localeCompare(b.name));
+  return skillsCache;
 }
 
 // ── list_component_skills ─────────────────────────────────────────────────────
