@@ -50,7 +50,11 @@ export const updatePageSchema = z.object({
 
 export async function toolUpdatePage(args: z.infer<typeof updatePageSchema>) {
 
-  // ── 1. Resolve page name → full page record (includes id, pageUrl, templateName, name) ──
+  // ── 1. Resolve userId from stored config (before any async work) ──────────
+  const cfg    = loadConfig();
+  const userId = args.userId ?? cfg?.userId ?? 1;
+
+  // ── 2. Resolve page name → full page record (includes id, pageUrl, templateName, name) ──
   let pageRef: Record<string, unknown>;
   try {
     pageRef = await getPageByName(args.pageName);
@@ -68,7 +72,7 @@ export async function toolUpdatePage(args: z.infer<typeof updatePageSchema>) {
     };
   }
 
-  // ── 2. Fetch staging record (if any) ─────────────────────────────────────
+  // ── 3. Fetch staging record (if any) ─────────────────────────────────────
   let staging: Record<string, unknown> | null = null;
   try {
     const raw = await getStagingByMainId(mainId, PAGE_MASTER);
@@ -77,7 +81,7 @@ export async function toolUpdatePage(args: z.infer<typeof updatePageSchema>) {
     // No staging record — proceed with null
   }
 
-  // ── 3. Build uiSchema / config / schema from the provided config ──────────
+  // ── 4. Build uiSchema / config / schema from the provided config ──────────
   //       Mirrors the frontend's mergeWithBackendData / submitHandler flow.
   let artifacts;
   try {
@@ -96,10 +100,6 @@ export async function toolUpdatePage(args: z.infer<typeof updatePageSchema>) {
   const updatedUiSchema = artifacts.uiSchema;
   const updatedConfig   = artifacts.config;
   const updatedSchema   = artifacts.schema;
-
-  // ── 4. Resolve userId ─────────────────────────────────────────────────────
-  const cfg    = loadConfig();
-  const userId = args.userId ?? cfg?.userId ?? 1;
 
   // ── 5. Build pageUrl the same way the frontend does ───────────────────────
   //       template/name — fall back to the value already on the main record.
