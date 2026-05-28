@@ -178,9 +178,10 @@ export function createMcpServer(): McpServer {
     "get_page_record",
     [
       "Fetch a page record by PAGE NAME (not ID).",
-      "Calls POST /page/getByName to resolve the name to an ID, then fetches the full master record via /master/getDetailById.",
+      "Calls POST /page/getByName which returns the full page including id, name, pageUrl, templateName, and config.",
       "Set fetchStaging=true to also retrieve the staging (pending/draft) record.",
-      "Use this as the first step before modifying any page — it gives you the current uiSchema and schema.",
+      "uiSchema and schema are stripped from the response by default to keep it compact — set includeSchema=true to include them.",
+      "Use this as the first step before modifying any page.",
     ].join(" "),
     getPageRecordSchema.shape,
     toolGetPageRecord

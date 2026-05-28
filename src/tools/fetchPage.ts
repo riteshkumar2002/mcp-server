@@ -34,7 +34,17 @@ export const getPageRecordSchema = z.object({
   pageName: z.string().describe("Page name as stored in the backend, e.g. 'page_eSign'"),
   masterName: z.string().describe("Master entity name used for staging lookup, e.g. 'com.act21.hyperform3.entity.page.PageStaging'"),
   fetchStaging: z.boolean().optional().describe("If true, also fetch the staging (pending/draft) record for this page"),
+  includeSchema: z.boolean().optional().default(false).describe(
+    "Set true to include the derived uiSchema and schema in the response. " +
+    "Default false — omits them to keep the response compact. " +
+    "The AI only needs config, id, name, pageUrl, and templateName for page edits."
+  ),
 });
+
+function stripSchema(record: Record<string, unknown>): Record<string, unknown> {
+  const { uiSchema: _u, schema: _s, ...rest } = record;
+  return rest;
+}
 
 export async function toolGetPageRecord(args: z.infer<typeof getPageRecordSchema>) {
   const page = await getPageByName(args.pageName);
@@ -49,18 +59,21 @@ export async function toolGetPageRecord(args: z.infer<typeof getPageRecordSchema
     };
   }
 
+  const pageData = args.includeSchema ? page : stripSchema(page);
+
   const lines: string[] = [
     `Page name : ${args.pageName}`,
     `Page id   : ${id}`,
     "",
     "--- Record ---",
-    JSON.stringify(page, null, 2),
+    JSON.stringify(pageData, null, 2),
   ];
 
   if (args.fetchStaging) {
     try {
       const staging = await getStagingByMainId(id, args.masterName);
-      lines.push("", "--- Staging record ---", JSON.stringify(staging, null, 2));
+      const stagingData = args.includeSchema ? staging : stripSchema(staging);
+      lines.push("", "--- Staging record ---", JSON.stringify(stagingData, null, 2));
     } catch {
       lines.push("", "--- Staging record ---", "(none / not found)");
     }
