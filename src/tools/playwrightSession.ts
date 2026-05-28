@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { spawn, execSync, ChildProcess } from "child_process";
+import { spawn, exec, execSync, ChildProcess } from "child_process";
 import { chromium, Browser, Page } from "@playwright/test";
 import { z } from "zod";
 import { buildUiSchema, buildSchema } from "impaktapps-ui-builder";
@@ -68,31 +68,30 @@ export const previewSessionFromConfigSchema = z.object({
 
 // ── Process helpers ───────────────────────────────────────────────────────────
 
-function killByPort(port: number): void {
-  try {
+function killByPort(port: number): Promise<void> {
+  return new Promise((resolve) => {
     if (process.platform === "win32") {
-      const out = execSync(`netstat -ano | findstr :${port}`, {
-        encoding: "utf8",
-        stdio: ["pipe", "pipe", "ignore"],
+      exec(`netstat -ano | findstr :${port}`, { encoding: "utf8" }, (_err, out) => {
+        if (!out) { resolve(); return; }
+        const pids = new Set<string>();
+        for (const line of out.split("\n")) {
+          if (!line.includes("LISTENING")) continue;
+          const pid = line.trim().split(/\s+/).pop();
+          if (pid && pid !== "0") pids.add(pid);
+        }
+        if (pids.size === 0) { resolve(); return; }
+        let pending = pids.size;
+        for (const pid of pids) {
+          exec(`taskkill /PID ${pid} /F`, () => { if (--pending === 0) resolve(); });
+        }
       });
-      const pids = new Set<string>();
-      for (const line of out.split("\n")) {
-        if (!line.includes("LISTENING")) continue;
-        const pid = line.trim().split(/\s+/).pop();
-        if (pid && pid !== "0") pids.add(pid);
-      }
-      for (const pid of pids) {
-        try { execSync(`taskkill /PID ${pid} /F`, { stdio: "ignore" }); } catch {}
-      }
     } else {
-      execSync(`lsof -ti:${port} | xargs kill -9 2>/dev/null || true`, { shell: "/bin/bash" });
+      exec(`lsof -ti:${port} | xargs kill -9 2>/dev/null || true`, { shell: "/bin/bash" }, () => resolve());
     }
-  } catch {
-    // port not in use
-  }
+  });
 }
 
-function stopRenderer(): void {
+async function stopRenderer(): Promise<void> {
   if (rendererProc) {
     const pid = rendererProc.pid;
     rendererProc = null;
@@ -105,13 +104,15 @@ function stopRenderer(): void {
         }
       } catch {}
     }
+    // tree kill freed ports 4000 and 5173 — no port scan needed
+    return;
   }
-  killByPort(4000);
-  killByPort(5173);
+  // no handle: orphan from a crash — fall back to async port scan
+  await Promise.all([killByPort(4000), killByPort(5173)]);
 }
 
-function spawnRenderer(schemaPath: string): ChildProcess {
-  stopRenderer();
+async function spawnRenderer(schemaPath: string): Promise<ChildProcess> {
+  await stopRenderer();
   const isWin = process.platform === "win32";
   const proc = spawn(
     isWin ? "node.exe" : "node",
@@ -152,7 +153,7 @@ async function closeBrowser(): Promise<void> {
 
 async function closeSession(): Promise<void> {
   await closeBrowser();
-  stopRenderer();
+  await stopRenderer();
 }
 
 // ── Tool handlers ─────────────────────────────────────────────────────────────
@@ -172,7 +173,7 @@ export async function toolPreviewLaunchSession(
 
   // Start renderer
   try {
-    spawnRenderer(args.schemaFilePath);
+    await spawnRenderer(args.schemaFilePath);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     return {
@@ -411,7 +412,7 @@ export async function toolPreviewSessionFromConfig(
 
   // Start renderer
   try {
-    spawnRenderer(previewFile);
+    await spawnRenderer(previewFile);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     return {

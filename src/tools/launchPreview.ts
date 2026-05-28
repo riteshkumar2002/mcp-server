@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { spawn, execSync, ChildProcess } from "child_process";
+import { spawn, exec, execSync, ChildProcess } from "child_process";
 import { z } from "zod";
 import { buildUiSchema, buildSchema } from "impaktapps-ui-builder";
 
@@ -34,31 +34,30 @@ export const previewFromConfigSchema = z.object({
 
 // ── Process helpers ───────────────────────────────────────────────────────────
 
-function killByPort(port: number): void {
-  try {
+function killByPort(port: number): Promise<void> {
+  return new Promise((resolve) => {
     if (process.platform === "win32") {
-      const out = execSync(`netstat -ano | findstr :${port}`, {
-        encoding: "utf8",
-        stdio: ["pipe", "pipe", "ignore"],
+      exec(`netstat -ano | findstr :${port}`, { encoding: "utf8" }, (_err, out) => {
+        if (!out) { resolve(); return; }
+        const pids = new Set<string>();
+        for (const line of out.split("\n")) {
+          if (!line.includes("LISTENING")) continue;
+          const pid = line.trim().split(/\s+/).pop();
+          if (pid && pid !== "0") pids.add(pid);
+        }
+        if (pids.size === 0) { resolve(); return; }
+        let pending = pids.size;
+        for (const pid of pids) {
+          exec(`taskkill /PID ${pid} /F`, () => { if (--pending === 0) resolve(); });
+        }
       });
-      const pids = new Set<string>();
-      for (const line of out.split("\n")) {
-        if (!line.includes("LISTENING")) continue;
-        const pid = line.trim().split(/\s+/).pop();
-        if (pid && pid !== "0") pids.add(pid);
-      }
-      for (const pid of pids) {
-        try { execSync(`taskkill /PID ${pid} /F`, { stdio: "ignore" }); } catch {}
-      }
     } else {
-      execSync(`lsof -ti:${port} | xargs kill -9 2>/dev/null || true`, { shell: "/bin/bash" });
+      exec(`lsof -ti:${port} | xargs kill -9 2>/dev/null || true`, { shell: "/bin/bash" }, () => resolve());
     }
-  } catch {
-    // port not in use
-  }
+  });
 }
 
-function stopPreview(): void {
+async function stopPreview(): Promise<void> {
   if (activePreview) {
     const pid = activePreview.pid;
     activePreview = null;
@@ -71,13 +70,15 @@ function stopPreview(): void {
         }
       } catch {}
     }
+    // tree kill freed ports 4000 and 5173 — no port scan needed
+    return;
   }
-  killByPort(4000);
-  killByPort(5173);
+  // no handle: orphan from a crash — fall back to async port scan
+  await Promise.all([killByPort(4000), killByPort(5173)]);
 }
 
-function startPreviewProcess(schemaPath: string): ChildProcess {
-  stopPreview();
+async function startPreviewProcess(schemaPath: string): Promise<ChildProcess> {
+  await stopPreview();
 
   const isWin = process.platform === "win32";
   const proc = spawn(
@@ -124,7 +125,7 @@ export async function toolLaunchPreview(args: z.infer<typeof launchPreviewSchema
   }
 
   try {
-    startPreviewProcess(args.schemaFilePath);
+    await startPreviewProcess(args.schemaFilePath);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     return {
@@ -135,7 +136,7 @@ export async function toolLaunchPreview(args: z.infer<typeof launchPreviewSchema
 
   const ready = await waitForUrl("http://localhost:5173");
   if (!ready) {
-    stopPreview();
+    await stopPreview();
     return {
       content: [{
         type: "text" as const,
@@ -162,9 +163,9 @@ export async function toolLaunchPreview(args: z.infer<typeof launchPreviewSchema
   };
 }
 
-export function toolClosePreview(_args: z.infer<typeof closePreviewSchema>) {
+export async function toolClosePreview(_args: z.infer<typeof closePreviewSchema>) {
   const wasRunning = activePreview !== null;
-  stopPreview();
+  await stopPreview();
   return {
     content: [{
       type: "text" as const,
@@ -205,7 +206,7 @@ export async function toolPreviewFromConfig(args: z.infer<typeof previewFromConf
 
   // Launch renderer
   try {
-    startPreviewProcess(previewFile);
+    await startPreviewProcess(previewFile);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     return {
@@ -216,7 +217,7 @@ export async function toolPreviewFromConfig(args: z.infer<typeof previewFromConf
 
   const ready = await waitForUrl("http://localhost:5173");
   if (!ready) {
-    stopPreview();
+    await stopPreview();
     return {
       content: [{
         type: "text" as const,

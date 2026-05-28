@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { spawn, execSync, ChildProcess } from "child_process";
+import { spawn, exec, execSync, ChildProcess } from "child_process";
 import { z } from "zod";
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
@@ -39,31 +39,30 @@ export const validatePageSchema = z.object({
 
 // ── Process management ───────────────────────────────────────────────────────
 
-function killByPort(port: number): void {
-  try {
+function killByPort(port: number): Promise<void> {
+  return new Promise((resolve) => {
     if (process.platform === "win32") {
-      const out = execSync(`netstat -ano | findstr :${port}`, {
-        encoding: "utf8",
-        stdio: ["pipe", "pipe", "ignore"],
+      exec(`netstat -ano | findstr :${port}`, { encoding: "utf8" }, (_err, out) => {
+        if (!out) { resolve(); return; }
+        const pids = new Set<string>();
+        for (const line of out.split("\n")) {
+          if (!line.includes("LISTENING")) continue;
+          const pid = line.trim().split(/\s+/).pop();
+          if (pid && pid !== "0") pids.add(pid);
+        }
+        if (pids.size === 0) { resolve(); return; }
+        let pending = pids.size;
+        for (const pid of pids) {
+          exec(`taskkill /PID ${pid} /F`, () => { if (--pending === 0) resolve(); });
+        }
       });
-      const pids = new Set<string>();
-      for (const line of out.split("\n")) {
-        if (!line.includes("LISTENING")) continue;
-        const pid = line.trim().split(/\s+/).pop();
-        if (pid && pid !== "0") pids.add(pid);
-      }
-      for (const pid of pids) {
-        try { execSync(`taskkill /PID ${pid} /F`, { stdio: "ignore" }); } catch {}
-      }
     } else {
-      execSync(`lsof -ti:${port} | xargs kill -9 2>/dev/null || true`, { shell: "/bin/bash" });
+      exec(`lsof -ti:${port} | xargs kill -9 2>/dev/null || true`, { shell: "/bin/bash" }, () => resolve());
     }
-  } catch {
-    // port not in use
-  }
+  });
 }
 
-function stopRenderer(): void {
+async function stopRenderer(): Promise<void> {
   if (activeRenderer) {
     const pid = activeRenderer.pid;
     activeRenderer = null;
@@ -76,14 +75,15 @@ function stopRenderer(): void {
         }
       } catch {}
     }
+    // tree kill freed ports 4000 and 5173 — no port scan needed
+    return;
   }
-  // Also kill by port to catch any orphaned processes
-  killByPort(4000);
-  killByPort(5173);
+  // no handle: orphan from a crash — fall back to async port scan
+  await Promise.all([killByPort(4000), killByPort(5173)]);
 }
 
-function startRenderer(schemaPath: string): ChildProcess {
-  stopRenderer();
+async function startRenderer(schemaPath: string): Promise<ChildProcess> {
+  await stopRenderer();
 
   const isWin = process.platform === "win32";
   const proc = spawn(
@@ -219,7 +219,7 @@ export async function toolValidatePage(args: z.infer<typeof validatePageSchema>)
 
   // 2. Start renderer
   try {
-    startRenderer(SCHEMA_FILE);
+    await startRenderer(SCHEMA_FILE);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     return { content: [{ type: "text" as const, text: `Failed to start renderer: ${msg}` }], isError: true };
@@ -228,7 +228,7 @@ export async function toolValidatePage(args: z.infer<typeof validatePageSchema>)
   // 3. Wait for frontend to become accessible
   const ready = await waitForUrl("http://localhost:5173");
   if (!ready) {
-    stopRenderer();
+    await stopRenderer();
     return {
       content: [{
         type: "text" as const,
@@ -242,7 +242,7 @@ export async function toolValidatePage(args: z.infer<typeof validatePageSchema>)
   const pwResult = await runPlaywright(args.validationChecks);
 
   // 5. Stop renderer
-  stopRenderer();
+  await stopRenderer();
 
   // 6. Build response
   const status = pwResult.passed ? "PASSED ✓" : "FAILED ✗";
