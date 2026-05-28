@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { spawn, exec, execSync, ChildProcess } from "child_process";
 import { z } from "zod";
-import { buildUiSchema, buildSchema } from "impaktapps-ui-builder";
+import { buildPageArtifacts } from "./validatePageStagingConfig.js";
 
 const MCP_ROOT = path.resolve(__dirname, "..", "..");
 const FRONTEND_DIR = path.join(MCP_ROOT, "frontend");
@@ -177,12 +177,13 @@ export async function toolClosePreview(_args: z.infer<typeof closePreviewSchema>
 }
 
 export async function toolPreviewFromConfig(args: z.infer<typeof previewFromConfigSchema>) {
-  // Build uiSchema and schema from config using the same builder the frontend uses
+  // Build uiSchema and schema from config — same builder + store used by update_page
   let uiSchema: unknown;
   let schema: unknown;
   try {
-    uiSchema = buildUiSchema(args.config, {});
-    schema   = buildSchema(args.config) ?? {};
+    const artifacts = buildPageArtifacts(args.config);
+    uiSchema = artifacts.uiSchema;
+    schema   = artifacts.schema;
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     return {
