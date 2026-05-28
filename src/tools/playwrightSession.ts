@@ -407,50 +407,61 @@ export async function toolPreviewSessionFromConfig(
     };
   }
 
-  // Close any existing session before starting a new one
-  await closeSession();
-
-  // Start renderer
-  try {
-    await spawnRenderer(previewFile);
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    return {
-      content: [{ type: "text" as const, text: `Failed to start renderer: ${msg}` }],
-      isError: true,
-    };
-  }
-
-  // Wait for frontend to be accessible
-  const ready = await waitForUrl("http://localhost:5173");
-  if (!ready) {
+  // ── Fast path: renderer + browser already running — just reload the page ──
+  if (rendererProc && activePage) {
+    try {
+      await activePage.reload({ waitUntil: "load", timeout: 20_000 });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      await closeSession();
+      return {
+        content: [{ type: "text" as const, text: `Failed to reload preview page: ${msg}` }],
+        isError: true,
+      };
+    }
+  } else {
+    // ── Cold-start path: no session running — stop any orphan, spawn fresh ──
     await closeSession();
-    return {
-      content: [{
-        type: "text" as const,
-        text: "Frontend did not become accessible within 40 seconds. " +
-          "Ensure npm dependencies are installed in the frontend directory.",
-      }],
-      isError: true,
-    };
-  }
 
-  // Launch Playwright browser and navigate
-  try {
-    browser = await chromium.launch({ headless: args.headless ?? true });
-    const context = await browser.newContext({
-      viewport: { width: 1280, height: 800 },
-    });
-    activePage = await context.newPage();
-    await activePage.goto("http://localhost:5173", { waitUntil: "networkidle", timeout: 20_000 });
-    await activePage.waitForTimeout(1500);
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    await closeSession();
-    return {
-      content: [{ type: "text" as const, text: `Failed to launch browser: ${msg}` }],
-      isError: true,
-    };
+    try {
+      await spawnRenderer(previewFile);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return {
+        content: [{ type: "text" as const, text: `Failed to start renderer: ${msg}` }],
+        isError: true,
+      };
+    }
+
+    const ready = await waitForUrl("http://localhost:5173");
+    if (!ready) {
+      await closeSession();
+      return {
+        content: [{
+          type: "text" as const,
+          text: "Frontend did not become accessible within 40 seconds. " +
+            "Ensure npm dependencies are installed in the frontend directory.",
+        }],
+        isError: true,
+      };
+    }
+
+    try {
+      browser = await chromium.launch({ headless: args.headless ?? true });
+      const context = await browser.newContext({
+        viewport: { width: 1280, height: 800 },
+      });
+      activePage = await context.newPage();
+      await activePage.goto("http://localhost:5173", { waitUntil: "networkidle", timeout: 20_000 });
+      await activePage.waitForTimeout(1500);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      await closeSession();
+      return {
+        content: [{ type: "text" as const, text: `Failed to launch browser: ${msg}` }],
+        isError: true,
+      };
+    }
   }
 
   // Take initial screenshot
