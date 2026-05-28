@@ -204,7 +204,6 @@ export async function toolPreviewLaunchSession(
     });
     activePage = await context.newPage();
     await activePage.goto("http://localhost:5173", { waitUntil: "load", timeout: 20_000 });
-    await activePage.waitForTimeout(1500);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     await closeSession();
@@ -331,7 +330,6 @@ export async function toolHtmlPreview(
       waitUntil: args.waitUntil ?? "load",
       timeout: 20_000,
     });
-    await activePage.waitForTimeout(500);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     await closeSession();
@@ -453,7 +451,6 @@ export async function toolPreviewSessionFromConfig(
       });
       activePage = await context.newPage();
       await activePage.goto("http://localhost:5173", { waitUntil: "load", timeout: 20_000 });
-      await activePage.waitForTimeout(1500);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       await closeSession();
