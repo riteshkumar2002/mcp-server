@@ -203,7 +203,7 @@ export async function toolPreviewLaunchSession(
       viewport: { width: 1280, height: 800 },
     });
     activePage = await context.newPage();
-    await activePage.goto("http://localhost:5173", { waitUntil: "networkidle", timeout: 20_000 });
+    await activePage.goto("http://localhost:5173", { waitUntil: "load", timeout: 20_000 });
     await activePage.waitForTimeout(1500);
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
@@ -452,7 +452,7 @@ export async function toolPreviewSessionFromConfig(
         viewport: { width: 1280, height: 800 },
       });
       activePage = await context.newPage();
-      await activePage.goto("http://localhost:5173", { waitUntil: "networkidle", timeout: 20_000 });
+      await activePage.goto("http://localhost:5173", { waitUntil: "load", timeout: 20_000 });
       await activePage.waitForTimeout(1500);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
