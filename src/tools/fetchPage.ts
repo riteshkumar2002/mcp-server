@@ -28,11 +28,11 @@ import {
 // });
 
 // ── get_page_record ───────────────────────────────────────────────────────────
-// Resolves page name → id via /page/getByName, then fetches the master record.
+// Fetches full page data via /page/getByName (single call — includes id, name, pageUrl, etc.)
 
 export const getPageRecordSchema = z.object({
   pageName: z.string().describe("Page name as stored in the backend, e.g. 'page_eSign'"),
-  masterName: z.string().describe("Master entity name to fetch from, e.g. 'com.act21.hyperform3.entity.page.PageStaging'"),
+  masterName: z.string().describe("Master entity name used for staging lookup, e.g. 'com.act21.hyperform3.entity.page.PageStaging'"),
   fetchStaging: z.boolean().optional().describe("If true, also fetch the staging (pending/draft) record for this page"),
 });
 
@@ -49,14 +49,12 @@ export async function toolGetPageRecord(args: z.infer<typeof getPageRecordSchema
     };
   }
 
-  const record = await getDetailById(id, args.masterName);
   const lines: string[] = [
     `Page name : ${args.pageName}`,
     `Page id   : ${id}`,
-    `Master    : ${args.masterName}`,
     "",
     "--- Record ---",
-    JSON.stringify(record, null, 2),
+    JSON.stringify(page, null, 2),
   ];
 
   if (args.fetchStaging) {

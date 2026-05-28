@@ -2,9 +2,7 @@ import { z } from "zod";
 import axios from "axios";
 import {
   getPageByName,
-  getDetailById,
   getStagingByMainId,
-  masterAction,
   masterSave,
 } from "../apiClient.js";
 import { loadConfig } from "../config.js";
@@ -52,7 +50,7 @@ export const updatePageSchema = z.object({
 
 export async function toolUpdatePage(args: z.infer<typeof updatePageSchema>) {
 
-  // ── 1. Resolve page name → main ID ────────────────────────────────────────
+  // ── 1. Resolve page name → full page record (includes id, pageUrl, templateName, name) ──
   let pageRef: Record<string, unknown>;
   try {
     pageRef = await getPageByName(args.pageName);
@@ -70,15 +68,7 @@ export async function toolUpdatePage(args: z.infer<typeof updatePageSchema>) {
     };
   }
 
-  // ── 2. Fetch main record (pageUrl, templateName, name) ────────────────────
-  let record: Record<string, unknown>;
-  try {
-    record = await getDetailById(mainId, PAGE_MASTER);
-  } catch (err) {
-    return { content: [{ type: "text" as const, text: `Failed to fetch page record (ID ${mainId}).\n${extractApiError(err)}` }] };
-  }
-
-  // ── 3. Fetch staging record (if any) ─────────────────────────────────────
+  // ── 2. Fetch staging record (if any) ─────────────────────────────────────
   let staging: Record<string, unknown> | null = null;
   try {
     const raw = await getStagingByMainId(mainId, PAGE_MASTER);
@@ -87,16 +77,7 @@ export async function toolUpdatePage(args: z.infer<typeof updatePageSchema>) {
     // No staging record — proceed with null
   }
 
-  // ── 4. Reject staging if it is not already rejected ───────────────────────
-  if (staging && staging["promotionStatus"] !== "R") {
-    try {
-      await masterAction(PAGE_STAGING, "R", staging);
-    } catch (err) {
-      return { content: [{ type: "text" as const, text: `Failed to reject existing staging record.\n${extractApiError(err)}` }] };
-    }
-  }
-
-  // ── 5. Build uiSchema / config / schema from the provided config ──────────
+  // ── 3. Build uiSchema / config / schema from the provided config ──────────
   //       Mirrors the frontend's mergeWithBackendData / submitHandler flow.
   let artifacts;
   try {
@@ -116,17 +97,17 @@ export async function toolUpdatePage(args: z.infer<typeof updatePageSchema>) {
   const updatedConfig   = artifacts.config;
   const updatedSchema   = artifacts.schema;
 
-  // ── 6. Resolve userId ─────────────────────────────────────────────────────
+  // ── 4. Resolve userId ─────────────────────────────────────────────────────
   const cfg    = loadConfig();
   const userId = args.userId ?? cfg?.userId ?? 1;
 
-  // ── 7. Build pageUrl the same way the frontend does ───────────────────────
+  // ── 5. Build pageUrl the same way the frontend does ───────────────────────
   //       template/name — fall back to the value already on the main record.
-  const name      = (args.config["name"] as string | undefined) ?? (record["name"] as string);
+  const name      = (args.config["name"] as string | undefined) ?? (pageRef["name"] as string);
   const template  = args.config["template"] as string | undefined;
-  const pageUrl   = template ? `${template}/${name}` : (record["pageUrl"] as string ?? name);
+  const pageUrl   = template ? `${template}/${name}` : (pageRef["pageUrl"] as string ?? name);
 
-  // ── 8. Save via /master/save ───────────────────────────────────────────────
+  // ── 6. Save via /master/save ───────────────────────────────────────────────
   //       id    = existing staging ID (or null for a fresh staging record)
   //       main  = mainId from the API — equivalent to localStorage "pageMainId"
   const entityValue: Record<string, unknown> = {
@@ -136,7 +117,7 @@ export async function toolUpdatePage(args: z.infer<typeof updatePageSchema>) {
     schema:           updatedSchema,
     name,
     pageUrl,
-    templateName:     record["templateName"] ?? 1,
+    templateName:     pageRef["templateName"] ?? 1,
     promotionStatus:  "N",
     isDeleted:        "N",
     main:             mainId,
