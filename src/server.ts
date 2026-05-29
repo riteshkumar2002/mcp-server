@@ -155,21 +155,21 @@ export function createMcpServer(): McpServer {
       "Run once — credentials persist in ~/.hyperform-mcp/config.json.",
     ].join(" "),
     configureSchema.shape,
-    toolConfigure
+    toolConfigure,
   );
 
   server.tool(
     "check_auth_status",
     "Check whether this MCP server is configured and authenticated. Shows backend URL and current user.",
     checkAuthStatusSchema.shape,
-    (args) => Promise.resolve(toolCheckAuthStatus(args))
+    (args) => Promise.resolve(toolCheckAuthStatus(args)),
   );
 
   server.tool(
     "logout",
     "Clear stored credentials and JWT. You will need to run 'configure' again before using other tools.",
     logoutSchema.shape,
-    (args) => Promise.resolve(toolLogout(args))
+    (args) => Promise.resolve(toolLogout(args)),
   );
 
   // ── Fetch tools ─────────────────────────────────────────────────────────────
@@ -184,15 +184,15 @@ export function createMcpServer(): McpServer {
       "Use this as the first step before modifying any page.",
     ].join(" "),
     getPageRecordSchema.shape,
-    toolGetPageRecord
+    toolGetPageRecord,
   );
 
-  server.tool(
-    "get_record_by_id",
-    "Fetch a single MDM record by ID and master name (e.g. 'com.act21.hyperform3.entity.page.PageStaging'). Returns full record including uiSchema and schema.",
-    getRecordByIdSchema.shape,
-    toolGetRecordById
-  );
+  // server.tool(
+  //   "get_record_by_id",
+  //   "Fetch a single MDM record by ID and master name (e.g. 'com.act21.hyperform3.entity.page.PageStaging'). Returns full record including uiSchema and schema.",
+  //   getRecordByIdSchema.shape,
+  //   toolGetRecordById
+  // );
 
   // server.tool(
   //   "get_staging_by_main_id",
@@ -291,7 +291,7 @@ export function createMcpServer(): McpServer {
     "save_record",
     "Save (create or update) an MDM record via /master/save. For page records, include uiSchema and schema in entityValue.",
     saveRecordSchema.shape,
-    toolSaveRecord
+    toolSaveRecord,
   );
 
   // server.tool(
@@ -319,7 +319,7 @@ export function createMcpServer(): McpServer {
       "Use this for new pages; use update_page for existing page edits.",
     ].join(" "),
     createPageSchema.shape,
-    toolCreatePage
+    toolCreatePage,
   );
 
   server.tool(
@@ -343,7 +343,7 @@ export function createMcpServer(): McpServer {
       "userId defaults to the value stored during setup (usually 1).",
     ].join(" "),
     updatePageSchema.shape,
-    toolUpdatePage
+    toolUpdatePage,
   );
 
   server.tool(
@@ -355,7 +355,7 @@ export function createMcpServer(): McpServer {
       "Use this in a retry loop: validate config, fix any errors, validate again, preview if needed, then call update_page.",
     ].join(" "),
     validatePageStagingConfigSchema.shape,
-    (args) => Promise.resolve(toolValidatePageStagingConfig(args))
+    (args) => Promise.resolve(toolValidatePageStagingConfig(args)),
   );
 
   // ── File system tools ────────────────────────────────────────────────────────
@@ -368,7 +368,7 @@ export function createMcpServer(): McpServer {
       "Large files are truncated by maxBytes to keep MCP responses manageable.",
     ].join(" "),
     readFileSchema.shape,
-    toolReadFile
+    toolReadFile,
   );
 
   server.tool(
@@ -380,7 +380,7 @@ export function createMcpServer(): McpServer {
       "Encoding defaults to utf8; supports ascii, base64, hex, latin1.",
     ].join(" "),
     writeFileSchema.shape,
-    toolWriteFile
+    toolWriteFile,
   );
 
   server.tool(
@@ -393,7 +393,7 @@ export function createMcpServer(): McpServer {
       "Returns absolute paths, a file count, and the resolved directory.",
     ].join(" "),
     listFilesSchema.shape,
-    toolListFiles
+    toolListFiles,
   );
 
   // ── uiSchema modification tools (pure, no HTTP) ───────────────────────────
@@ -402,56 +402,56 @@ export function createMcpServer(): McpServer {
     "get_uischema_structure",
     "Print a human-readable tree of a uiSchema — shows all sections, widgets, scopes, and grid sizes. Use this before modifying a page.",
     getUiSchemaStructureSchema.shape,
-    (args) => Promise.resolve(toolGetUiSchemaStructure(args))
+    (args) => Promise.resolve(toolGetUiSchemaStructure(args)),
   );
 
   server.tool(
     "update_control_config",
     "Merge new props into config.main of a control (e.g. change label, placeholder, disabled, items). Returns the modified uiSchema.",
     updateControlConfigSchema.shape,
-    (args) => Promise.resolve(toolUpdateControlConfig(args))
+    (args) => Promise.resolve(toolUpdateControlConfig(args)),
   );
 
   server.tool(
     "change_widget",
     "Change the widget type of a control (e.g. InputField → SelectInputField). Returns the modified uiSchema.",
     changeWidgetSchema.shape,
-    (args) => Promise.resolve(toolChangeWidget(args))
+    (args) => Promise.resolve(toolChangeWidget(args)),
   );
 
   server.tool(
     "update_control_layout",
     "Resize a control's grid column span (MUI 12-column: lg, md, sm, xs). Returns the modified uiSchema.",
     updateLayoutSchema.shape,
-    (args) => Promise.resolve(toolUpdateLayout(args))
+    (args) => Promise.resolve(toolUpdateLayout(args)),
   );
 
   server.tool(
     "add_control",
     "Add a new Control element into a section or the root. Optionally insert after a specific scope.",
     addControlSchema.shape,
-    (args) => Promise.resolve(toolAddControl(args))
+    (args) => Promise.resolve(toolAddControl(args)),
   );
 
   server.tool(
     "remove_control",
     "Remove a control by its scope from the uiSchema. Returns the modified uiSchema.",
     removeControlSchema.shape,
-    (args) => Promise.resolve(toolRemoveControl(args))
+    (args) => Promise.resolve(toolRemoveControl(args)),
   );
 
   server.tool(
     "add_section",
     "Add a new WrapperLayout section to the page root. Optionally insert after a specific section scope.",
     addSectionSchema.shape,
-    (args) => Promise.resolve(toolAddSection(args))
+    (args) => Promise.resolve(toolAddSection(args)),
   );
 
   server.tool(
     "reorder_controls",
     "Reorder controls within a section by providing scopes in the desired order. Returns the modified uiSchema.",
     reorderControlsSchema.shape,
-    (args) => Promise.resolve(toolReorderControls(args))
+    (args) => Promise.resolve(toolReorderControls(args)),
   );
 
   // ── Component skill tools ─────────────────────────────────────────────────────
@@ -468,7 +468,7 @@ export function createMcpServer(): McpServer {
       "get_component_skill name to use for the component you need.",
     ].join(" "),
     listComponentSkillsSchema.shape,
-    (args) => Promise.resolve(toolListComponentSkills(args))
+    (args) => Promise.resolve(toolListComponentSkills(args)),
   );
 
   server.tool(
@@ -484,7 +484,7 @@ export function createMcpServer(): McpServer {
       "add-horizontal-layout, add-progress-bar, add-runner-boy-progress-bar.",
     ].join(" "),
     getComponentSkillSchema.shape,
-    (args) => Promise.resolve(toolGetComponentSkill(args))
+    (args) => Promise.resolve(toolGetComponentSkill(args)),
   );
 
   // ── Skill: Page Builder Guide ─────────────────────────────────────────────────
@@ -508,14 +508,14 @@ export function createMcpServer(): McpServer {
           text: PAGE_BUILDER_GUIDE,
         },
       ],
-    })
+    }),
   );
 
   server.prompt(
     "page_builder_guide",
     "Load the complete HyPerform page-builder skill into the conversation context. " +
-    "Use this before creating or modifying any page JSON to get full knowledge of " +
-    "page structure, components, event patterns, API paths, and critical rules.",
+      "Use this before creating or modifying any page JSON to get full knowledge of " +
+      "page structure, components, event patterns, API paths, and critical rules.",
     () => ({
       messages: [
         {
@@ -529,7 +529,7 @@ export function createMcpServer(): McpServer {
           },
         },
       ],
-    })
+    }),
   );
 
   // ── render_page — open a page in the browser via json_to_ui ─────────────────
@@ -551,7 +551,7 @@ export function createMcpServer(): McpServer {
           text: MCP_REQUEST_FLOW_GUIDE,
         },
       ],
-    })
+    }),
   );
 
   server.prompt(
@@ -569,7 +569,7 @@ export function createMcpServer(): McpServer {
           },
         },
       ],
-    })
+    }),
   );
 
   server.tool(
@@ -581,7 +581,7 @@ export function createMcpServer(): McpServer {
       "Both servers must be running: 'node backend/server.js' and 'npm run dev' in D:\\Act21files\\frontend.",
     ].join(" "),
     renderPageSchema.shape,
-    (args) => Promise.resolve(toolRenderPage(args))
+    (args) => Promise.resolve(toolRenderPage(args)),
   );
 
   // ── launch_preview / close_preview ───────────────────────────────────────────
@@ -596,14 +596,14 @@ export function createMcpServer(): McpServer {
       "The renderer keeps running until close_preview is called.",
     ].join(" "),
     launchPreviewSchema.shape,
-    (args) => toolLaunchPreview(args)
+    (args) => toolLaunchPreview(args),
   );
 
   server.tool(
     "close_preview",
     "Stop the running UI preview renderer. Kills the start.js process and frees ports 4000 and 5173.",
     closePreviewSchema.shape,
-    (args) => Promise.resolve(toolClosePreview(args))
+    (args) => Promise.resolve(toolClosePreview(args)),
   );
 
   server.tool(
@@ -616,7 +616,7 @@ export function createMcpServer(): McpServer {
       "The renderer keeps running until close_preview is called.",
     ].join(" "),
     previewFromConfigSchema.shape,
-    (args) => toolPreviewFromConfig(args)
+    (args) => toolPreviewFromConfig(args),
   );
 
   // ── Playwright session tools ──────────────────────────────────────────────────
@@ -632,7 +632,7 @@ export function createMcpServer(): McpServer {
       "and preview_close_session when done.",
     ].join(" "),
     previewLaunchSessionSchema.shape,
-    (args) => toolPreviewLaunchSession(args)
+    (args) => toolPreviewLaunchSession(args),
   );
 
   server.tool(
@@ -645,14 +645,14 @@ export function createMcpServer(): McpServer {
       "Requires preview_launch_session to have been called first.",
     ].join(" "),
     previewScreenshotSchema.shape,
-    (args) => toolPreviewScreenshot(args)
+    (args) => toolPreviewScreenshot(args),
   );
 
   server.tool(
     "preview_close_session",
     "Close the active Playwright browser session and stop the renderer. Frees ports 4000 and 5173.",
     previewCloseSessionSchema.shape,
-    (args) => toolPreviewCloseSession(args)
+    (args) => toolPreviewCloseSession(args),
   );
 
   server.tool(
@@ -665,7 +665,7 @@ export function createMcpServer(): McpServer {
       "Returns an initial screenshot inline. Use preview_screenshot for more, preview_close_session when done.",
     ].join(" "),
     previewSessionFromConfigSchema.shape,
-    (args) => toolPreviewSessionFromConfig(args)
+    (args) => toolPreviewSessionFromConfig(args),
   );
 
   server.tool(
@@ -681,7 +681,7 @@ export function createMcpServer(): McpServer {
       "Use waitUntil='networkidle' for pages that load content asynchronously.",
     ].join(" "),
     htmlPreviewSchema.shape,
-    (args) => toolHtmlPreview(args)
+    (args) => toolHtmlPreview(args),
   );
 
   // ── validate_page — save JSON → start renderer → Playwright → return results ──
@@ -697,7 +697,7 @@ export function createMcpServer(): McpServer {
       "with attemptNumber incremented (max 3 attempts before giving up).",
     ].join(" "),
     validatePageSchema.shape,
-    (args) => toolValidatePage(args)
+    (args) => toolValidatePage(args),
   );
 
   server.tool(
@@ -714,7 +714,7 @@ export function createMcpServer(): McpServer {
     () =>
       Promise.resolve({
         content: [{ type: "text" as const, text: PAGE_BUILDER_GUIDE }],
-      })
+      }),
   );
 
   server.tool(
@@ -728,7 +728,7 @@ export function createMcpServer(): McpServer {
     () =>
       Promise.resolve({
         content: [{ type: "text" as const, text: MCP_REQUEST_FLOW_GUIDE }],
-      })
+      }),
   );
 
   return server;
