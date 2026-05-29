@@ -229,6 +229,6 @@ export async function getStagingByMainId(
 // }
 
 // ── /master/delete ────────────────────────────────────────────────────────────
-export async function masterDelete(entityName: string, id: number): Promise<void> {
-  await getClient().post("/master/delete", { entityName, id });
-}
+// export async function masterDelete(entityName: string, id: number): Promise<void> {
+//   await getClient().post("/master/delete", { entityName, id });
+// }

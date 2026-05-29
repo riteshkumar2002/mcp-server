@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+The uiSchema and schema examples shown in this skill are **reference only** — they illustrate what the auto-derivation produces from your config. Do not copy or manually build them.
+
+---
+
 ## How to Add ButtonWithIconAndText to Your Page
 
 ButtonWithIconText Component displays a button with **both an icon AND text label**. Perfect for:
@@ -87,64 +96,21 @@ ButtonWithIconText Component displays a button with **both an icon AND text labe
 
 ---
 
-## Step 2: Add to uiSchema.elements
-
-Note: widget is `"Button"` (not `"ButtonWithIconAndText"`). The distinction is in config, not the widget name. Use `startIcon` to set the icon.
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/refresh",
-  "config": {
-    "main": {
-      "icon": "",
-      "name": "Refresh",
-      "size": "small",
-      "type": "text",
-      "onClick": "onClick",
-      "variant": "contained",
-      "startIcon": "RefreshIcon",
-      "styleDefault": false,
-      "enableDefaultStyle": false
-    },
-    "style": {},
-    "layout": {
-      "lg": 1.5,
-      "md": 2,
-      "sm": 2.5,
-      "xs": 4
-    }
-  },
-  "options": {
-    "widget": "Button"
-  }
-}
-```
-
----
-
-## Step 3: Add to schema.properties
-
-```json
-{
-  "refresh": {},
-  "export": {}
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
 ## Key Configuration Points
 
-| Property | Location | Purpose | Example |
-|---|---|---|---|
-| buttonType | config | Identifies button style | "ButtonWithIconAndText" |
-| iconName | config | Icon shown on button | "RefreshIcon" |
-| defaultStyle | config | Use theme defaults | "true" or "false" |
-| widget | uiSchema options | Always "Button" | "Button" |
-| startIcon | uiSchema main | Icon name for rendering | "RefreshIcon" |
-| name | uiSchema main | Button label text | "Refresh" |
-| variant | uiSchema main | Button style | "contained", "outlined", "text" |
+| Property | Purpose | Example |
+|---|---|---|
+| buttonType | Identifies button style | "ButtonWithIconAndText" |
+| iconName | Icon shown on button | "RefreshIcon" |
+| label | Button label text | "Refresh" |
+| color | Button color theme | "primary", "success", "error" |
+| defaultStyle | Use theme defaults | "true" or "false" |
+| size | Button size | "small", "medium", "large" |
+| layout | Responsive grid columns | `[{"key": "lg", "value": "2"}, ...]` |
 
 ---
 
@@ -207,51 +173,6 @@ Note: widget is `"Button"` (not `"ButtonWithIconAndText"`). The distinction is i
       {"key": "sm", "value": "4"},
       {"key": "xs", "value": "6"}
     ]
-  }
-]
-```
-
-### uiSchema.elements
-
-```json
-[
-  {
-    "type": "Control",
-    "scope": "#/properties/export",
-    "config": {
-      "main": {
-        "icon": "DownloadIcon",
-        "name": "Export Report",
-        "size": "small",
-        "type": "text",
-        "color": "success",
-        "onClick": "onClick",
-        "variant": "contained",
-        "startIcon": "DownloadIcon",
-        "styleDefault": false
-      },
-      "layout": {"lg": 2, "md": 3, "sm": 4, "xs": 6}
-    },
-    "options": {"widget": "Button"}
-  },
-  {
-    "type": "Control",
-    "scope": "#/properties/refresh",
-    "config": {
-      "main": {
-        "icon": "",
-        "name": "Refresh",
-        "size": "small",
-        "type": "text",
-        "onClick": "onClick",
-        "variant": "contained",
-        "startIcon": "RefreshIcon",
-        "styleDefault": false,
-        "enableDefaultStyle": false
-      },
-      "layout": {"lg": 1.5, "md": 2, "sm": 2.5, "xs": 4}
-    },
-    "options": {"widget": "Button"}
   }
 ]
 ```
@@ -349,6 +270,92 @@ InfoIcon          — Information
 
 ---
 
+## 2-Step Chained Download (Generate Report → Download File)
+
+Use this pattern when downloading a report requires **two sequential API calls**:
+1. First call generates the report and returns a `fileId`
+2. Second call uses that `fileId` to fetch and download the file
+
+The pattern uses **nested Success events** — a Success handler on the first API call that stores the fileId and triggers the second API call.
+
+```json
+{
+  "name": "downloadReport",
+  "type": "Button",
+  "label": "Download",
+  "iconName": "DownloadIcon",
+  "buttonType": "ButtonWithIconAndText",
+  "color": "primary",
+  "events": [
+    {
+      "body": [
+        {"key": "reportName",  "value": "<your-report-name>"},
+        {"key": "messageType", "value": "generateReport"},
+        {"key": "reportType",  "value": "fileDownload"},
+        {"key": "startDate",   "value": "$startDate"},
+        {"key": "endDate",     "value": "$endDate"},
+        {"key": "programId",   "value": "$programId"}
+      ],
+      "path": "/HyperformMessage/process",
+      "events": [
+        {
+          "events": [
+            {
+              "path": "/externalData/getById",
+              "events": [
+                {
+                  "events": [],
+                  "Handler": "inBuiltFunction",
+                  "eventCode": "",
+                  "eventType": "Success",
+                  "funcParametersCode": "(store, dynamicData, userValue, parentEventOutput, service) => {\n  return parentEventOutput.data;\n}",
+                  "inBuiltFunctionType": "downloadFile"
+                }
+              ],
+              "method": "post",
+              "Handler": "api",
+              "apiBody": "(store, dynamicData, userValue, resp, service) => {\n  return {\n    id: localStorage.getItem('<your-fileId-key>'),\n    withData: true,\n    toBeDeleted: false\n  };\n}",
+              "eventCode": "",
+              "eventType": "Success"
+            }
+          ],
+          "Handler": "custom",
+          "apiBody": "",
+          "eventCode": "async (store, d, user, res, service) => {\n  localStorage.setItem('<your-fileId-key>', res.data);\n}",
+          "eventType": "Success"
+        }
+      ],
+      "method": "post",
+      "Handler": "api",
+      "eventType": "onClick"
+    }
+  ],
+  "layout": [
+    {"key": "lg", "value": "4"},
+    {"key": "md", "value": "4"},
+    {"key": "sm", "value": "5"},
+    {"key": "xs", "value": "12"}
+  ]
+}
+```
+
+**Replace:**
+- `<your-report-name>` → your backend report identifier
+- `<your-fileId-key>` → a unique localStorage key to store the generated file ID (e.g. `"releaseReportFileId"`)
+- Body keys → match what your backend expects
+- `reportType: "fileDownload"` → tells the backend to generate a downloadable file (vs `"reports"` for table data)
+
+**How the chain works:**
+1. `onClick` → POST to `/HyperformMessage/process` with report params
+2. Backend generates file, returns `fileId` in `res.data`
+3. First `Success` (custom) → stores `fileId` in localStorage
+4. Second `Success` (API) → POSTs `{id: fileId, withData: true}` to `/externalData/getById`
+5. Third `Success` (inBuiltFunction downloadFile) → triggers browser download
+
+**Why localStorage?** The `apiBody` on the inner API call needs the fileId but `res.data` from the outer call is not directly accessible in `apiBody`. Storing in localStorage bridges the two calls.
+
+---
+
 ## Common Patterns
 
 ### Approve / Reject Row
@@ -384,25 +391,18 @@ InfoIcon          — Information
 
 ## Common Mistakes to Avoid
 
-**Mistake 1:** Wrong widget in uiSchema — always `"Button"`, not `"ButtonWithIconAndText"`
-```json
-// WRONG
-"options": {"widget": "ButtonWithIconAndText"}
-
-// CORRECT
-"options": {"widget": "Button"}
-```
-
-**Mistake 2:** Missing `startIcon` in uiSchema `config.main` — this is what actually renders the icon
+**Mistake 1:** Missing `iconName` in config — this is required for the icon to render.
 ```json
 // WRONG — icon won't appear
-"main": {"name": "Refresh", "variant": "contained"}
+{"name": "refresh", "type": "Button", "buttonType": "ButtonWithIconAndText", "label": "Refresh"}
 
 // CORRECT
-"main": {"name": "Refresh", "startIcon": "RefreshIcon", "variant": "contained"}
+{"name": "refresh", "type": "Button", "buttonType": "ButtonWithIconAndText", "label": "Refresh", "iconName": "RefreshIcon"}
 ```
 
-**Mistake 3:** Confusing `iconName` (config) with `startIcon` (uiSchema) — both must be set to the same icon name.
+**Mistake 2:** Using `buttonType: "Button"` instead of `"ButtonWithIconAndText"` — the buttonType must exactly match to get the icon+text rendering.
+
+**Mistake 3:** Not setting `defaultStyle` — set `"true"` to use theme defaults or `"false"` to apply custom color.
 
 ---
 

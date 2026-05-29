@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+The uiSchema and schema examples shown in this skill are **reference only** — they illustrate what the auto-derivation produces from your config. Do not copy or manually build them.
+
+---
+
 ## How to Add MultipleSelect to Your Page
 
 MultipleSelect Component allows users to select multiple values from a list. Perfect for:
@@ -76,48 +85,7 @@ MultipleSelect Component allows users to select multiple values from a list. Per
 }
 ```
 
----
-
-## Step 2: Add to uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/toList",
-  "config": {
-    "main": {
-      "type": "text",
-      "label": "To",
-      "options": [],
-      "variant": "outlined",
-      "multiple": true,
-      "lazyLoading": true
-    },
-    "layout": {
-      "lg": 3,
-      "md": 4,
-      "sm": 6,
-      "xs": 6
-    }
-  },
-  "options": {
-    "widget": "MultipleSelect"
-  }
-}
-```
-
----
-
-## Step 3: Add to schema.properties
-
-```json
-"toList": {
-  "type": "array",
-  "items": {
-    "type": "string"
-  }
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
@@ -125,13 +93,17 @@ MultipleSelect Component allows users to select multiple values from a list. Per
 
 | Property | Purpose | Example |
 |---|---|---|
-| type (config) | "MultipleSelect" | "MultipleSelect" |
-| widget (uiSchema) | "MultipleSelect" | "MultipleSelect" |
-| value | Initial value | [] |
-| variant | Input style | "outlined" or "filled" |
-| multiple | Always true in uiSchema | true |
-| freeSolo | Allow custom typed values | "YES" or "NO" |
-| lazyLoading | Load options on demand | "YES" or "NO" |
+| `name` | Unique field key | `"toList"` |
+| `type` | Must be `"MultipleSelect"` | `"MultipleSelect"` |
+| `label` | Display label | `"To"` |
+| `value` | Static options or initial value | `[]` or `[{label, value}]` |
+| `variant` | Input style | `"outlined"` or `"filled"` |
+| `freeSolo` | Allow custom typed values | `"YES"` or `"NO"` |
+| `lazyLoading` | Load options on demand | `"YES"` or `"NO"` |
+| `toolTip` | Optional tooltip text | `"Select recipients"` |
+| `toolTipPosition` | Optional tooltip position | `"top"` |
+| `style` | JSON string for inline styles | `"{}"` |
+| `layout` | Array of `{key,value}` | Default: lg:3 md:4 sm:6 xs:6 |
 
 ---
 
@@ -149,14 +121,12 @@ User must pick from predefined options. Use for roles, permissions, fixed catego
 
 ### With Lazy Loading (large lists)
 ```json
-"lazyLoading": "YES"  // config
-"lazyLoading": true   // uiSchema
+"lazyLoading": "YES"
 ```
 
 ### Without Lazy Loading (small lists)
 ```json
-"lazyLoading": "NO"   // config
-"lazyLoading": false  // uiSchema
+"lazyLoading": "NO"
 ```
 
 ---
@@ -233,61 +203,6 @@ User must pick from predefined options. Use for roles, permissions, fixed catego
     "variant": "outlined",
     "freeSolo": "YES",
     "lazyLoading": "YES"
-  }
-]
-```
-
-### uiSchema.elements
-
-```json
-[
-  {
-    "type": "Control",
-    "scope": "#/properties/toList",
-    "config": {
-      "main": {
-        "type": "text",
-        "label": "To",
-        "options": [],
-        "variant": "outlined",
-        "multiple": true,
-        "lazyLoading": true
-      },
-      "layout": {"lg": 3, "md": 4, "sm": 6, "xs": 6}
-    },
-    "options": {"widget": "MultipleSelect"}
-  },
-  {
-    "type": "Control",
-    "scope": "#/properties/ccList",
-    "config": {
-      "main": {
-        "type": "text",
-        "label": "Cc",
-        "options": [],
-        "variant": "outlined",
-        "multiple": true,
-        "lazyLoading": true
-      },
-      "layout": {"lg": 3, "md": 4, "sm": 6, "xs": 6}
-    },
-    "options": {"widget": "MultipleSelect"}
-  },
-  {
-    "type": "Control",
-    "scope": "#/properties/bccList",
-    "config": {
-      "main": {
-        "type": "text",
-        "label": "Bcc",
-        "options": [],
-        "variant": "outlined",
-        "multiple": true,
-        "lazyLoading": true
-      },
-      "layout": {"lg": 3, "md": 4, "sm": 6, "xs": 6}
-    },
-    "options": {"widget": "MultipleSelect"}
   }
 ]
 ```
@@ -375,9 +290,7 @@ const selected = store.ctx.core.data.toList;
 
 ## Common Mistakes to Avoid
 
-**Mistake 1:** Missing `"multiple": true` in uiSchema `config.main` — without it the widget behaves as single-select.
-
-**Mistake 2:** Wrong initial value — must be `[]` (empty array), not `""` or `null`.
+**Mistake 1:** Wrong initial value — must be `[]` (empty array), not `""` or `null`.
 ```json
 // WRONG
 "value": ""
@@ -386,16 +299,16 @@ const selected = store.ctx.core.data.toList;
 "value": []
 ```
 
-**Mistake 3:** Schema type must be `"array"` not `"string"`
+**Mistake 2:** `freeSolo` and `lazyLoading` in config must be strings (`"YES"`/`"NO"`), not booleans.
 ```json
 // WRONG
-"toList": {"type": "string"}
+"freeSolo": true,
+"lazyLoading": true
 
 // CORRECT
-"toList": {"type": "array", "items": {"type": "string"}}
+"freeSolo": "YES",
+"lazyLoading": "YES"
 ```
-
-**Mistake 4:** `freeSolo` in config is a string (`"YES"`/`"NO"`), but `lazyLoading` in uiSchema is a boolean (`true`/`false`).
 
 ---
 

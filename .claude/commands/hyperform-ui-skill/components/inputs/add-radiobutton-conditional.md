@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+The uiSchema and schema examples shown in this skill are **reference only** — they illustrate what the auto-derivation produces from your config. Do not copy or manually build them.
+
+---
+
 ## How to Add Radio Button with Conditional Fields
 
 This skill teaches you to create radio buttons that toggle field visibility. Perfect for:
@@ -54,39 +63,11 @@ This skill teaches you to create radio buttons that toggle field visibility. Per
 }
 ```
 
----
-
-## Step 2: Add to uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/filterType",
-  "config": {
-    "main": {
-      "label": "Filter Type",
-      "options": [
-        "Program Cycle",
-        "Date Range"
-      ],
-      "errorMessage": "Please select a filter type"
-    },
-    "layout": {
-      "lg": 8,
-      "md": 8,
-      "sm": 11,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "RadioInputField"
-  }
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
-## Step 3: Add Related Fields (Will be conditionally shown/hidden)
+## Step 2: Add Related Fields (Will be conditionally shown/hidden)
 
 **Example: Date Fields (only visible for "Date Range")**
 
@@ -148,31 +129,21 @@ config.elements:
 
 ---
 
-## Step 4: Add to schema.properties
-
-```json
-{
-  "filterType": {},
-  "startDate": {},
-  "endDate": {},
-  "programCycle": {}
-}
-```
-
----
-
 ## Key Configuration Points
 
 | Property | Value | Purpose |
 |---|---|---|
-| type (config) | Radio | Radio button field |
-| widget (uiSchema) | RadioInputField | Radio widget |
-| sectionLabels | Array of labels | Option labels |
-| eventType | onChange | Trigger on selection |
-| disabled: true | In schema | Hide field (grayed out) |
-| disabled: false | In schema | Show field (active) |
-| store.setSchema | Function | Enable/disable fields |
-| store.setFormdata | Function | Clear field values |
+| `type` | `"Radio"` | Radio button field |
+| `label` | String | Display label |
+| `sectionLabels` | Array of `{label}` objects | Radio option labels |
+| `errorMessage` | String | Validation error message |
+| `toolTip` | String | Optional tooltip text |
+| `toolTipPosition` | String | Optional tooltip position |
+| `style` | JSON string | Optional inline style |
+| `layout` | Array of `{key,value}` | Responsive grid (default: lg:3 md:4 sm:6 xs:12) |
+| `eventType` | `"onChange"` | Trigger logic on selection |
+| `store.setSchema` | Function | Enable/disable fields dynamically |
+| `store.setFormdata` | Function | Clear field values on switch |
 
 ---
 
@@ -350,81 +321,6 @@ Here's the exact pattern from the reference page:
 }
 ```
 
-### uiSchema.elements
-
-```json
-{
-  "type": "WrapperLayout",
-  "scope": "#/properties/Application Report",
-  "elements": [
-    {
-      "type": "Control",
-      "scope": "#/properties/filterType",
-      "config": {
-        "main": {
-          "label": "Filter Type",
-          "options": ["Program Cycle", "Date Range"]
-        },
-        "layout": {
-          "lg": 8, "md": 8, "sm": 11, "xs": 12
-        }
-      },
-      "options": {"widget": "RadioInputField"}
-    },
-    {
-      "type": "Control",
-      "scope": "#/properties/programId",
-      "config": {
-        "main": {
-          "type": "text",
-          "label": "Program Type",
-          "freeSole": false
-        },
-        "layout": {"lg": 4, "md": 4, "sm": 5, "xs": 12}
-      },
-      "options": {"widget": "SelectInputField"}
-    },
-    {
-      "type": "Control",
-      "scope": "#/properties/startDate",
-      "config": {
-        "main": {
-          "type": "date",
-          "label": "Start Date"
-        },
-        "layout": {"lg": 4, "md": 4, "sm": 5, "xs": 12}
-      },
-      "options": {"widget": "DateInputField"}
-    },
-    {
-      "type": "Control",
-      "scope": "#/properties/endDate",
-      "config": {
-        "main": {
-          "type": "date",
-          "label": "End Date"
-        },
-        "layout": {"lg": 4, "md": 4, "sm": 5, "xs": 12}
-      },
-      "options": {"widget": "DateInputField"}
-    },
-    {
-      "type": "Control",
-      "scope": "#/properties/programCycle",
-      "config": {
-        "main": {
-          "type": "text",
-          "label": "Program Cycle",
-          "freeSole": false
-        },
-        "layout": {"lg": 4, "md": 4, "sm": 5, "xs": 12}
-      },
-      "options": {"widget": "SelectInputField"}
-    }
-  ]
-}
-```
-
 ---
 
 ## Use Cases
@@ -515,11 +411,11 @@ startDate: { disabled: true }
 ## Key Points to Remember
 
 1. **Radio Button:** `type: "Radio"` in config
-2. **Widget:** `RadioInputField` in uiSchema
-3. **onChange Event:** Trigger logic on selection
-4. **setSchema:** Enable/disable fields dynamically
-5. **setFormdata:** Clear values when switching
-6. **Options:** Define in `sectionLabels` array
+2. **Options:** Define in `sectionLabels` array (each entry: `{"label": "..."}`)
+3. **onChange Event:** Trigger logic on selection change
+4. **setSchema:** Enable/disable fields dynamically at runtime
+5. **setFormdata:** Clear values when switching options
+6. **uiSchema/schema:** Auto-derived — never build manually
 
 ---
 

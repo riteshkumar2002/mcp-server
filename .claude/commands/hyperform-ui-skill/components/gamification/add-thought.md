@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+Call `update_page(pageName, config, userId)` and both `uiSchema` and `schema` are built automatically from your config. Never construct or pass them manually.
+
+---
+
 ## How to Add Thought to Your Page
 
 The Thought Component displays inspirational quotes, motivational messages, or daily thoughts. Perfect for:
@@ -43,40 +52,8 @@ The Thought Component displays inspirational quotes, motivational messages, or d
 
 ---
 
-## Step 2: Add to uiSchema.elements
 
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/thought",
-  "config": {
-    "main": {
-      "thought": "Just one small positive thought in the morning can change your whole day."
-    },
-    "layout": {
-      "xs": 12,
-      "sm": 12,
-      "md": 12,
-      "lg": 12
-    }
-  },
-  "options": {
-    "widget": "Thought"
-  }
-}
-```
-
----
-
-## Step 3: schema.properties
-
-```json
-{
-  "thought": {
-    "type": "string"
-  }
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
@@ -84,55 +61,32 @@ The Thought Component displays inspirational quotes, motivational messages, or d
 
 | Property | Purpose | Example |
 |---|---|---|
-| type (config) | Must be "Thought" | "Thought" |
-| widget (uiSchema) | Must be "Thought" | "Thought" |
-| thought (config) | Static message text | "Excellence is not a destination..." |
-| thought (uiSchema main) | Must match config thought value | same string |
-| layout | Responsive grid sizing (usually full-width) | lg: 12, xs: 12 |
-| style | Optional CSS-in-JSON string | `"{\"color\": \"#333\"}"` |
+| `name` | Unique field name | `"thought"` |
+| `type` | Must be `"Thought"` | `"Thought"` |
+| `thought` | The quote/motivational text to display | `"Excellence is not a destination..."` |
+| `label` | Title or attribution line | `"Thought of the Day"` |
+| `style` | JSON string for custom styles | `"{\"color\": \"#333\"}"` |
+| `layout` | Responsive grid sizing (usually full-width) | lg: 12, xs: 12 |
+| `events` | `[]` for static, or `onLoad` custom event for dynamic message | always required |
 
 ---
 
 ## Complete Example: Contest Dashboard Thought
-
-### config.elements
 
 ```json
 {
   "name": "thought",
   "type": "Thought",
   "style": "",
+  "thought": "Just one small positive thought in the morning can change your whole day.",
+  "label": "Thought of the Day",
   "events": [],
   "layout": [
     {"key": "xs", "value": "12"},
     {"key": "sm", "value": "12"},
     {"key": "md", "value": "12"},
     {"key": "lg", "value": "12"}
-  ],
-  "thought": "Just one small positive thought in the morning can change your whole day."
-}
-```
-
-### uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/thought",
-  "config": {
-    "main": {
-      "thought": "Just one small positive thought in the morning can change your whole day."
-    },
-    "layout": {
-      "xs": 12,
-      "sm": 12,
-      "md": 12,
-      "lg": 12
-    }
-  },
-  "options": {
-    "widget": "Thought"
-  }
+  ]
 }
 ```
 
@@ -164,16 +118,9 @@ The Thought Component displays inspirational quotes, motivational messages, or d
 
 ## Common Mistakes to Avoid
 
-**Mistake 1:** Wrong widget name
-```json
-// WRONG
-"widget": "ThoughtBanner"
+**Mistake 1:** Wrong `type` name — must be `"Thought"`, not `"ThoughtBanner"` or `"thought"`.
 
-// CORRECT
-"widget": "Thought"
-```
-
-**Mistake 2:** Setting `thought` text only in config but not in uiSchema `config.main` — both must have the `thought` property for static messages to render.
+**Mistake 2:** Setting `thought` to a very long string without testing text overflow — always check rendering at the target screen size.
 
 **Mistake 3:** Forgetting `"events": []` on the config element — even when there are no events, the array must be present.
 

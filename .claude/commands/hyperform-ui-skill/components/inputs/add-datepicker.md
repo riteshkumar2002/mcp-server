@@ -129,14 +129,16 @@ dateOfBirth                     (birth date)
 
 | Property | Value | Notes |
 |---|---|---|
-| `type` | `Date` | The config element type — drives widget selection in buildUiSchema |
+| `type` | `"Date"` or `"DateTime"` | The config element type — drives widget selection in buildUiSchema |
 | `label` | String | Display label |
 | `name`  | camelCase | Must be unique within the page; becomes the schema property key |
+| `variant` | String | Optional input variant |
+| `toolTip` | String | Optional tooltip text |
+| `toolTipPosition` | String | Optional tooltip position |
+| `style` | JSON string | Optional inline style |
+| `layout` | Array of `{key,value}` | Responsive grid overrides (default: lg:4 md:4 sm:4 xs:11) |
 
-The generated uiSchema will use:
-- `widget: "DateInputField"`
-- `main.type: "date"`
-- `layout: { lg: 4, md: 4, sm: 4, xs: 11 }`
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 

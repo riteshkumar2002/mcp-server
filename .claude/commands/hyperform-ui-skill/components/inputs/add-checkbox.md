@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+The uiSchema and schema examples shown in this skill are **reference only** — they illustrate what the auto-derivation produces from your config. Do not copy or manually build them.
+
+---
+
 ## How to Add CheckBox to Your Page
 
 CheckBox Component provides a boolean input for selecting/deselecting items. Perfect for:
@@ -67,87 +76,7 @@ CheckBox Component provides a boolean input for selecting/deselecting items. Per
 }
 ```
 
----
-
-## Step 2: Add to uiSchema.elements
-
-### Standalone CheckBox
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/agreeToTerms",
-  "config": {
-    "main": {
-      "label": "I agree to the terms and conditions"
-    },
-    "layout": {
-      "lg": 12,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "CheckBox"
-  }
-}
-```
-
-### CheckBox in Table Column
-
-```json
-{
-  "size": 180,
-  "header": "Select",
-  "widget": {
-    "type": "Control",
-    "scope": "#/properties/Select",
-    "config": {
-      "main": {},
-      "layout": {
-        "lg": 3,
-        "md": 4,
-        "sm": 6,
-        "xs": 6
-      }
-    },
-    "options": {
-      "widget": "CheckBox"
-    }
-  },
-  "accessorKey": "Select",
-  "enableSorting": true,
-  "enableColumnFilter": true
-}
-```
-
----
-
-## Step 3: Add to schema.properties
-
-```json
-{
-  "agreeToTerms": {
-    "type": "boolean"
-  }
-}
-```
-
-For table row checkboxes, the `Select` field is part of the table row schema:
-```json
-{
-  "paymentFailedRecords": {
-    "type": "array",
-    "items": {
-      "type": "object",
-      "properties": {
-        "Select": {"type": "boolean"},
-        "id": {},
-        "status": {}
-      }
-    }
-  }
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
@@ -155,11 +84,11 @@ For table row checkboxes, the `Select` field is part of the table row schema:
 
 | Property | Purpose | Example |
 |---|---|---|
-| type (config) | Must be "CheckBox" | "CheckBox" |
-| widget (uiSchema) | Must be "CheckBox" | "CheckBox" |
-| label | Text shown beside checkbox | "I agree to terms" |
-| default | Initial checked state | true or false |
-| disabled | Disable checkbox | true or false |
+| `name` | Unique field key | `"agreeToTerms"` |
+| `type` | Must be `"CheckBox"` | `"CheckBox"` |
+| `label` | Text shown beside checkbox | `"I agree to terms"` |
+| `style` | JSON string for inline styles | `"{}"` |
+| `layout` | Array of `{key,value}` | Default: lg:3 md:4 sm:6 xs:6 |
 
 ---
 
@@ -200,44 +129,6 @@ CheckBox stores boolean values:
     {"name": "payeeName", "label": "Payee Name", "events": []}
   ],
   "selectKey": "Select12121"
-}
-```
-
-### uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/paymentFailedRecords",
-  "config": {
-    "main": {
-      "columns": {"dataColumns": [], "actionColumns": []},
-      "disableSorting": false
-    },
-    "layout": 12
-  },
-  "options": {"widget": "Table"},
-  "elements": [
-    {
-      "size": 180,
-      "header": "Select",
-      "widget": {
-        "type": "Control",
-        "scope": "#/properties/Select",
-        "config": {
-          "main": {},
-          "layout": {"lg": 3, "md": 4, "sm": 6, "xs": 6}
-        },
-        "options": {"widget": "CheckBox"}
-      },
-      "accessorKey": "Select",
-      "enableSorting": true,
-      "enableColumnFilter": true
-    },
-    {"size": 180, "header": "Id", "accessorKey": "id"},
-    {"size": 180, "header": "Status", "accessorKey": "status"},
-    {"size": 180, "header": "Payee Name", "accessorKey": "payeeName"}
-  ]
 }
 ```
 
@@ -364,20 +255,11 @@ if (store.ctx.core.data.agreeToTerms) {
 
 ## Common Mistakes to Avoid
 
-**Mistake 1:** Wrong schema type — must be `"boolean"`, not `"string"`
-```json
-// WRONG
-"agreeToTerms": {"type": "string"}
+**Mistake 1:** Reading checked state incorrectly — use `dynamicData?.changeEvent?.target?.checked` in `onChange`, not `dynamicData.value`
 
-// CORRECT
-"agreeToTerms": {"type": "boolean"}
-```
+**Mistake 2:** For table row checkboxes, the field name `"Select"` must be consistent across all config `elements` entries — the name used in config must match how the table references it.
 
-**Mistake 2:** Reading checked state incorrectly — use `dynamicData?.changeEvent?.target?.checked` in `onChange`, not `dynamicData.value`
-
-**Mistake 3:** For table row checkboxes, the field name `"Select"` must match in config `elements`, uiSchema `accessorKey`, and `scope` — all three must be consistent.
-
-**Mistake 4:** Missing `selectKey` on the Table config when using row selection — add `"selectKey": "Select12121"` (or any unique string) to enable proper selection tracking.
+**Mistake 3:** Missing `selectKey` on the Table config when using row selection — add `"selectKey": "Select12121"` (or any unique string) to enable proper selection tracking.
 
 ---
 

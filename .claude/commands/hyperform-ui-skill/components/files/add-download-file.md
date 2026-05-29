@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+The uiSchema and schema examples shown in this skill are **reference only** — they illustrate what the auto-derivation produces from your config. Do not copy or manually build them.
+
+---
+
 ## How to Add DownloadFile to Your Page
 
 DownloadFile Component provides a dedicated file download button for retrieving previously uploaded files. Perfect for:
@@ -58,38 +67,7 @@ DownloadFile Component provides a dedicated file download button for retrieving 
 
 ---
 
-## Step 2: Add to uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/downloadFile",
-  "config": {
-    "main": {
-      "label": "Download File",
-      "onClick": "onClick",
-      "required": false
-    },
-    "style": {
-      "backgroundColor": "none"
-    },
-    "layout": {
-      "lg": 3,
-      "md": 3,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "DownloadFile"
-  }
-}
-```
-
----
-
-## Step 3: schema.properties
-
-DownloadFile doesn't need a schema entry — it reads `uploadFileId` from formdata (set during upload).
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
@@ -97,10 +75,12 @@ DownloadFile doesn't need a schema entry — it reads `uploadFileId` from formda
 
 | Property | Purpose | Example |
 |---|---|---|
-| type (config) | Must be "DownloadFile" | "DownloadFile" |
-| widget (uiSchema) | Must be "DownloadFile" | "DownloadFile" |
+| type | Must be "DownloadFile" | "DownloadFile" |
 | label | Button label | "Download File" |
-| apiBody | Builds request with fileId | reads `uploadFileId` from store |
+| required | Mark field as required | `true` or `false` |
+| toolTip | Tooltip text on hover | "Download your invoice" |
+| layout | Responsive grid columns | `[{"key": "lg", "value": "3"}, ...]` |
+| apiBody (in events) | Builds request with fileId | reads `uploadFileId` from store |
 | inBuiltFunctionType | Auto-triggers browser download | "downloadFile" |
 | funcParametersCode | Extracts binary from response | `parentEventOutput.data` |
 
@@ -168,33 +148,6 @@ DownloadFile doesn't need a schema entry — it reads `uploadFileId` from formda
 ]
 ```
 
-### uiSchema.elements
-
-```json
-[
-  {
-    "type": "Control",
-    "scope": "#/properties/uploadFile",
-    "config": {
-      "main": {"label": "Invoice File", "onClick": "onClick", "required": true},
-      "style": {"backgroundColor": "none"},
-      "layout": {"lg": 3, "md": 3, "xs": 12}
-    },
-    "options": {"widget": "UploadFile"}
-  },
-  {
-    "type": "Control",
-    "scope": "#/properties/downloadFile",
-    "config": {
-      "main": {"label": "Download File", "onClick": "onClick", "required": false},
-      "style": {"backgroundColor": "none"},
-      "layout": {"lg": 3, "md": 3, "xs": 12}
-    },
-    "options": {"widget": "DownloadFile"}
-  }
-]
-```
-
 ---
 
 ## API: POST /externalData/getById
@@ -254,15 +207,58 @@ store.setFormdata(prev => ({
 
 ---
 
+## Variant: Download from Table Row (IconButton in Table Column)
+
+Use this when the download button is inside a table row and uses the row's data to get the file ID.
+
+```json
+{
+  "name": "downloadAttachment",
+  "type": "Button",
+  "label": "Download",
+  "iconName": "DownloadIcon",
+  "buttonType": "IconButton",
+  "defaultStyle": "true",
+  "elements": [],
+  "events": [
+    {
+      "path": "/externalData/getById",
+      "events": [
+        {
+          "events": [],
+          "Handler": "inBuiltFunction",
+          "eventType": "Success",
+          "funcParametersCode": "(store, dynamicData, userValue, parentEventOutput, service) => {\n  return parentEventOutput.data;\n}",
+          "inBuiltFunctionType": "downloadFile"
+        }
+      ],
+      "method": "post",
+      "Handler": "api",
+      "apiBody": "(store, dynamicData, userValue, body, service) => {\n  if (!dynamicData?.rowData?.attachmentField) {\n    throw new Error('No attachment on this row');\n  }\n  return {\n    id: dynamicData.rowData.attachmentField,\n    withData: true,\n    toBeDeleted: false\n  };\n}",
+      "eventType": "onClick"
+    }
+  ]
+}
+```
+
+**Replace `attachmentField`** with the actual column name in your table data that holds the file ID.
+
+The key difference from a standalone DownloadFile button:
+- File ID comes from `dynamicData.rowData.yourField` (row data) instead of `store.ctx.core.data.uploadFileId` (formdata)
+- Uses `IconButton` type, not `DownloadFile` type
+- Throws an error inside `apiBody` to prevent the API call when no attachment exists
+
+---
+
 ## Common Mistakes to Avoid
 
-**Mistake 1:** Wrong widget name
+**Mistake 1:** Wrong type name in config
 ```json
 // WRONG
-"widget": "Download"
+{"name": "download", "type": "Download"}
 
 // CORRECT
-"widget": "DownloadFile"
+{"name": "download", "type": "DownloadFile"}
 ```
 
 **Mistake 2:** Missing `inBuiltFunctionType: "downloadFile"` in the Success event — without it the file binary is received but the browser download is never triggered.

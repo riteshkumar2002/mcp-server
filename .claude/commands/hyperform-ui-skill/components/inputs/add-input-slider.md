@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+The uiSchema and schema examples shown in this skill are **reference only** — they illustrate what the auto-derivation produces from your config. Do not copy or manually build them.
+
+---
+
 ## How to Add Input Slider to Your Page
 
 Input Slider is a range input component perfect for:
@@ -69,37 +78,7 @@ Input Slider is a range input component perfect for:
 }
 ```
 
----
-
-## Step 2: Add to uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/final_amt",
-  "config": {
-    "main": {
-      "min": "10000",
-      "max": "1000000",
-      "step": "10000",
-      "label": "Final Amount",
-      "limitToMax": false
-    },
-    "layout": 12
-  },
-  "options": {
-    "widget": "InputSlider"
-  }
-}
-```
-
----
-
-## Step 3: Add to schema.properties
-
-```json
-"final_amt": {}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
@@ -191,66 +170,21 @@ Here's the full example from page_ColIncentiveCalculator:
 }
 ```
 
-### uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/final_amt",
-  "config": {
-    "main": {
-      "max": "1000000",
-      "min": "10000",
-      "step": "10000",
-      "label": "Final Amount Bounce BP",
-      "limitToMax": false
-    },
-    "layout": 12
-  },
-  "options": {
-    "widget": "InputSlider"
-  }
-},
-{
-  "type": "Control",
-  "scope": "#/properties/resolution_per",
-  "config": {
-    "main": {
-      "max": "100",
-      "min": "1",
-      "step": "1",
-      "label": "Resolution %",
-      "limitToMax": true
-    },
-    "layout": 12
-  },
-  "options": {
-    "widget": "InputSlider"
-  }
-}
-```
-
-### schema.properties
-
-```json
-{
-  "final_amt": {},
-  "resolution_per": {}
-}
-```
-
 ---
 
 ## Key Configuration Points
 
 | Property | Type | Purpose | Example |
 |---|---|---|---|
-| min | String | Minimum value | "10000" |
-| max | String | Maximum value | "1000000" |
-| step | String | Increment step | "10000" |
-| label | String | Display label | "Amount" |
-| limitToMax | String | Enforce max? | "YES" or "NO" |
-| widget | String | Use InputSlider | "InputSlider" |
+| `name` | String | Unique field key | `"final_amt"` |
+| `type` | String | Must be `"InputSlider"` | `"InputSlider"` |
+| `label` | String | Display label | `"Final Amount"` |
+| `min` | String | Minimum value | `"10000"` |
+| `max` | String | Maximum value | `"1000000"` |
+| `step` | String | Increment step | `"10000"` |
+| `limitToMax` | String | Enforce max? | `"YES"` or `"NO"` |
+| `style` | JSON string | Optional inline style | `"{}"` |
+| `layout` | Array of `{key,value}` | Responsive grid (default: lg:6 md:6 sm:12 xs:12) | |
 
 ---
 
@@ -379,22 +313,22 @@ async (store, dynamicData, userValue, parentEventOutput) => {
 
 ### Full Width (Typical for Sliders)
 ```json
-"layout": 12
+"layout": [
+  {"key": "lg", "value": "12"},
+  {"key": "md", "value": "12"},
+  {"key": "sm", "value": "12"},
+  {"key": "xs", "value": "12"}
+]
 ```
 
-### Half Width
+### Half Width (Default)
 ```json
-"layout": 6
-```
-
-### Custom Responsive
-```json
-"layout": {
-  "lg": 6,
-  "md": 6,
-  "sm": 12,
-  "xs": 12
-}
+"layout": [
+  {"key": "lg", "value": "6"},
+  {"key": "md", "value": "6"},
+  {"key": "sm", "value": "12"},
+  {"key": "xs", "value": "12"}
+]
 ```
 
 ---
@@ -410,20 +344,13 @@ async (store, dynamicData, userValue, parentEventOutput) => {
 "min": "10000"
 ```
 
-**Mistake 2:** Missing widget configuration — both config and uiSchema entries required
+**Mistake 2:** Wrong `limitToMax` format — must be string `"YES"` or `"NO"` in config
 ```json
-// In config: {"type": "InputSlider", ...}
-// In uiSchema: {"options": {"widget": "InputSlider"}, ...}
-// In schema: {"fieldName": {}}
-```
+// WRONG
+"limitToMax": true
 
-**Mistake 3:** Wrong limitToMax format — must be string "YES"/"NO" in config, boolean in uiSchema
-```json
-// config.elements
-"limitToMax": "YES"   // string
-
-// uiSchema config.main
-"limitToMax": true    // boolean
+// CORRECT
+"limitToMax": "YES"
 ```
 
 ---

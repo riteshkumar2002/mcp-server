@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+This skill contains **config-only** examples. Never construct or edit uiSchema or schema by hand.
+
+---
+
 ## What is EmptyBox?
 
 EmptyBox is a **layout utility component** — invisible space that fills grid columns to balance and align other elements within the 12-column grid system. It renders nothing visually.
@@ -27,7 +36,7 @@ EmptyBox is a **layout utility component** — invisible space that fills grid c
 
 ---
 
-## Step 1: Add to config.elements
+## Add to config.elements
 
 ```json
 {
@@ -46,37 +55,7 @@ No `events`, no `label`, no other properties needed.
 
 ---
 
-## Step 2: Add to uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/spacer",
-  "config": {
-    "main": {},
-    "style": {},
-    "layout": {
-      "lg": 6,
-      "md": 6,
-      "sm": 12,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "EmptyBox"
-  }
-}
-```
-
----
-
-## Step 3: Add to schema.properties
-
-```json
-{
-  "spacer": {}
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
@@ -95,8 +74,6 @@ Col1 (6) + Col2 (6) = 12 ✓
 ## Real Example: Left-Align a Button (from page_systemBot)
 
 Button takes 1.5 columns, EmptyBox fills the remaining 10.5:
-
-### config.elements
 
 ```json
 [
@@ -130,25 +107,6 @@ Button takes 1.5 columns, EmptyBox fills the remaining 10.5:
       {"key": "sm", "value": "9"},
       {"key": "xs", "value": "8"}
     ]
-  }
-]
-```
-
-### uiSchema.elements
-
-```json
-[
-  {
-    "type": "Control",
-    "scope": "#/properties/ask",
-    "config": {"main": {"label": "Ask"}, "layout": {"lg": 1.5, "md": 2.5, "sm": 3, "xs": 4}},
-    "options": {"widget": "Button"}
-  },
-  {
-    "type": "Control",
-    "scope": "#/properties/spacer",
-    "config": {"main": {}, "style": {}, "layout": {"lg": 10.5, "md": 9.5, "sm": 9, "xs": 8}},
-    "options": {"widget": "EmptyBox"}
   }
 ]
 ```
@@ -199,11 +157,9 @@ Grid math: lg 3+9=12 ✓, md 4+8=12 ✓, sm 6+6=12 ✓, xs 12+12 (wraps) ✓
 {"lg": "3"}, {"lg": "9"}
 ```
 
-**Mistake 2:** Strings in uiSchema layout — config uses string values (`"6"`), uiSchema layout uses numbers (`6`).
+**Mistake 2:** Adding extra properties to EmptyBox — only `name`, `type`, and `layout` are needed. No `label`, no `events`.
 
-**Mistake 3:** Missing schema entry — EmptyBox must have an empty object `{}` in schema.properties or the build will fail.
-
-**Mistake 4:** Adding styles to EmptyBox — `main` and `style` must both be empty objects `{}`.
+**Mistake 3:** Adding styles to EmptyBox — the component renders nothing; style properties have no effect.
 
 ---
 
@@ -213,9 +169,8 @@ Grid math: lg 3+9=12 ✓, md 4+8=12 ✓, sm 6+6=12 ✓, xs 12+12 (wraps) ✓
 - [ ] All rows sum to 12 at md breakpoint
 - [ ] All rows sum to 12 at sm breakpoint
 - [ ] All rows sum to 12 at xs breakpoint
-- [ ] EmptyBox entry present in schema.properties
-- [ ] uiSchema layout uses numbers (not strings)
 - [ ] No visible content renders where EmptyBox is placed
+- [ ] Adjacent elements align correctly
 
 ---
 

@@ -24,6 +24,43 @@ These functions derive the full uiSchema and schema from the config. Your only j
 
 ---
 
+## Static Dropdown (hardcoded options — no API)
+
+Use the `value` array when the dropdown options are fixed and do not come from an API.
+
+```json
+{
+  "name": "adjustmentType",
+  "type": "Select",
+  "label": "Adjustment Type",
+  "value": [
+    {"label": "Case Adjustment",  "value": "case_adjustment"},
+    {"label": "Payee Adjustment", "value": "payee_adjustment"},
+    {"label": "Case Rebooking",   "value": "case_rebooking"},
+    {"label": "Documents",        "value": "documents"},
+    {"label": "Cancellation",     "value": "cancellation"}
+  ],
+  "events": [],
+  "layout": [
+    {"key": "lg", "value": "4"},
+    {"key": "md", "value": "4"},
+    {"key": "sm", "value": "6"},
+    {"key": "xs", "value": "12"}
+  ],
+  "validation": [
+    {"validationType": "required", "validationValue": "true"}
+  ]
+}
+```
+
+**Key difference from LOV dropdown:**
+- `value` array is set directly on the field (no `events` needed)
+- Each entry has `label` (display text) and `value` (stored value)
+- No API call — options are always the same
+- `events: []` can be empty
+
+---
+
 ## How to Add a Dropdown
 
 ### Single Dropdown — add to config.elements
@@ -209,6 +246,105 @@ Key rules for dependent dropdowns:
 - Read parent value from `store?.newData?.parentField` (not `ctx.core.data`)
 - Reset child with `store.ctx.core.data.childField = []`
 - Always guard `setSchema` with `if (options.length)`
+
+---
+
+## Populating a Dropdown from Another Field's onLoad Event
+
+Sometimes a dropdown's options depend on a value that isn't known until another event runs. You can populate a dropdown's `oneOf` options from **any** field's event — not just the dropdown itself.
+
+**Pattern:** Add an `onLoad` event to any field (Text, Select, or even a container element). In its `Success` handler, map the API response to `oneOf` format and call `store.setSchema` to inject the options into the target dropdown's schema property.
+
+```json
+{
+  "name": "triggerField",
+  "type": "Text",
+  "label": "Search Id",
+  "events": [
+    {
+      "body": [
+        {"key": "programId", "value": "$programId"},
+        {"key": "messageType", "value": "generateReport"},
+        {"key": "reportName",  "value": "<your-report-name>"}
+      ],
+      "path": "/HyperformMessage/process",
+      "events": [
+        {
+          "events": [],
+          "Handler": "custom",
+          "eventCode": "async (store, dynamicData, userValue, res) => {\n  const isProgramIdPresent = 'programId' in store.newData;\n  const isManager = userValue.userType !== 'agent';\n  return isProgramIdPresent && isManager;\n}",
+          "eventType": "onStart"
+        },
+        {
+          "events": [],
+          "Handler": "custom",
+          "eventCode": "async (store, dynamicData, userValue, res) => {\n  const options = Array.isArray(res?.data)\n    ? res.data.map(item => ({ const: item.name, title: item.name }))\n    : [];\n  store.setSchema((pre) => ({\n    ...pre,\n    properties: { ...pre?.properties, targetDropdown: { oneOf: options } }\n  }));\n}",
+          "eventType": "Success"
+        }
+      ],
+      "method": "post",
+      "Handler": "api",
+      "apiBody": "(store, d, u, body) => {\n  return { ...body, programId: store.newData.programId };\n}",
+      "eventType": "onLoad"
+    }
+  ],
+  "layout": [
+    {"key": "lg", "value": "4"},
+    {"key": "md", "value": "4"},
+    {"key": "sm", "value": "12"},
+    {"key": "xs", "value": "12"}
+  ]
+}
+```
+
+**Replace:**
+- `triggerField` → the field name that triggers the load
+- `targetDropdown` → the `name` of the Select field whose options you are populating
+- `<your-report-name>` → your backend report/query identifier
+- `item.name` → the key in your API response used as both `const` and `title`
+
+**When to use this pattern:**
+- The dropdown's options depend on a combination of filters not known at page load
+- Another field (Text input, filter, etc.) acts as the trigger for re-loading the dropdown's options
+- The `onStart` can gate the load — e.g. only fire when a parent programId is present AND the user is a manager
+
+---
+
+## Store Data Access Reference
+
+Three ways to read form field values — use the right one for each context:
+
+| Access path | Contains | Use when |
+|---|---|---|
+| `store.newData.fieldName` | The value **just changed** in the latest event | `onChange` handlers, `onStart` guards checking if a field was touched, `apiBody` needing the freshly-set value |
+| `store.formData.fieldName` | All current form values (flat object) | `apiBody`, `onLoad`, reading any field's current value |
+| `store.ctx.core.data.fieldName` | Same as formData but deeper in the store tree | More reliable inside nested Success handlers; use for resetting: `store.ctx.core.data.field = []` |
+
+**Quick rules:**
+- In `onChange` → always use `store.newData` to read the field that just changed
+- In `apiBody` → prefer `store.newData` when you need the latest change, `store.formData` for stable values
+- To reset a child dropdown → `store.ctx.core.data.childField = []`
+- `'fieldName' in store.newData` → checks whether a specific field was part of the latest change event
+
+### onStart: checking store.newData membership
+
+```javascript
+// Fire only if programId was part of this change event AND user is not agent
+async (store, dynamicData, userValue, res) => {
+  const isProgramIdPresent = 'programId' in store.newData;
+  const isManager = userValue.userType !== 'agent';
+  return isProgramIdPresent && isManager;
+}
+```
+
+### userValue fields available in events
+
+| Field | Value |
+|---|---|
+| `userValue.username` | Login username |
+| `userValue.userId` | Numeric user ID |
+| `userValue.userType` | Role string — e.g. `"agent"`, `"manager"`, `"admin"` |
+| `userValue.positionName` | User's position |
 
 ---
 

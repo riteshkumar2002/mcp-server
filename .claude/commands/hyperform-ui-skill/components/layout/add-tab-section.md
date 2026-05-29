@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+This skill contains **config-only** examples. Never construct or edit uiSchema or schema by hand.
+
+---
+
 ## How to Add Tab Section to Your Page
 
 Tab Section (TabLayout) organizes content into tabs. Perfect for:
@@ -22,7 +31,7 @@ Tab Section (TabLayout) organizes content into tabs. Perfect for:
 
 ---
 
-## Step 1: Add to config.elements
+## Add to config.elements
 
 ```json
 {
@@ -58,103 +67,18 @@ Tab Section (TabLayout) organizes content into tabs. Perfect for:
   "sectionLabels": [
     {"label": "Transaction Report"}
   ],
-  "verticalOrientation": "YES",
+  "orientation": "YES",
   "lazyLoad": "NO"
 }
 ```
 
 ---
 
-## Step 2: Add to uiSchema.elements
-
-```json
-{
-  "type": "TabLayout",
-  "scope": "#/properties/TabSection",
-  "config": {
-    "main": {
-      "id": "TabSection",
-      "layout": 12,
-      "lazyLoad": false,
-      "tabLabels": [
-        "Transaction Report"
-      ]
-    }
-  },
-  "elements": [
-    {
-      "type": "Control",
-      "scope": "#/properties/reportOne",
-      "config": {
-        "main": {
-          "columns": {
-            "dataColumns": [],
-            "actionColumns": []
-          },
-          "onMount": "onMount",
-          "Selection": false,
-          "allRowData": [],
-          "enableDrag": false,
-          "lazyLoading": false,
-          "disableSorting": true,
-          "downloadAllData": true,
-          "enableExpandAll": true,
-          "disableColumnFilter": true,
-          "disableDownloadFile": false,
-          "disableGlobalSearch": true
-        }
-      },
-      "options": {
-        "widget": "Table"
-      },
-      "elements": [
-        {
-          "size": 180,
-          "header": "ID",
-          "accessorKey": "id",
-          "enableColumnFilter": true
-        },
-        {
-          "size": 180,
-          "header": "Name",
-          "accessorKey": "name",
-          "enableColumnFilter": true
-        },
-        {
-          "size": 180,
-          "type": "amount",
-          "header": "Amount",
-          "accessorKey": "amount",
-          "enableColumnFilter": true
-        }
-      ]
-    }
-  ]
-}
-```
-
----
-
-## Step 3: Add to schema.properties
-
-```json
-{
-  "reportOne": {
-    "type": "array",
-    "items": {
-      "type": "object",
-      "required": [],
-      "properties": {}
-    }
-  }
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
 ## Complete Example: Multiple Tabs with Tables
-
-### config.elements
 
 ```json
 {
@@ -213,87 +137,8 @@ Tab Section (TabLayout) organizes content into tabs. Perfect for:
     {"label": "Payee Level Report"},
     {"label": "Transaction Report"}
   ],
-  "verticalOrientation": "YES",
+  "orientation": "YES",
   "lazyLoad": "NO"
-}
-```
-
-### uiSchema.elements
-
-```json
-{
-  "type": "TabLayout",
-  "scope": "#/properties/TabSection",
-  "config": {
-    "main": {
-      "id": "TabSection",
-      "layout": 12,
-      "lazyLoad": false,
-      "tabLabels": [
-        "Payee Level Report",
-        "Transaction Report"
-      ]
-    }
-  },
-  "elements": [
-    {
-      "type": "Control",
-      "scope": "#/properties/payeeReport",
-      "config": {
-        "main": {
-          "columns": {"dataColumns": [], "actionColumns": []},
-          "Selection": false,
-          "disableSorting": true,
-          "downloadAllData": true,
-          "disableColumnFilter": true,
-          "disableDownloadFile": false
-        }
-      },
-      "options": {"widget": "Table"},
-      "elements": [
-        {"size": 180, "header": "Agent Code", "accessorKey": "dsa_code"},
-        {"size": 180, "header": "Agent Name", "accessorKey": "dsa_name"},
-        {"size": 180, "header": "Branch", "accessorKey": "branch_name"},
-        {"size": 180, "type": "amount", "header": "Final Payout", "accessorKey": "final_payout"}
-      ]
-    },
-    {
-      "type": "Control",
-      "scope": "#/properties/transactionReport",
-      "config": {
-        "main": {
-          "columns": {"dataColumns": [], "actionColumns": []},
-          "Selection": false,
-          "disableSorting": true,
-          "downloadAllData": true,
-          "disableColumnFilter": true,
-          "disableDownloadFile": false
-        }
-      },
-      "options": {"widget": "Table"},
-      "elements": [
-        {"size": 180, "header": "Transaction ID", "accessorKey": "transaction_id"},
-        {"size": 180, "header": "Application No.", "accessorKey": "application_number"},
-        {"size": 180, "header": "Customer Name", "accessorKey": "customer_name"},
-        {"size": 180, "type": "amount", "header": "Amount", "accessorKey": "disbursed_amount"}
-      ]
-    }
-  ]
-}
-```
-
-### schema.properties
-
-```json
-{
-  "payeeReport": {
-    "type": "array",
-    "items": {"type": "object", "properties": {}}
-  },
-  "transactionReport": {
-    "type": "array",
-    "items": {"type": "object", "properties": {}}
-  }
 }
 ```
 
@@ -303,13 +148,11 @@ Tab Section (TabLayout) organizes content into tabs. Perfect for:
 
 | Property | Type | Purpose | Example |
 |---|---|---|---|
-| type (config) | TabSection | Tab container | "TabSection" |
-| type (uiSchema) | TabLayout | Tab renderer | "TabLayout" |
-| sectionLabels | Array | Tab names in config | [{"label": "Report 1"}] |
-| tabLabels | Array | Tab names in uiSchema | ["Report 1", "Report 2"] |
-| verticalOrientation | String | Vertical tabs? | "YES" or "NO" |
-| lazyLoad | String | Load on demand? | "YES" or "NO" |
-| style | String | Custom CSS | ".css-xxx { padding: 24px; }" |
+| type | TabSection | Tab container | `"TabSection"` |
+| sectionLabels | Array | Tab names | `[{"label": "Report 1"}]` |
+| orientation | String | Vertical tabs? | `"YES"` = vertical, `"NO"` = horizontal |
+| lazyLoad | String | Load on demand? | `"YES"` or `"NO"` |
+| style | String | Custom CSS | `".css-xxx { padding: 24px; }"` |
 | elements | Array | Nested components | Tables, Forms, etc. |
 
 ---
@@ -318,7 +161,7 @@ Tab Section (TabLayout) organizes content into tabs. Perfect for:
 
 ### Horizontal Tabs
 ```json
-"verticalOrientation": "NO"
+"orientation": "NO"
 ```
 ```
 ┌─────────┬─────────┬─────────┐
@@ -330,7 +173,7 @@ Tab Section (TabLayout) organizes content into tabs. Perfect for:
 
 ### Vertical Tabs
 ```json
-"verticalOrientation": "YES"
+"orientation": "YES"
 ```
 ```
 ┌─────────┬───────────────────┐
@@ -378,7 +221,7 @@ Tab Section (TabLayout) organizes content into tabs. Perfect for:
 "elements": [{"name": "report1", ...}, {"name": "report2", ...}]
 ```
 
-**Mistake 3:** `tabLabels` in uiSchema must match `sectionLabels` in config exactly (same strings, same order)
+**Mistake 3:** Using `orientation: "YES"` when you want horizontal tabs — `"YES"` means **vertical**. Use `"NO"` for the default horizontal tab bar.
 
 ---
 

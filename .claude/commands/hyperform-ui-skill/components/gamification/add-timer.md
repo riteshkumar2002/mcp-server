@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+Call `update_page(pageName, config, userId)` and both `uiSchema` and `schema` are built automatically from your config. Never construct or pass them manually.
+
+---
+
 ## How to Add Timer to Your Page
 
 Timer Component displays a live countdown showing days, hours, minutes, and seconds remaining. Perfect for:
@@ -43,45 +52,8 @@ Timer Component displays a live countdown showing days, hours, minutes, and seco
 
 ---
 
-## Step 2: Add to uiSchema.elements
 
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/timer",
-  "config": {
-    "main": {
-      "label": "Contest Ends In"
-    },
-    "style": {},
-    "layout": {
-      "lg": 6,
-      "md": 6,
-      "sm": 6,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "Timer"
-  }
-}
-```
-
----
-
-## Step 3: schema.properties
-
-```json
-{
-  "timer": {
-    "type": "object",
-    "properties": {
-      "startDate": {"type": "string"},
-      "endDate": {"type": "string"}
-    }
-  }
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
@@ -89,11 +61,18 @@ Timer Component displays a live countdown showing days, hours, minutes, and seco
 
 | Property | Purpose | Format | Example |
 |---|---|---|---|
-| type (config) | Must be "Timer" | string | "Timer" |
-| widget (uiSchema) | Must be "Timer" | string | "Timer" |
-| label | Display label above timer | string | "Contest Ends In" |
-| startDate | Timer start date-time | ISO 8601 with timezone | "2026-01-04T13:15:03-08:00" |
-| endDate | Timer end date-time | ISO 8601 with timezone | "2027-01-04T13:15:03-08:00" |
+| `name` | Unique field name | string | `"timer"` |
+| `type` | Must be `"Timer"` | string | `"Timer"` |
+| `label` | Display label above the countdown | string | `"Contest Ends In"` |
+| `layout` | Responsive grid sizing | array | see layout section |
+| `events` | `onLoad` to set `{startDate, endDate}` in formdata | array | always required |
+
+**Data keys set via onLoad event (in formdata):**
+
+| Key | Format | Example |
+|---|---|---|
+| `startDate` | ISO 8601 with timezone | `"2026-01-04T13:15:03-08:00"` |
+| `endDate` | ISO 8601 with timezone | `"2027-01-04T13:15:03-08:00"` |
 
 ---
 
@@ -114,8 +93,6 @@ Timer runs client-side — it only needs the dates on load, then counts down ind
 
 ## Complete Example: Contest Countdown
 
-### config.elements
-
 ```json
 {
   "name": "timer",
@@ -134,30 +111,6 @@ Timer runs client-side — it only needs the dates on load, then counts down ind
     {"key": "md", "value": "6"},
     {"key": "lg", "value": "6"}
   ]
-}
-```
-
-### uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/timer",
-  "config": {
-    "main": {
-      "label": "Contest Ends In"
-    },
-    "style": {},
-    "layout": {
-      "lg": 6,
-      "md": 6,
-      "sm": 6,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "Timer"
-  }
 }
 ```
 
@@ -206,14 +159,7 @@ const specificDate = new Date('2026-06-30T23:59:59+05:30').toISOString();
 
 ## Common Mistakes to Avoid
 
-**Mistake 1:** Wrong widget name
-```json
-// WRONG
-"widget": "Countdown"
-
-// CORRECT
-"widget": "Timer"
-```
+**Mistake 1:** Wrong `type` name — must be `"Timer"`, not `"Countdown"` or `"timer"`.
 
 **Mistake 2:** Providing dates without timezone — always use ISO 8601 with timezone offset (e.g., `+05:30` for IST, `-08:00` for PST) to avoid countdown mismatches across time zones.
 

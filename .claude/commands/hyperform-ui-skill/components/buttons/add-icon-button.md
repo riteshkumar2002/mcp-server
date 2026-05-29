@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+The uiSchema and schema examples shown in this skill are **reference only** — they illustrate what the auto-derivation produces from your config. Do not copy or manually build them.
+
+---
+
 ## How to Add Icon Button to Your Page
 
 Icon Button displays only an icon with optional tooltip. Perfect for:
@@ -70,125 +79,461 @@ Icon Button displays only an icon with optional tooltip. Perfect for:
 
 ---
 
-## Step 2: Add to uiSchema.elements
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
-### Icon Button in Table Column
+---
+
+## Array Type — Repeatable Row Group
+
+`Array` is a special container type that lets users add/remove multiple rows of the same fields. Each row is an instance of its child elements.
 
 ```json
 {
-  "size": 180,
-  "header": "View",
-  "widget": {
-    "type": "Control",
-    "scope": "#/properties/viewBtn",
-    "config": {
-      "main": {
-        "icon": "ViewIcon",
-        "name": "View",
-        "size": "small",
-        "type": "text",
-        "color": "primary",
-        "onClick": "onClick",
-        "variant": "contained",
-        "startIcon": "",
-        "styleDefault": true
-      },
-      "style": {},
-      "layout": {
-        "lg": 1.5,
-        "md": 2,
-        "sm": 2.5,
-        "xs": 4
-      }
+  "name": "addException",
+  "type": "Array",
+  "label": "Add Exception",
+  "events": [],
+  "validation": [],
+  "elements": [
+    {
+      "name": "adjustmentType",
+      "type": "Select",
+      "label": "Adjustment Type",
+      "value": [
+        {"label": "Option A", "value": "option_a"},
+        {"label": "Option B", "value": "option_b"}
+      ],
+      "events": [],
+      "layout": [{"key": "lg", "value": "4"}, {"key": "md", "value": "4"}, {"key": "sm", "value": "6"}, {"key": "xs", "value": "12"}],
+      "validation": [{"validationType": "required", "validationValue": "true"}]
     },
-    "options": {
-      "widget": "IconButton"
+    {
+      "name": "remarks",
+      "type": "Text",
+      "label": "Remarks",
+      "events": [],
+      "layout": [{"key": "lg", "value": "4"}, {"key": "md", "value": "4"}, {"key": "sm", "value": "6"}, {"key": "xs", "value": "12"}],
+      "validation": [{"validationType": "required", "validationValue": "true"}]
     }
-  },
-  "accessorKey": "viewBtn",
-  "enableSorting": true,
-  "enableColumnFilter": false
+  ]
 }
 ```
 
-### Icon Button in Table Header (via headerIcons)
+**Rules:**
+- `type: "Array"` — the container
+- `elements` — the fields for each row (same as any form section)
+- `validation: []` — always empty array on the Array itself; put validation on child fields
+- The data is stored as an array of objects in formdata: `store.ctx.core.data.addException = [{adjustmentType: "...", remarks: "..."}, ...]`
+- Reference the whole array in event body with `"$addException"` (the field name prefixed with `$`)
+
+### Sending Array data in event body
 
 ```json
-{
-  "widget": {
-    "type": "Control",
-    "scope": "#/properties/addBtn",
-    "config": {
-      "main": {
-        "icon": "TableAddIcon",
-        "name": "Add",
-        "size": "small",
-        "type": "text",
-        "onClick": "onClick",
-        "variant": "contained",
-        "startIcon": "",
-        "styleDefault": false,
-        "tooltipMessage": "Add New Record"
-      },
-      "style": {},
-      "layout": {
-        "lg": 1.5,
-        "md": 2,
-        "sm": 2.5,
-        "xs": 4
-      }
-    },
-    "options": {
-      "widget": "IconButton"
-    }
+{"key": "body", "value": "$addException"}
+```
+
+This passes the entire array as the value for that body key. The backend receives the full list.
+
+### Checking Array length in onStart
+
+```javascript
+async (store) => {
+  const data = store.ctx.core.data.addException;
+  if (data && data.length > 0) {
+    store.setValidation("ValidateAndShow");
+    return true;
   }
+  store.setNotify({ FailMessage: "Please add at least one row first!", Fail: true });
+  return false;
 }
 ```
 
-Header icons go inside `config.main.headerIcons.elements` on the Table uiSchema entry:
+### Clearing/resetting an Array field in Success
 
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/logsTable",
-  "config": {
-    "main": {
-      "columns": {"dataColumns": [], "actionColumns": []},
-      "headerIcons": {
-        "elements": [
-          {
-            "widget": {
-              "type": "Control",
-              "scope": "#/properties/addBtn",
-              "options": {"widget": "IconButton"}
-            }
-          },
-          {
-            "widget": {
-              "type": "Control",
-              "scope": "#/properties/downloadBtn",
-              "options": {"widget": "IconButton"}
-            }
-          }
-        ]
-      }
-    }
-  },
-  "options": {"widget": "Table"}
+```javascript
+async (store, dynamicData, userValue, res) => {
+  store.setFormdata((prev) => ({ ...prev, addException: [] }));
+  store.setNotify({ SuccessMessage: "Submitted successfully", Success: true });
 }
 ```
 
 ---
 
-## Step 3: Add to schema.properties
+## Multiple Success Events on the Same onClick
+
+A single API event can have multiple `Success` handlers. They run in order after the API responds successfully. Use this when you need to: show a notification AND refresh a table after the same action.
 
 ```json
 {
-  "viewBtn": {},
-  "addBtn": {},
-  "downloadBtn": {}
+  "body": [...],
+  "path": "/HyperformMessage/process",
+  "events": [
+    {
+      "events": [],
+      "Handler": "custom",
+      "eventCode": "async (store, dynamicData, userValue, res) => {\n  if (res?.data?.isRequestValid === false) {\n    store.setNotify({ FailMessage: res?.data?.message, Fail: true });\n    return;\n  }\n  store.setNotify({ SuccessMessage: 'Action completed successfully', Success: true });\n}",
+      "eventType": "Success"
+    },
+    {
+      "events": [],
+      "Handler": "refresh",
+      "eventType": "Success",
+      "refreshElements": [{"value": "myTable"}, {"value": "anotherTable"}]
+    }
+  ],
+  "method": "post",
+  "Handler": "api",
+  "eventType": "onClick"
 }
 ```
+
+**Order:** The first Success handler runs first. If you need to show a notification AND refresh, put the custom notification handler before the refresh handler.
+
+### Checking API response for business validation errors
+
+Some APIs return HTTP 200 but include a `isRequestValid: false` flag in the response body when business rules fail:
+
+```javascript
+async (store, dynamicData, userValue, res) => {
+  if (res?.data?.isRequestValid === false) {
+    store.setNotify({ FailMessage: res?.data?.message, Fail: true });
+    return;
+  }
+  // happy path
+  store.setNotify({ SuccessMessage: "Done!", Success: true });
+}
+```
+
+---
+
+## store.setNotify — Notification Patterns
+
+```javascript
+// Success notification
+store.setNotify({ SuccessMessage: "Action completed", Success: true });
+
+// Failure/error notification
+store.setNotify({ FailMessage: "Something went wrong", Fail: true });
+
+// Warning
+store.setNotify({ WarningMessage: "Please check input", Warning: true });
+```
+
+---
+
+## Custom Handler onLoad for Table (manual fetch + setFormdata)
+
+Use this when you need full control over the API call — custom query params, complex headers, or setting table data from a non-standard response shape.
+
+Instead of `Handler: "api"`, use `Handler: "custom"` with `eventCode` that calls `service.get` / `service.post` manually and sets the table data via `store.setFormdata`.
+
+```json
+{
+  "name": "myTable",
+  "type": "Table",
+  "events": [
+    {
+      "body": [],
+      "path": "/api/getData",
+      "events": [],
+      "method": "get",
+      "Handler": "custom",
+      "eventCode": "async (store, dynamicData, user, body, service) => {\n  const id = store.searchParams?.get('id');\n  try {\n    const res = await service.get('/api/getData', {\n      params: { source: 'MY_SOURCE', sourceId: id }\n    });\n    store.setFormdata((prev) => ({\n      ...prev,\n      myTable: res.data\n    }));\n  } catch (error) {\n    console.error('Error fetching data:', error);\n  }\n}",
+      "eventType": "onLoad"
+    }
+  ],
+  "elements": [...]
+}
+```
+
+**Critical:** `store.setFormdata(prev => ({...prev, myTable: res.data}))` — the key must match the table's `name` exactly. This is how a custom handler populates a Table component.
+
+### headers — Custom HTTP headers on an event
+
+Add a `headers` array to an event to send custom HTTP headers with the request:
+
+```json
+{
+  "path": "/api/endpoint",
+  "headers": [
+    {"key": "source",   "value": "MY_SOURCE"},
+    {"key": "sourceId", "value": "$urlParams.caseId"}
+  ],
+  "method": "get",
+  "Handler": "api",
+  "eventType": "onLoad"
+}
+```
+
+Headers support `$variable` references the same as body keys.
+
+---
+
+## isSync on Button Events
+
+Add `"isSync": "Yes"` to an event when it must complete synchronously before the next handler runs:
+
+```json
+{
+  "events": [],
+  "isSync": "Yes",
+  "Handler": "custom",
+  "eventCode": "async (store, dynamicData, userValue, response, service) => {\n  store.navigate('/Page?id=' + dynamicData?.rowData?.id);\n}",
+  "eventType": "onClick"
+}
+```
+
+---
+
+## Table Config Flags
+
+All Table feature flags are **strings** in config (`"YES"` / `"NO"`), not booleans. Add only the ones you need.
+
+```json
+{
+  "name": "myTable",
+  "type": "Table",
+  "lazyLoading":           "YES",
+  "DragAvailable":         "NO",
+  "SelectionAvailable":    "NO",
+  "ColumnResizingAvailable": "YES",
+  "disableFilters":        "YES",
+  "disableSorting":        "YES",
+  "disablePagination":     "NO",
+  "disableColumnFilter":   "YES",
+  "disableGlobalSearch":   "YES",
+  "disableDensityToggle":  "NO",
+  "disableEditColumn":     "NO",
+  "disableDownloadFile":   "YES",
+  "downloadAllData":       "YES",
+  "events": [...],
+  "elements": [...]
+}
+```
+
+| Flag | Purpose | Common value |
+|---|---|---|
+| `lazyLoading` | Load data on demand | `"YES"` for large datasets |
+| `DragAvailable` | Allow row drag-and-drop | `"NO"` usually |
+| `SelectionAvailable` | Enable row checkboxes for selection | `"NO"` usually |
+| `ColumnResizingAvailable` | Allow column width resize | `"YES"` for wide tables |
+| `disableFilters` | Hide all column filter controls | `"YES"` for simple tables |
+| `disableSorting` | Disable column sort | `"YES"` for report tables |
+| `disablePagination` | Hide pagination controls | `"NO"` usually |
+| `disableColumnFilter` | Disable per-column filter | `"YES"` for simple tables |
+| `disableGlobalSearch` | Hide global search bar | `"YES"` for report tables |
+| `disableDensityToggle` | Hide density toggle | `"NO"` usually |
+| `disableEditColumn` | Hide column visibility editor | `"NO"` usually |
+| `disableDownloadFile` | Hide built-in download button | `"YES"` when custom download provided |
+| `downloadAllData` | Download all data (not just visible page) | `"YES"` for export |
+
+### sizeHolder — Column Width Overrides
+
+Use `sizeHolder` to set explicit widths for specific columns by their data key name:
+
+```json
+{
+  "name": "myTable",
+  "type": "Table",
+  "sizeHolder": [
+    {"value": "270", "keyName": "columnName1"},
+    {"value": "240", "keyName": "columnName2"},
+    {"value": "280", "keyName": "columnName3"}
+  ],
+  "events": [...],
+  "elements": [...]
+}
+```
+
+`value` is the width in pixels as a string. `keyName` must match the column's `name` in the elements array.
+
+### columnFormat on Table Columns
+
+Add `columnFormat` to a table column element to apply automatic value formatting:
+
+```json
+{"name": "payable_amount", "label": "Payable Amount",  "events": [], "columnFormat": "amount"},
+{"name": "cycle_start",    "label": "Cycle Start Date", "events": [], "columnFormat": "date"},
+{"name": "created_on",     "label": "Created On",       "events": [], "columnFormat": "dateTime"}
+```
+
+| `columnFormat` value | Formats |
+|---|---|
+| `"amount"` | Currency (₹ symbol, 2 decimal places) |
+| `"date"` | Date only — e.g. `DD/MM/YYYY` |
+| `"dateTime"` | Date + time — e.g. `DD/MM/YYYY HH:mm` |
+
+---
+
+## onStart Pre-Condition on Events
+
+`onStart` is a **pre-condition guard** placed inside a parent event's nested `events` array. It runs before the parent event executes. If it returns `false`, the parent event is skipped entirely.
+
+**Use when:** the event should only fire if certain conditions are met (e.g. URL params exist, form fields are filled, user has permission).
+
+```json
+{
+  "body": [...],
+  "path": "/HyperformMessage/process",
+  "events": [
+    {
+      "events": [],
+      "Handler": "custom",
+      "eventCode": "async (store) => {\n  if (store.searchParams?.get('requiredParam')) {\n    return true;\n  }\n  return false;\n}",
+      "eventType": "onStart"
+    }
+  ],
+  "method": "post",
+  "Handler": "api",
+  "elements": [],
+  "eventType": "onLoad"
+}
+```
+
+**Rules:**
+- Return `true` → parent event executes normally
+- Return `false` → parent event is skipped (no API call made)
+- Placed inside the parent event's `events: [...]` array
+- The parent event must also have `"elements": []` when using `onStart`
+- Can read `store.searchParams`, `store.formData`, `userValue`, or any other store value
+
+**Common `onStart` checks:**
+
+```javascript
+// Check URL params exist
+async (store) => {
+  return !!(store.searchParams?.get('programId') && store.searchParams?.get('agentId'));
+}
+
+// Check form field is filled (via store.formData)
+async (store) => {
+  return !!store.formData.selectedId;
+}
+
+// Check form field via store.ctx.core.data (alternative formdata access)
+async (store) => {
+  return !!(store?.ctx?.core?.data?.programId);
+}
+
+// Check multiple form fields with ctx.core.data
+async (store) => {
+  const data = store?.ctx?.core?.data;
+  return !!(data?.programId && data?.programCycle);
+}
+
+// Check user has required role
+async (store, dynamicData, userValue) => {
+  return userValue.userType === 'admin';
+}
+```
+
+**`store.formData` vs `store.ctx.core.data` vs `store.newData`:**
+
+| Path | Use when |
+|---|---|
+| `store.newData.field` | Field value from the latest change event; use in `onChange` and `onStart` to check what just changed |
+| `'field' in store.newData` | Check whether a specific field was part of the current change |
+| `store.formData.field` | Current form value; reliable in `onLoad` and `apiBody` |
+| `store.ctx.core.data.field` | Same as formData; more reliable inside nested handlers |
+
+---
+
+## $urlParams Variables
+
+Use `$urlParams.paramName` in event body values to read URL query parameters at runtime.
+
+```json
+{"key": "programId",   "value": "$urlParams.programId"},
+{"key": "agentId",     "value": "$urlParams.agentId"},
+{"key": "businessKey", "value": "$urlParams.businessKey"}
+```
+
+These resolve to the value of `?programId=...&agentId=...` from the current page URL.
+
+**Other common `$` variables:**
+
+| Variable | Resolves to |
+|---|---|
+| `$urlParams.paramName` | URL query parameter value |
+| `$userValue.username` | Logged-in user's username |
+| `$userValue.userId` | Logged-in user's numeric ID |
+| `$userValue.userType` | User's role — e.g. `"agent"`, `"manager"` |
+| `$userValue.positionName` | User's position name |
+| `$fromDate` | Value of `fromDate` field in formdata |
+| `$endDate` | Value of `endDate` field in formdata |
+| `$programId` | Value of `programId` field in formdata |
+| `$programCycle` | Value of `programCycle` field in formdata |
+| `$case_id` | Value of `case_id` field in formdata |
+
+**Hardcoded literal values in body:**
+
+Body key values can also be **plain string literals** instead of `$variable` references — use this when the value is fixed and does not come from the form:
+
+```json
+{"key": "programId", "value": "845"}
+```
+
+Mix freely with variable references in the same body array:
+```json
+[
+  {"key": "programId",  "value": "845"},
+  {"key": "reportType", "value": "fileDownload"},
+  {"key": "userName",   "value": "$userValue.username"},
+  {"key": "startDate",  "value": "$startDate"}
+]
+```
+
+---
+
+## Row Button with API Call + File Download (apiBody + inBuiltFunction)
+
+Use this pattern when a table row button needs to call an API using row data and then trigger a file download.
+
+```json
+{
+  "name": "downloadBtn",
+  "type": "Button",
+  "label": "Download",
+  "iconName": "DownloadIcon",
+  "buttonType": "IconButton",
+  "defaultStyle": "true",
+  "elements": [],
+  "events": [
+    {
+      "path": "/externalData/getById",
+      "events": [
+        {
+          "events": [],
+          "Handler": "inBuiltFunction",
+          "eventType": "Success",
+          "funcParametersCode": "(store, dynamicData, userValue, parentEventOutput, service) => {\n  return parentEventOutput.data;\n}",
+          "inBuiltFunctionType": "downloadFile"
+        }
+      ],
+      "method": "post",
+      "Handler": "api",
+      "apiBody": "(store, dynamicData, userValue, body, service) => {\n  if (!dynamicData?.rowData?.fileId) {\n    throw new Error('No file attached to this row');\n  }\n  return {\n    id: dynamicData.rowData.fileId,\n    withData: true,\n    toBeDeleted: false\n  };\n}",
+      "eventType": "onClick"
+    }
+  ]
+}
+```
+
+**How it works:**
+1. User clicks the button on a table row
+2. `apiBody` reads the file ID from `dynamicData.rowData.fileId` (the row's data)
+3. POSTs `{id, withData: true}` to `/externalData/getById`
+4. On success, `inBuiltFunction "downloadFile"` extracts `parentEventOutput.data` and triggers browser download
+
+**Replace `fileId`** with the actual column name in your table data that holds the file reference.
+
+**Guard for missing attachment:**
+```javascript
+if (!dynamicData?.rowData?.attachmentField) {
+  throw new Error('No attachment on this row');
+}
+```
+Throwing an error inside `apiBody` prevents the API call from firing.
 
 ---
 
@@ -200,12 +545,26 @@ Header icons go inside `config.main.headerIcons.elements` on the Table uiSchema 
 {
   "name": "logsTable",
   "type": "Table",
+  "lazyLoading": "YES",
   "events": [
     {
-      "body": [],
-      "path": "/api/getLogs",
+      "body": [
+        {"key": "reportName", "value": "myReport"},
+        {"key": "messageType", "value": "generateReport"},
+        {"key": "programId",  "value": "$urlParams.programId"}
+      ],
+      "path": "/HyperformMessage/process",
+      "events": [
+        {
+          "events": [],
+          "Handler": "custom",
+          "eventCode": "async (store) => {\n  return !!store.searchParams?.get('programId');\n}",
+          "eventType": "onStart"
+        }
+      ],
       "method": "post",
       "Handler": "api",
+      "elements": [],
       "eventType": "onLoad"
     }
   ],
@@ -281,85 +640,6 @@ Header icons go inside `config.main.headerIcons.elements` on the Table uiSchema 
 }
 ```
 
-### uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/logsTable",
-  "config": {
-    "main": {
-      "columns": {"dataColumns": [], "actionColumns": []},
-      "lazyLoading": true,
-      "disableSorting": true,
-      "downloadAllData": false,
-      "headerIcons": {
-        "elements": [
-          {
-            "widget": {
-              "type": "Control",
-              "scope": "#/properties/addBtn",
-              "options": {"widget": "IconButton"}
-            }
-          },
-          {
-            "widget": {
-              "type": "Control",
-              "scope": "#/properties/downloadBtn",
-              "options": {"widget": "IconButton"}
-            }
-          }
-        ]
-      }
-    }
-  },
-  "options": {"widget": "Table"},
-  "elements": [
-    {"size": 180, "header": "Name", "accessorKey": "name"},
-    {"size": 180, "header": "Status", "accessorKey": "status"},
-    {
-      "size": 180,
-      "header": "View",
-      "widget": {
-        "type": "Control",
-        "scope": "#/properties/viewBtn",
-        "config": {
-          "main": {
-            "icon": "ViewIcon",
-            "name": "View",
-            "color": "primary",
-            "onClick": "onClick",
-            "styleDefault": true
-          },
-          "layout": {"lg": 1.5, "md": 2, "sm": 2.5, "xs": 4}
-        },
-        "options": {"widget": "IconButton"}
-      },
-      "accessorKey": "viewBtn"
-    },
-    {
-      "size": 180,
-      "header": "Delete",
-      "widget": {
-        "type": "Control",
-        "scope": "#/properties/deleteBtn",
-        "config": {
-          "main": {
-            "icon": "DeleteIcon",
-            "name": "Delete",
-            "color": "error",
-            "onClick": "onClick",
-            "styleDefault": true
-          }
-        },
-        "options": {"widget": "IconButton"}
-      },
-      "accessorKey": "deleteBtn"
-    }
-  ]
-}
-```
-
 ---
 
 ## Common Icon Names
@@ -370,7 +650,8 @@ Header icons go inside `config.main.headerIcons.elements` on the Table uiSchema 
 | Edit | `EditIcon` |
 | Delete | `DeleteIcon` |
 | Add | `TableAddIcon` |
-| Download | `TableDownloadIcon` |
+| Download (table header) | `TableDownloadIcon` |
+| Download (row action) | `DownloadIcon` |
 | Search | `SearchIcon` |
 | Approve | `ApproveIcon` |
 | Reject | `RejectIcon` |
@@ -456,16 +737,13 @@ async(store, dynamic) => {
 {"buttonType": "IconButton", "iconName": "ViewIcon"}
 ```
 
-**Mistake 2:** Wrong widget type in uiSchema
-```json
-// WRONG
-"widget": "Button"
+**Mistake 2:** Header buttons placed in column elements instead of `headerIcons.elements` — use `elementType: "tableHeader"` in config to place header buttons correctly. The auto-derived uiSchema will handle placement automatically.
 
-// CORRECT
-"widget": "IconButton"
-```
+**Mistake 4:** Using `$urlParams.paramName` without an `onStart` guard — if the URL param doesn't exist the API call fires with a null value. Always pair `$urlParams` variables with an `onStart` check.
 
-**Mistake 3:** Header buttons placed in column elements instead of `headerIcons.elements` — use `elementType: "tableHeader"` in config AND place the widget inside `config.main.headerIcons.elements` in uiSchema.
+**Mistake 5:** Forgetting `"elements": []` on the parent event when using `onStart` — the `elements` field is required on the event object when a nested `events` array is present.
+
+**Mistake 6:** Using `dynamic.rowData` in a custom handler but `dynamicData.rowData` in `apiBody` — the parameter name differs between handler types. In `apiBody` the second parameter is named `dynamicData`.
 
 ---
 

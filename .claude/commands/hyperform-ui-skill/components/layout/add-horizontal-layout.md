@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+This skill contains **config-only** examples. Never construct or edit uiSchema or schema by hand.
+
+---
+
 ## What is HorizontalLayout?
 
 HorizontalLayout is a **container** that arranges child elements side-by-side in a responsive multi-column grid. Children (Table, Box, Card, Graph, EmptyBox, etc.) are placed horizontally within it.
@@ -26,7 +35,7 @@ HorizontalLayout is a **container** that arranges child elements side-by-side in
 
 ---
 
-## Step 1: Add to config.elements
+## Add to config.elements
 
 ```json
 {
@@ -50,61 +59,24 @@ HorizontalLayout is a **container** that arranges child elements side-by-side in
 
 ---
 
-## Step 2: Add to uiSchema.elements
-
-```json
-{
-  "type": "HorizontalLayout",
-  "scope": "#/properties/dataSection",
-  "config": {
-    "main": {
-      "divider": false,
-      "rowSpacing": 3
-    },
-    "layout": {
-      "lg": 6,
-      "md": 6,
-      "sm": 12,
-      "xs": 12
-    },
-    "defaultStyle": true
-  },
-  "elements": [
-    // child Controls here
-  ]
-}
-```
-
-**Note:** uiSchema uses `"type": "HorizontalLayout"` (not `"type": "Control"`).
-
----
-
-## Step 3: schema.properties
-
-```json
-{
-  "dataSection": {}
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
 ## Key Configuration Points
 
-| Property | Config | uiSchema |
+| Property | Config | Notes |
 |---|---|---|
-| type | `"HorizontalLayout"` | `"HorizontalLayout"` (not "Control") |
-| divider | `"No"` / `"YES"` (string) | `false` / `true` (boolean) |
-| isAccordion | `"No"` / `"YES"` (string) | `true` / `false` in `config.main` |
-| layout values | strings (`"6"`) | numbers (`6`) |
-| rowSpacing | not in config | number in `config.main` (default 3) |
-| defaultStyle | not in config | `true` in config root |
+| type | `"HorizontalLayout"` | Required — identifies the container |
+| divider | `"No"` / `"YES"` | String value |
+| isAccordion | `"No"` / `"YES"` | String value; `"No"` disables accordion |
+| layout values | strings (`"6"`) | Per-breakpoint column width for the container |
+| style | JSON string | Optional custom CSS |
+| elements | Array | Child components placed side-by-side |
 
 ---
 
 ## Complete Example: Two Tables Side-by-Side (from page_schemeDashboard)
-
-### config.elements
 
 ```json
 {
@@ -157,75 +129,25 @@ HorizontalLayout is a **container** that arranges child elements side-by-side in
 }
 ```
 
-### uiSchema.elements
-
-```json
-{
-  "type": "HorizontalLayout",
-  "scope": "#/properties/achievementSlab",
-  "config": {
-    "main": {
-      "label": "Achievement Slab",
-      "divider": false,
-      "rowSpacing": 3
-    },
-    "layout": {
-      "lg": 6,
-      "md": 6,
-      "sm": 12,
-      "xs": 12
-    },
-    "defaultStyle": true
-  },
-  "elements": [
-    {
-      "type": "Control",
-      "scope": "#/properties/label-1",
-      "config": {"main": {"heading": "Average Yield Slabs", "iconName": ""}, "style": {}, "layout": {"lg": 12, "md": 12}},
-      "options": {"widget": "Box"}
-    },
-    {
-      "type": "Control",
-      "scope": "#/properties/avg_yield_slab",
-      "config": {"main": {"columns": {"dataColumns": [], "actionColumns": []}}, "layout": 12},
-      "options": {"widget": "Table"},
-      "elements": []
-    },
-    {
-      "type": "Control",
-      "scope": "#/properties/label-2",
-      "config": {"main": {"heading": "KPIs & Respective Weights", "iconName": ""}, "style": {}, "layout": {"lg": 12, "md": 12}},
-      "options": {"widget": "Box"}
-    },
-    {
-      "type": "Control",
-      "scope": "#/properties/KPIs_and_Respective_Weights",
-      "config": {"main": {"columns": {"dataColumns": [], "actionColumns": []}}, "layout": 12},
-      "options": {"widget": "Table"},
-      "elements": []
-    }
-  ]
-}
-```
-
 ---
 
-## Example: With Accordion
+## Example: With Accordion (config)
 
 ```json
 {
+  "name": "dataSection",
   "type": "HorizontalLayout",
-  "scope": "#/properties/dataSection",
-  "config": {
-    "main": {
-      "divider": false,
-      "rowSpacing": 3,
-      "isAccordion": true,
-      "defaultClosed": false
-    },
-    "layout": {"lg": 6, "md": 6, "sm": 12, "xs": 12},
-    "defaultStyle": true
-  },
+  "label": "Data Section",
+  "events": [],
+  "layout": [
+    {"key": "lg", "value": "6"},
+    {"key": "md", "value": "6"},
+    {"key": "sm", "value": "12"},
+    {"key": "xs", "value": "12"}
+  ],
+  "divider": "No",
+  "isAccordion": "YES",
+  "defaultClosed": "NO",
   "elements": [...]
 }
 ```
@@ -245,13 +167,11 @@ HorizontalLayout is a **container** that arranges child elements side-by-side in
 
 ## Common Mistakes to Avoid
 
-**Mistake 1:** Using `"type": "Control"` in uiSchema — HorizontalLayout uses `"type": "HorizontalLayout"` (not `"Control"`).
+**Mistake 1:** `divider` and `isAccordion` values — config always uses string values (`"No"`, `"YES"`), never booleans.
 
-**Mistake 2:** `divider` and `isAccordion` format — config uses strings (`"No"`, `"YES"`), uiSchema `config.main` uses booleans (`false`, `true`).
+**Mistake 2:** Column totals — the `layout` value on HorizontalLayout is the width of **the container**, not each child. Set `layout` on each child element separately, using 12-column math within the container.
 
-**Mistake 3:** Column totals — the layout value is the width of **each child column**, not the container. For 2 children at `lg: 6`, each child takes 6 cols (total 12). For 3 children at `lg: 4`, each takes 4 cols (total 12).
-
-**Mistake 4:** Missing schema entry — the HorizontalLayout container name needs an empty `{}` in schema.properties, but children also need their own entries.
+**Mistake 3:** Nesting too deeply — HorizontalLayout can contain Tables, Box, Card, Graph, EmptyBox, etc., but avoid nesting HorizontalLayout inside another HorizontalLayout unless the page design specifically requires it.
 
 ---
 
@@ -260,7 +180,6 @@ HorizontalLayout is a **container** that arranges child elements side-by-side in
 - [ ] Children appear side-by-side on desktop (lg)
 - [ ] Children stack correctly on mobile (xs)
 - [ ] Column layout math is correct
-- [ ] Schema has entries for container and all children
 - [ ] Accordion open/close works (if configured)
 - [ ] Divider shows/hides correctly
 

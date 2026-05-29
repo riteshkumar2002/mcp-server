@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+This skill contains **config-only** examples. Never construct or edit uiSchema or schema by hand.
+
+---
+
 ## What is Box?
 
 Box is a **display-only component** that renders static text — a section title, table label, or caption. It has no input, no events, and no data binding. It is the standard way to add visible headings inside layout containers.
@@ -27,7 +36,7 @@ Box is a **display-only component** that renders static text — a section title
 
 ---
 
-## Step 1: Add to config.elements
+## Add to config.elements
 
 ```json
 {
@@ -46,60 +55,23 @@ Box is a **display-only component** that renders static text — a section title
 
 ---
 
-## Step 2: Add to uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/sectionLabel",
-  "config": {
-    "main": {
-      "heading": "Sales Data",
-      "iconName": ""
-    },
-    "style": {},
-    "layout": {
-      "lg": 12,
-      "md": 12,
-      "sm": 12,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "Box"
-  }
-}
-```
-
----
-
-## Step 3: schema.properties
-
-```json
-{
-  "sectionLabel": {}
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
 ## Key Configuration Points
 
-| Property | Config | uiSchema |
+| Property | Config | Notes |
 |---|---|---|
-| type | `"Box"` | widget: `"Box"` |
-| text content | `label` | `config.main.heading` |
-| icon | not in config | `config.main.iconName` (empty string if none) |
-| layout values | strings (`"12"`) | numbers (`12`) |
-| style | not needed | `config.style: {}` (empty object) |
-
-**Both `label` in config and `heading` in uiSchema `config.main` must be set to the same text.**
+| type | `"Box"` | Required — identifies the component |
+| label | String | The text displayed as the heading/caption |
+| iconName | String | Optional MUI icon name (e.g. `"AnalyticsIcon"`); auto-derived into uiSchema |
+| layout | Array | Per-breakpoint column widths; full-width (`"12"`) is typical |
+| style | JSON string | Optional custom CSS |
 
 ---
 
 ## Complete Example: Table Header (from page_schemeDashboard)
-
-### config.elements
 
 ```json
 {
@@ -116,40 +88,24 @@ Box is a **display-only component** that renders static text — a section title
 }
 ```
 
-### uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/label-1",
-  "config": {
-    "main": {
-      "heading": "Average Yield Slabs",
-      "iconName": ""
-    },
-    "style": {},
-    "layout": {
-      "lg": 12,
-      "md": 12,
-      "sm": 12,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "Box"
-  }
-}
-```
-
 ---
 
 ## With Icon
 
+Add `iconName` to the config element to display an icon alongside the heading text:
+
 ```json
-// uiSchema config.main
 {
-  "heading": "Analytics Dashboard",
-  "iconName": "AnalyticsIcon"
+  "name": "dashboardHeader",
+  "type": "Box",
+  "label": "Analytics Dashboard",
+  "iconName": "AnalyticsIcon",
+  "layout": [
+    {"key": "xs", "value": "12"},
+    {"key": "sm", "value": "12"},
+    {"key": "md", "value": "12"},
+    {"key": "lg", "value": "12"}
+  ]
 }
 ```
 
@@ -159,13 +115,11 @@ Common icon names: `SearchIcon`, `AnalyticsIcon`, `DashboardIcon`, `ReportIcon`,
 
 ## Common Mistakes to Avoid
 
-**Mistake 1:** Using `label` in uiSchema `config.main` instead of `heading` — Box uiSchema uses `heading`, not `label`.
+**Mistake 1:** Using Box for input or interaction — Box is display-only. It has no onClick event. Use Button instead.
 
-**Mistake 2:** Omitting `iconName` — always include `"iconName": ""` even when no icon is needed, otherwise the component may error.
+**Mistake 2:** Leaving `label` empty — `label` is the heading text rendered on screen; it must be set to a non-empty string.
 
-**Mistake 3:** Missing schema entry — Box must have an empty `{}` in schema.properties.
-
-**Mistake 4:** Using Box for clickable content — Box has no onClick event. Use Button instead.
+**Mistake 3:** Using an invalid icon name — only MUI icon names are supported (e.g. `"AnalyticsIcon"`). An invalid name will silently render no icon.
 
 ---
 
@@ -175,7 +129,6 @@ Common icon names: `SearchIcon`, `AnalyticsIcon`, `DashboardIcon`, `ReportIcon`,
 - [ ] Icon shows (if configured)
 - [ ] Layout is full-width or correct column size
 - [ ] No overflow or truncation
-- [ ] Schema has the entry
 
 ---
 

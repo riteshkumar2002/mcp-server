@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+Call `update_page(pageName, config, userId)` and both `uiSchema` and `schema` are built automatically from your config. Never construct or pass them manually.
+
+---
+
 ## How to Add ProgressBar to Your Page
 
 ProgressBar Component visualizes progress towards a target goal. Perfect for:
@@ -41,34 +50,55 @@ ProgressBar Component visualizes progress towards a target goal. Perfect for:
 }
 ```
 
----
+### All Config Properties for ProgressBar
 
-## Step 2: Add to uiSchema.elements
+| Property | Purpose | Example |
+|---|---|---|
+| `name` | Unique field name | `"targetVsAchivement"` |
+| `type` | Always `"ProgressBar"` | `"ProgressBar"` |
+| `label` | Heading shown above the bar | `"Achievement Progress"` |
+| `variant` | Bar display variant | `"determinate"` / `"indeterminate"` / `"buffer"` / `"query"` |
+| `size` | Bar thickness (number) | `10`, `15`, `20` |
+| `bottomLabel_1` | Label at the left below the bar | `"Achieved"` |
+| `bottomLabel_2` | Label in the middle below the bar | `"Target"` |
+| `bottomLabel_3` | Label at the right below the bar | `"Remaining"` |
+| `pieArcColors` | Array of color stops | `[{"key": "color1", "value": "#1F6F78"}]` |
+| `layout` | Responsive grid sizing | see layout section |
+| `events` | `onLoad` to populate data | always required |
+
+### Full Example with All Properties
 
 ```json
 {
-  "type": "Control",
-  "scope": "#/properties/targetVsAchivement",
-  "config": {
-    "main": {
-      "heading": "Achievement Progress",
-      "bottomLabel_3": "Remaining",
-      "developOnlyProgresBar": false
-    },
-    "layout": {
-      "lg": 12,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "ProgressBar"
-  }
+  "name": "salesProgress",
+  "type": "ProgressBar",
+  "label": "Sales Achievement",
+  "variant": "determinate",
+  "size": 12,
+  "bottomLabel_1": "Achieved",
+  "bottomLabel_2": "Target",
+  "bottomLabel_3": "Remaining",
+  "pieArcColors": [
+    {"key": "color1", "value": "#0FAFAF"},
+    {"key": "color2", "value": "#e0e0e0"}
+  ],
+  "events": [],
+  "layout": [
+    {"key": "lg", "value": "12"},
+    {"key": "md", "value": "12"},
+    {"key": "sm", "value": "12"},
+    {"key": "xs", "value": "12"}
+  ]
 }
 ```
 
 ---
 
-## Step 3: Populate with Data
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
+
+---
+
+## Step 2: Populate with Data
 
 ProgressBar reads `{ total, achieved }` from formdata. Set it in an `onLoad` event.
 
@@ -102,27 +132,21 @@ ProgressBar reads `{ total, achieved }` from formdata. Set it in an `onLoad` eve
 
 ---
 
-## Step 4: Add to schema.properties
-
-```json
-{
-  "targetVsAchivement": {}
-}
-```
-
----
-
 ## Key Configuration Points
 
 | Property | Purpose | Example |
 |---|---|---|
-| type (config) | Must be "ProgressBar" | "ProgressBar" |
-| widget (uiSchema) | Must be "ProgressBar" | "ProgressBar" |
-| heading | Label shown above bar | "Achievement Progress" |
-| bottomLabel_3 | Label for remaining portion | "Remaining" |
-| developOnlyProgresBar | Dev mode flag | false |
-| total | Target amount (denominator) | 81000 |
-| achieved | Achieved amount (numerator) | 115000 |
+| `name` | Unique field name | `"targetVsAchivement"` |
+| `type` | Must be `"ProgressBar"` | `"ProgressBar"` |
+| `label` | Heading shown above the bar | `"Achievement Progress"` |
+| `variant` | Bar display variant | `"determinate"` |
+| `size` | Bar thickness (number) | `12` |
+| `bottomLabel_1` | Label at the left below bar | `"Achieved"` |
+| `bottomLabel_2` | Label in the middle below bar | `"Target"` |
+| `bottomLabel_3` | Label at the right below bar | `"Remaining"` |
+| `pieArcColors` | Color stops array | `[{"key": "color1", "value": "#0FAFAF"}]` |
+| `layout` | Responsive grid sizing | see layout section |
+| `events` | `onLoad` to populate `{total, achieved}` in formdata | always required |
 
 ---
 
@@ -149,13 +173,16 @@ Remaining % = 100 - Progress %
 
 ## Complete Real Example: Target vs Achievement Dashboard
 
-### config.elements
-
 ```json
 {
   "name": "targetVsAchivement",
   "type": "ProgressBar",
   "label": "Achievement Progress",
+  "variant": "determinate",
+  "size": 12,
+  "bottomLabel_1": "Achieved",
+  "bottomLabel_2": "Target",
+  "bottomLabel_3": "Remaining",
   "events": [
     {
       "Handler": "custom",
@@ -170,42 +197,22 @@ Remaining % = 100 - Progress %
 }
 ```
 
-### uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/targetVsAchivement",
-  "config": {
-    "main": {
-      "heading": "Achievement Progress",
-      "bottomLabel_3": "Remaining",
-      "developOnlyProgresBar": false
-    },
-    "layout": {
-      "lg": 12,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "ProgressBar"
-  }
-}
-```
-
 Result: 100% filled bar (115,000 achieved vs 81,000 target — exceeded by 34,000 points)
 
 ---
 
 ## Sales Target Example (API-driven)
 
-### config.elements
-
 ```json
 {
   "name": "monthlySalesTarget",
   "type": "ProgressBar",
   "label": "Monthly Sales Target",
+  "variant": "determinate",
+  "size": 12,
+  "bottomLabel_1": "Achieved",
+  "bottomLabel_2": "Target",
+  "bottomLabel_3": "Remaining to Target",
   "events": [
     {
       "path": "/api/sales/monthlyProgress",
@@ -227,31 +234,6 @@ Result: 100% filled bar (115,000 achieved vs 81,000 target — exceeded by 34,00
     {"key": "sm", "value": "12"},
     {"key": "xs", "value": "12"}
   ]
-}
-```
-
-### uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/monthlySalesTarget",
-  "config": {
-    "main": {
-      "heading": "Monthly Sales Target",
-      "bottomLabel_3": "Remaining to Target",
-      "developOnlyProgresBar": false
-    },
-    "layout": {
-      "lg": 12,
-      "md": 12,
-      "sm": 12,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "ProgressBar"
-  }
 }
 ```
 
@@ -329,16 +311,9 @@ async (store) => {
 
 **Mistake 2:** Setting `total: 0` — causes division by zero. Always ensure total > 0.
 
-**Mistake 3:** Wrong widget name
-```json
-// WRONG
-"widget": "ProgressBar_" 
+**Mistake 3:** Wrong `type` name — must be exactly `"ProgressBar"` (capital P and B, no trailing underscore or space).
 
-// CORRECT
-"widget": "ProgressBar"
-```
-
-**Mistake 4:** Putting the data payload directly in config instead of formdata — ProgressBar reads from `store.ctx.core.data.<fieldName>`, not from config.
+**Mistake 4:** Putting the data payload directly in config instead of formdata — ProgressBar reads `{total, achieved}` from `store.ctx.core.data.<fieldName>`, not from config properties.
 
 ---
 

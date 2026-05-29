@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+Call `update_page(pageName, config, userId)` and both `uiSchema` and `schema` are built automatically from your config. Never construct or pass them manually.
+
+---
+
 ## How to Add RunnerBoyProgressBar to Your Page
 
 RunnerBoyProgressBar is an animated progress bar featuring a running character. Perfect for:
@@ -41,42 +50,8 @@ RunnerBoyProgressBar is an animated progress bar featuring a running character. 
 
 ---
 
-## Step 2: Add to uiSchema.elements
 
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/proRunning",
-  "config": {
-    "main": {},
-    "layout": {
-      "lg": 12,
-      "md": 12,
-      "sm": 12,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "RunnerBoyProgressBar"
-  }
-}
-```
-
----
-
-## Step 3: schema.properties
-
-```json
-{
-  "proRunning": {
-    "type": "object",
-    "properties": {
-      "total": {"type": "number"},
-      "achieve": {"type": "number"}
-    }
-  }
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
@@ -84,10 +59,17 @@ RunnerBoyProgressBar is an animated progress bar featuring a running character. 
 
 | Property | Purpose | Example |
 |---|---|---|
-| type (config) | Must be "RunnerBoyProgressBar" | "RunnerBoyProgressBar" |
-| widget (uiSchema) | Must be "RunnerBoyProgressBar" | "RunnerBoyProgressBar" |
-| total | Target/goal value | 300 |
-| achieve | Current achievement (**not** "achieved") | 200 |
+| `name` | Unique field name | `"proRunning"` |
+| `type` | Must be `"RunnerBoyProgressBar"` | `"RunnerBoyProgressBar"` |
+| `layout` | Responsive grid sizing (usually full-width) | lg: 12, xs: 12 |
+| `events` | `onLoad` to populate `{total, achieve}` in formdata | always required |
+
+**Data keys set via onLoad event (in formdata):**
+
+| Key | Purpose | Example |
+|---|---|---|
+| `total` | Target/goal value | `300` |
+| `achieve` | Current achievement — **NOT** `"achieved"` | `200` |
 
 **CRITICAL:** The data key is `achieve` — NOT `achieved` (unlike the standard ProgressBar which uses `achieved`).
 
@@ -110,8 +92,6 @@ Progress % = (achieve / total) × 100. Runner position updates based on this per
 
 ## Complete Example: Contest Target Runner
 
-### config.elements
-
 ```json
 {
   "name": "proRunning",
@@ -129,27 +109,6 @@ Progress % = (achieve / total) × 100. Runner position updates based on this per
     {"key": "md", "value": "12"},
     {"key": "lg", "value": "12"}
   ]
-}
-```
-
-### uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/proRunning",
-  "config": {
-    "main": {},
-    "layout": {
-      "lg": 12,
-      "md": 12,
-      "sm": 12,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "RunnerBoyProgressBar"
-  }
 }
 ```
 
@@ -198,14 +157,7 @@ Progress % = (achieve / total) × 100. Runner position updates based on this per
 
 ## Common Mistakes to Avoid
 
-**Mistake 1:** Wrong widget name
-```json
-// WRONG
-"widget": "RunnerProgressBar"
-
-// CORRECT
-"widget": "RunnerBoyProgressBar"
-```
+**Mistake 1:** Wrong `type` name — must be `"RunnerBoyProgressBar"`, not `"RunnerProgressBar"` or `"runnerBoyProgressBar"`.
 
 **Mistake 2:** Using `achieved` instead of `achieve` — RunnerBoyProgressBar uses `achieve` (no "d"), unlike the standard ProgressBar which uses `achieved`.
 

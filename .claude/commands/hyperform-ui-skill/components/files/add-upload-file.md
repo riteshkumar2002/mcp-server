@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+The uiSchema and schema examples shown in this skill are **reference only** — they illustrate what the auto-derivation produces from your config. Do not copy or manually build them.
+
+---
+
 ## How to Add UploadFile to Your Page
 
 UploadFile Component provides a dedicated file upload button for single file uploads. Perfect for:
@@ -48,43 +57,7 @@ UploadFile Component provides a dedicated file upload button for single file upl
 
 ---
 
-## Step 2: Add to uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/uploadFile",
-  "config": {
-    "main": {
-      "label": "Invoice File",
-      "onClick": "onClick",
-      "required": true
-    },
-    "style": {
-      "backgroundColor": "none"
-    },
-    "layout": {
-      "lg": 3,
-      "md": 3,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "UploadFile"
-  }
-}
-```
-
----
-
-## Step 3: Add to schema.properties
-
-```json
-{
-  "uploadFileId": {},
-  "uploadFileName": {}
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
@@ -92,11 +65,12 @@ UploadFile Component provides a dedicated file upload button for single file upl
 
 | Property | Purpose | Example |
 |---|---|---|
-| type (config) | Must be "UploadFile" | "UploadFile" |
-| widget (uiSchema) | Must be "UploadFile" | "UploadFile" |
+| type | Must be "UploadFile" | "UploadFile" |
 | label | Button label | "Upload Invoice" |
-| required | Mark field as required | true or false |
-| onClick | Event name in uiSchema main | "onClick" |
+| required | Mark field as required | `true` or `false` |
+| toolTip | Tooltip text on hover | "Upload your invoice PDF" |
+| layout | Responsive grid columns | `[{"key": "lg", "value": "3"}, ...]` |
+| events | onClick handler for upload logic | see Upload Flow below |
 
 ---
 
@@ -132,25 +106,6 @@ UploadFile Component provides a dedicated file upload button for single file upl
     {"key": "md", "value": "3"},
     {"key": "xs", "value": "12"}
   ]
-}
-```
-
-### uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/uploadFile",
-  "config": {
-    "main": {
-      "label": "Invoice File",
-      "onClick": "onClick",
-      "required": true
-    },
-    "style": {"backgroundColor": "none"},
-    "layout": {"lg": 3, "md": 3, "xs": 12}
-  },
-  "options": {"widget": "UploadFile"}
 }
 ```
 
@@ -198,13 +153,13 @@ if (file.size > 5 * 1024 * 1024) {
 
 ## Common Mistakes to Avoid
 
-**Mistake 1:** Wrong widget name
+**Mistake 1:** Wrong type name in config
 ```json
 // WRONG
-"widget": "Upload"
+{"name": "upload", "type": "Upload"}
 
 // CORRECT
-"widget": "UploadFile"
+{"name": "upload", "type": "UploadFile"}
 ```
 
 **Mistake 2:** Not using `service` parameter — upload requires `service.post(...)`, not a regular API event handler. The `service` is the 5th parameter of the `onClick` eventCode function.

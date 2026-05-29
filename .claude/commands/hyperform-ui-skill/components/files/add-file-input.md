@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+The uiSchema and schema examples shown in this skill are **reference only** — they illustrate what the auto-derivation produces from your config. Do not copy or manually build them.
+
+---
+
 ## How to Add FileInput to Your Page
 
 FileInput Component enables file upload/download/delete operations. Perfect for:
@@ -88,76 +97,7 @@ FileInput must be wrapped inside an `Array` element to support multiple files.
 
 ---
 
-## Step 2: Add to uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/attachments",
-  "config": {
-    "main": {
-      "label": "Attachments"
-    }
-  },
-  "layout": 12,
-  "elements": [
-    {
-      "type": "Control",
-      "scope": "#/properties/file",
-      "config": {
-        "main": {
-          "onUpload": "onFileUpload",
-          "required": false,
-          "onDownload": "onFileDownload"
-        },
-        "style": {
-          "backgroundColor": "none"
-        },
-        "layout": {
-          "xs": 6
-        }
-      },
-      "options": {
-        "widget": "FileInputField"
-      }
-    },
-    {
-      "type": "Control",
-      "scope": "#/properties/emptyBox",
-      "config": {
-        "main": {},
-        "layout": {
-          "lg": 3,
-          "md": 4,
-          "sm": 6,
-          "xs": 6
-        }
-      },
-      "options": {
-        "widget": "EmptyBox"
-      }
-    }
-  ]
-}
-```
-
----
-
-## Step 3: Add to schema.properties
-
-```json
-"attachments": {
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "file": {},
-      "fileId": {},
-      "eb": {}
-    }
-  }
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
@@ -165,9 +105,12 @@ FileInput must be wrapped inside an `Array` element to support multiple files.
 
 | Property | Purpose | Example |
 |---|---|---|
-| type (config) | Must be "FileInput" | "FileInput" |
-| widget (uiSchema) | Must be "FileInputField" | "FileInputField" |
+| type | Must be "FileInput" | "FileInput" |
 | Array wrapper | Required for multi-file support | type: "Array" |
+| disableUpload | Disable upload capability | "YES" / "NO" |
+| disableDownload | Disable download capability | "YES" / "NO" |
+| disableDelete | Disable delete capability | "YES" / "NO" |
+| useLabel | Show file name as label | "YES" / "NO" |
 | apiBody (onUpload) | Build FormData for upload | `new FormData()` |
 | onUpload event | Sends file to backend | POST /externalData/save |
 | onDownload event | Fetches file from backend | POST /externalData/getById |
@@ -308,18 +251,18 @@ store.setSchema(pre => ({
 
 **Mistake 1:** Missing Array wrapper — `FileInput` must be inside an `Array` element for upload/download path indexing to work.
 
-**Mistake 2:** Wrong widget name
+**Mistake 2:** Wrong type name in config — the config type is `"FileInput"` (not `"FileInputField"`).
 ```json
 // WRONG
-"widget": "FileInput"
+{"name": "file", "type": "FileInputField"}
 
 // CORRECT
-"widget": "FileInputField"
+{"name": "file", "type": "FileInput"}
 ```
 
 **Mistake 3:** Not returning `FormData` from `apiBody` — must return a `FormData` object, not a plain JSON object, for multipart upload.
 
-**Mistake 4:** Missing `fileId` in schema items — the `fileId` property must exist in `schema.properties.attachments.items.properties` so it persists in formdata.
+**Mistake 4:** Not naming the `fileId` child element in config — include a `fileId` field inside the Array's elements so the auto-derived schema includes it and it persists in formdata after upload.
 
 ---
 

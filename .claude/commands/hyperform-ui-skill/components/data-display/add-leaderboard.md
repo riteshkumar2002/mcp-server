@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+Call `update_page(pageName, config, userId)` and both `uiSchema` and `schema` are built automatically from your config. Never construct or pass them manually.
+
+---
+
 ## How to Add LeaderBoard to Your Page
 
 LeaderBoard Component displays a ranked list of participants with scores, images, and medals/badges. Perfect for:
@@ -67,45 +76,8 @@ LeaderBoard Component displays a ranked list of participants with scores, images
 
 ---
 
-## Step 2: Add to uiSchema.elements
 
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/leaderboard",
-  "config": {
-    "main": {
-      "nameKey": "emp_name",
-      "imageKey": "empImage",
-      "scoreKey": "incentive",
-      "firstImage": "https://media.istockphoto.com/id/1497142422/photo/close-up-photo-portrait-of-young-successful-entrepreneur-businessman-investor-wearing-glasses.jpg",
-      "secondImage": "https://img.freepik.com/free-photo/portrait-businesswoman-window-1_1262-1490.jpg",
-      "thirdImage": "https://img.freepik.com/premium-photo/indian-businessman-writing-document-while-sitting-desk-work-station_466689-45756.jpg"
-    },
-    "layout": {
-      "lg": 12,
-      "md": 12,
-      "sm": 12,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "LeaderBoard"
-  },
-  "elements": [
-    {"header": "Rank", "accessorKey": "rank"},
-    {"header": "Employee Code", "accessorKey": "emp_code"},
-    {"header": "Emp Name", "accessorKey": "emp_name"},
-    {"header": "Incentive", "accessorKey": "incentive"}
-  ]
-}
-```
-
----
-
-## Step 3: schema.properties
-
-LeaderBoard doesn't need a schema entry — it renders array data returned by the API directly.
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
@@ -113,16 +85,20 @@ LeaderBoard doesn't need a schema entry — it renders array data returned by th
 
 | Property | Purpose | Example |
 |---|---|---|
-| type (config) | Must be "LeaderBoard" | "LeaderBoard" |
-| widget (uiSchema) | Must be "LeaderBoard" | "LeaderBoard" |
-| nameKey | Data field for participant name | "emp_name" |
-| imageKey | Data field for profile image URL | "empImage" |
-| scoreKey | Data field for ranking score | "incentive" |
-| firstImage | Image/medal URL for 1st place | gold medal URL |
-| secondImage | Image/medal URL for 2nd place | silver medal URL |
-| thirdImage | Image/medal URL for 3rd place | bronze medal URL |
-| elements (config) | Column definitions with name + label | array of column objects |
-| elements (uiSchema) | Column definitions with header + accessorKey | array of column objects |
+| `name` | Unique field name | `"leaderboard"` |
+| `type` | Must be `"LeaderBoard"` | `"LeaderBoard"` |
+| `label` | Display label | `"Top Performers"` |
+| `nameKey` | Data field for participant name | `"emp_name"` |
+| `imageKey` | Data field for profile image URL | `"empImage"` |
+| `scoreKey` | Data field for ranking score | `"incentive"` |
+| `isScoreAmount` | Format score as currency | `"YES"` / `"NO"` |
+| `firstImage` | Image/medal URL for 1st place | gold medal URL |
+| `secondImage` | Image/medal URL for 2nd place | silver medal URL |
+| `thirdImage` | Image/medal URL for 3rd place | bronze medal URL |
+| `elements` | Column definitions: `[{name, label, events?}]` | array of column objects |
+| `style` | JSON string for custom styles | `"{}"` |
+| `layout` | Responsive grid sizing | see layout section |
+| `events` | `onLoad` API or custom event | always required |
 
 ---
 
@@ -173,8 +149,6 @@ The LeaderBoard automatically displays:
 
 ## Complete Example: Employee Performance LeaderBoard
 
-### config.elements
-
 ```json
 {
   "name": "leaderboard",
@@ -208,40 +182,12 @@ The LeaderBoard automatically displays:
   ],
   "firstImage": "https://media.istockphoto.com/id/1497142422/photo/close-up-photo-portrait-of-young-successful-entrepreneur-businessman-investor-wearing-glasses.jpg",
   "secondImage": "https://img.freepik.com/free-photo/portrait-businesswoman-window-1_1262-1490.jpg",
-  "thirdImage": "https://img.freepik.com/premium-photo/indian-businessman-writing-document-while-sitting-desk-work-station_466689-45756.jpg"
-}
-```
-
-### uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/leaderboard",
-  "config": {
-    "main": {
-      "nameKey": "emp_name",
-      "imageKey": "empImage",
-      "scoreKey": "incentive",
-      "firstImage": "https://media.istockphoto.com/id/1497142422/photo/close-up-photo-portrait-of-young-successful-entrepreneur-businessman-investor-wearing-glasses.jpg",
-      "secondImage": "https://img.freepik.com/free-photo/portrait-businesswoman-window-1_1262-1490.jpg",
-      "thirdImage": "https://img.freepik.com/premium-photo/indian-businessman-writing-document-while-sitting-desk-work-station_466689-45756.jpg"
-    },
-    "layout": {
-      "lg": 12,
-      "md": 12,
-      "sm": 12,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "LeaderBoard"
-  },
-  "elements": [
-    {"header": "Rank", "accessorKey": "rank"},
-    {"header": "Employee Code", "accessorKey": "emp_code"},
-    {"header": "Emp Name", "accessorKey": "emp_name"},
-    {"header": "Incentive", "accessorKey": "incentive"}
+  "thirdImage": "https://img.freepik.com/premium-photo/indian-businessman-writing-document-while-sitting-desk-work-station_466689-45756.jpg",
+  "layout": [
+    {"key": "lg", "value": "12"},
+    {"key": "md", "value": "12"},
+    {"key": "sm", "value": "12"},
+    {"key": "xs", "value": "12"}
   ]
 }
 ```
@@ -280,20 +226,13 @@ The LeaderBoard automatically displays:
 
 ## Common Mistakes to Avoid
 
-**Mistake 1:** Wrong widget name
-```json
-// WRONG
-"widget": "Leaderboard"
+**Mistake 1:** Wrong `type` casing — must be `"LeaderBoard"` (capital L and B), not `"Leaderboard"` or `"leaderboard"`.
 
-// CORRECT
-"widget": "LeaderBoard"
-```
+**Mistake 2:** Mismatched keys — `nameKey`, `imageKey`, `scoreKey` in config must exactly match the field names in the API response data.
 
-**Mistake 2:** Mismatched keys — `nameKey`, `imageKey`, `scoreKey` in config must exactly match the field names in the API response data, and they must also be repeated in uiSchema `config.main`.
+**Mistake 3:** Missing `elements` array in config — the LeaderBoard requires `elements` to define which columns to display, each with `name` and `label`.
 
-**Mistake 3:** Missing `elements` in uiSchema — unlike other components, LeaderBoard requires an `elements` array at the uiSchema level (not nested in config) to define the column headers and `accessorKey` mappings.
-
-**Mistake 4:** Setting `nameKey`/`imageKey`/`scoreKey` only in config but not in uiSchema `config.main` — both must have these keys for the component to render correctly.
+**Mistake 4:** Forgetting `"events": []` on each element object inside the `elements` array.
 
 ---
 

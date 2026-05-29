@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+Call `update_page(pageName, config, userId)` and both `uiSchema` and `schema` are built automatically from your config. Never construct or pass them manually.
+
+---
+
 ## How to Add RankCard to Your Page
 
 RankCard Component displays a user's current rank/position with visual styling. Perfect for:
@@ -45,41 +54,8 @@ RankCard Component displays a user's current rank/position with visual styling. 
 
 ---
 
-## Step 2: Add to uiSchema.elements
 
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/rnk",
-  "config": {
-    "main": {
-      "rank": "2",
-      "height": "200px"
-    },
-    "layout": {
-      "lg": 4,
-      "md": 4,
-      "sm": 4,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "RankCard"
-  }
-}
-```
-
----
-
-## Step 3: schema.properties
-
-```json
-{
-  "rnk": {
-    "type": ["string", "number"]
-  }
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
@@ -87,15 +63,15 @@ RankCard Component displays a user's current rank/position with visual styling. 
 
 | Property | Purpose | Type | Example |
 |---|---|---|---|
-| type (config) | Must be "RankCard" | string | "RankCard" |
-| widget (uiSchema) | Must be "RankCard" | string | "RankCard" |
-| rank (config) | Static rank value | string | "2" |
-| rank (uiSchema main) | Must match config rank | string | "2" |
-| height (config) | Card height in px (number as string) | string | "200" |
-| height (uiSchema main) | Must include "px" suffix | string | "200px" |
-| label | Card title text | string | "Your Rank" |
+| `name` | Unique field name | string | `"rnk"` |
+| `type` | Must be `"RankCard"` | string | `"RankCard"` |
+| `rank` | Static rank value (string) | string | `"2"` |
+| `height` | Card height in px — number as string, no unit | string | `"200"` |
+| `label` | Card title text | string | `"Your Rank"` |
+| `layout` | Responsive grid sizing | array | see layout section |
+| `events` | `[]` for static, or `onLoad` custom event to set dynamic rank | array | |
 
-**Note:** `rank` in config is just the number string (`"2"`), but in uiSchema `config.main` it also stays as `"2"`. `height` in config is `"200"` (no unit), but in uiSchema `config.main` it is `"200px"` (with px).
+**Note:** `rank` in config is a static fallback (`"2"`). To display dynamic rank, set the field value in formdata via an `onLoad` event — the formdata value overrides the static config value.
 
 ---
 
@@ -111,8 +87,6 @@ RankCard Component displays a user's current rank/position with visual styling. 
 ---
 
 ## Complete Example: Contest Rank Display
-
-### config.elements
 
 ```json
 {
@@ -134,30 +108,6 @@ RankCard Component displays a user's current rank/position with visual styling. 
     {"key": "md", "value": "4"},
     {"key": "lg", "value": "4"}
   ]
-}
-```
-
-### uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/rnk",
-  "config": {
-    "main": {
-      "rank": "2",
-      "height": "200px"
-    },
-    "layout": {
-      "lg": 4,
-      "md": 4,
-      "sm": 4,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "RankCard"
-  }
 }
 ```
 
@@ -215,16 +165,9 @@ RankCard is commonly placed alongside LeaderBoard — RankCard shows the user's 
 
 ## Common Mistakes to Avoid
 
-**Mistake 1:** Wrong widget name
-```json
-// WRONG
-"widget": "RankDisplay"
+**Mistake 1:** Wrong `type` name — must be `"RankCard"`, not `"RankDisplay"` or `"rankCard"`.
 
-// CORRECT
-"widget": "RankCard"
-```
-
-**Mistake 2:** `height` format inconsistency — in config use `"200"` (no units), in uiSchema `config.main` use `"200px"` (with px suffix).
+**Mistake 2:** `height` must be a string without units in config — use `"200"` not `"200px"`. The `px` suffix is added automatically by the renderer.
 
 **Mistake 3:** `rank` in config is a static fallback value. To show dynamic rank, update `rnk` in formdata via an `onLoad` event — the formdata value overrides the static config value.
 

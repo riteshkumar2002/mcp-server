@@ -12,6 +12,15 @@ compatibility: Hyperform MCP server, update_page tool
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+The uiSchema and schema examples shown in this skill are **reference only** — they illustrate what the auto-derivation produces from your config. Do not copy or manually build them.
+
+---
+
 ## How to Add TextArea to Your Page
 
 TextArea Component displays multi-line text input for longer content. Perfect for:
@@ -58,57 +67,7 @@ TextArea Component displays multi-line text input for longer content. Perfect fo
 }
 ```
 
----
-
-## Step 2: Add to uiSchema.elements
-
-```json
-{
-  "type": "Control",
-  "scope": "#/properties/body",
-  "config": {
-    "main": {
-      "heading": "Body",
-      "minRows": 4,
-      "hideButton": true
-    },
-    "style": {
-      "textAreaStyle": {
-        "color": "black",
-        "padding": "20px",
-        "background": "white",
-        "borderRadius": "20px"
-      },
-      "containerStyle": {
-        "borderRadius": "20px"
-      },
-      "headerContainerStyle": {}
-    },
-    "layout": {
-      "lg": 12,
-      "md": 10,
-      "sm": 12,
-      "xs": 12
-    }
-  },
-  "options": {
-    "widget": "TextArea"
-  }
-}
-```
-
----
-
-## Step 3: Add to schema.properties
-
-```json
-{
-  "body": {
-    "type": "string",
-    "minLength": 10
-  }
-}
-```
+> **uiSchema and schema are auto-derived** — call `update_page(pageName, config, userId)` and the server builds both automatically. Never edit them manually.
 
 ---
 
@@ -116,39 +75,14 @@ TextArea Component displays multi-line text input for longer content. Perfect fo
 
 | Property | Purpose | Example |
 |---|---|---|
-| type (config) | Must be "TextArea" | "TextArea" |
-| widget (uiSchema) | Must be "TextArea" | "TextArea" |
-| heading | Label shown above text area | "Message Body" |
-| minRows | Minimum visible rows | 4 |
-| hideButton | Hide border/styling button | true |
-| placeholder | Hint text inside field | "Enter your message..." |
-
----
-
-## Height Options
-
-### Short (2 rows)
-```json
-"minRows": 2
-```
-
-### Medium (4 rows)
-```json
-"minRows": 4
-```
-
-### Long (8 rows)
-```json
-"minRows": 8
-```
-
-### Fixed pixel height
-```json
-"textAreaStyle": {
-  "minHeight": "300px",
-  "maxHeight": "600px"
-}
-```
+| `name` | Unique field key | `"body"` |
+| `type` | Must be `"TextArea"` | `"TextArea"` |
+| `label` | Heading shown above the text area | `"Message Body"` |
+| `placeholder` | Hint text inside the field | `"Enter your message..."` |
+| `enableCodeEditor` | Show code editor mode | `"YES"` or `"NO"` |
+| `codeEditorLanguage` | Language for code editor | `"javascript"` |
+| `style` | JSON string for inline styles | `"{}"` |
+| `layout` | Array of `{key,value}` for responsive grid | Default: full-width (lg:12) |
 
 ---
 
@@ -167,33 +101,6 @@ TextArea Component displays multi-line text input for longer content. Perfect fo
 ### Half Width
 ```json
 "layout": {"lg": 6, "md": 6, "sm": 12, "xs": 12}
-```
-
----
-
-## Styling Options
-
-### textAreaStyle
-```json
-"textAreaStyle": {
-  "color": "black",
-  "padding": "20px",
-  "background": "white",
-  "borderRadius": "20px",
-  "fontSize": "14px",
-  "fontFamily": "Poppins",
-  "minHeight": "200px",
-  "border": "1px solid #ccc",
-  "lineHeight": "1.5"
-}
-```
-
-### containerStyle
-```json
-"containerStyle": {
-  "borderRadius": "20px",
-  "boxShadow": "0 2px 4px rgba(0,0,0,0.1)"
-}
 ```
 
 ---
@@ -232,57 +139,6 @@ TextArea Component displays multi-line text input for longer content. Perfect fo
       ]
     }
   ]
-}
-```
-
-### uiSchema.elements
-
-```json
-{
-  "type": "WrapperLayout",
-  "scope": "#/properties/emailContent",
-  "elements": [
-    {
-      "type": "Control",
-      "scope": "#/properties/subject",
-      "config": {
-        "main": {"label": "Subject"},
-        "layout": {"lg": 12, "md": 12, "sm": 12, "xs": 12}
-      },
-      "options": {"widget": "InputField"}
-    },
-    {
-      "type": "Control",
-      "scope": "#/properties/body",
-      "config": {
-        "main": {
-          "heading": "Message Body",
-          "minRows": 6,
-          "hideButton": true
-        },
-        "style": {
-          "textAreaStyle": {
-            "color": "black",
-            "padding": "20px",
-            "background": "#f5f5f5",
-            "borderRadius": "8px",
-            "fontSize": "14px"
-          }
-        },
-        "layout": {"lg": 12, "md": 12, "sm": 12, "xs": 12}
-      },
-      "options": {"widget": "TextArea"}
-    }
-  ]
-}
-```
-
-### schema.properties
-
-```json
-{
-  "subject": {"type": "string", "minLength": 1},
-  "body": {"type": "string", "minLength": 10}
 }
 ```
 

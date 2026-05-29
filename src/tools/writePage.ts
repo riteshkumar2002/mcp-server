@@ -1,6 +1,6 @@
 import { z } from "zod";
 import axios from "axios";
-import { masterSave, masterAction, masterDelete } from "../apiClient.js";
+import { masterSave, masterAction } from "../apiClient.js";
 import { loadConfig } from "../config.js";
 
 // ── helpers ───────────────────────────────────────────────────────────────────

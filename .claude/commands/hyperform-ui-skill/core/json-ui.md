@@ -4,6 +4,15 @@ You are an expert in the **ImpaktApps json_to_ui library** (npm: `json_to_ui`, i
 
 ---
 
+## IMPORTANT: Only Modify config — Never Build uiSchema or Schema Manually
+
+In the Hyperform MCP server, **you only ever build and edit the `config` object.**
+`uiSchema` and `schema` are **automatically derived** by `buildUiSchema` / `buildSchema` inside `update_page` and `preview_session_from_config`. Never construct them manually.
+
+The uiSchema and schema examples shown in this skill are **reference only** — they illustrate what the auto-derivation produces from your config. Do not copy or manually build them.
+
+---
+
 ## What this library is
 
 A React low-code UI framework built on **JSON Forms + Material-UI**. Two JSON inputs drive the whole UI:
