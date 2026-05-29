@@ -5,13 +5,13 @@ import os from 'os'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// Get the schema file path from command line argument
+// Get the config file path from command line argument
 const schemaPath = process.argv[2]
 
 if (!schemaPath) {
-  console.error('Error: Schema file path is required')
-  console.error('Usage: node start.js <path-to-schema.json>')
-  console.error('Example: node start.js ./backend/schema.json')
+  console.error('Error: Config file path is required')
+  console.error('Usage: node start.js <path-to-config.json>')
+  console.error('Example: node start.js ./my-page-config.json')
   process.exit(1)
 }
 
@@ -19,7 +19,7 @@ if (!schemaPath) {
 const absoluteSchemaPath = path.resolve(process.cwd(), schemaPath)
 
 console.log('🚀 Starting application...')
-console.log(`📄 Using schema: ${absoluteSchemaPath}`)
+console.log(`📄 Using config: ${absoluteSchemaPath}`)
 console.log()
 
 // Array to track child processes
